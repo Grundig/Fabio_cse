@@ -313,21 +313,6 @@ protected:
 public:
 	integer_itemWithLimits() { itemTypeName = "integer_itemWithLimits"; }
 
-	//integer_itemWithLimits(int min = -50, int max = 50) {
-	//	int temp;
-	//	if (min > max)
-	//	{
-	//		temp = min;
-	//		min = max;
-	//		max = temp;
-	//	}
-	//	else
-	//	{ 
-	//		min_val = min;
-	//		max_val = max;
-	//	}
-	//}
-
 	~integer_itemWithLimits() { cout << "integer_itemWithLimits destructor called" << endl; } // can remove the printout after testing
 
 	int getItemVal() { return item_value; }
@@ -425,7 +410,7 @@ public:
 
 
 		// first typecast the other item to confimr it is the same as this;
-		integer_item* typecasted_other_item = typecastItem(other_item, this);
+		integer_itemWithLimits* typecasted_other_item = typecastItem(other_item, this);
 
 		// check that it worked
 		if (typecasted_other_item == NULL)
@@ -435,7 +420,8 @@ public:
 			return false;
 			// items of the wrong type (or null pointers) will be pushed to the end of the list
 		}
-
+		int test = getItemVal();
+		int otherTest = typecasted_other_item->getItemVal();
 		// now verify if the other item is larger than the curren
 		if (getItemVal() > (typecasted_other_item->getItemVal()))
 			result = true;

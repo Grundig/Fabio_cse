@@ -99,7 +99,7 @@ void test_Individualtem()
 	
 	// 
 	cout << "Test input funcitons:" << endl;
-//	testItemFunctions_part1(&testitem1);
+	//testItemFunctions_part1(&testitem1);
 	testItemFunctions_part1(&testintWL1);
 
 	cout << endl;
@@ -116,7 +116,7 @@ void test_Individualtem()
 	cout << "Test comparison of two items:" << endl;	
 	// this uses the default comparison option:
 	//testItemFunctions_part2(&testitem1, &testitem1a, NULL);
-	
+	testItemFunctions_part2(&testintWL1, &testintWL1a, NULL);
 	// this uses the full default comparison rule (via user input)
 //	testItemFunctions_part2(&testitem1, &testitem1a, &testsort_crit);
 	testItemFunctions_part2(&testintWL1, &testintWL1a, &testsort_crit);
