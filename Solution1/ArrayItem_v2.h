@@ -454,7 +454,7 @@ public:
 
 	virtual basic_item* allocateEmptyItem()
 	{
-		basic_item* result = new integer_item;
+		basic_item* result = new integer_itemWithLimits;
 		if (result == NULL)
 		{
 			cout << endl << "Out of memeory allocating ";
