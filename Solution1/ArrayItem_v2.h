@@ -151,7 +151,7 @@ public:
 		}
 	}
 	
-	void generateRandomItemWithinLimits(int min_val, int max_val)
+	void generateRandomItemWithinLimits(int Min_val, int Max_val)
 	{
 		if (isLocked())
 			cout << "Error in generateRandomItem: Item is locked" << endl;
@@ -159,18 +159,18 @@ public:
 		{
 			int item;
 
-			if (min_val > max_val)
+			if (Min_val > max_val)
 			{
-				int temp = min_val;
-				min_val = max_val;
+				int temp = Min_val;
+				Min_val = max_val;
 				max_val = temp;
 			}
 
-			int max_rand_val = max_val - min_val;
+			int max_rand_val = max_val - Min_val;
 
 			item = rand();
 			item = item % (max_rand_val);
-			item = item + min_val;
+			item = item + Min_val;
 			item_value = item;
 			// item filled
 			empty = false;
@@ -306,7 +306,192 @@ public:
 		basic_sort_criteria::printOptionToScreen();
 	}
 };
+class integer_itemWithLimits : public integer_item {
+protected:
+	int item_value;
+	int min_val = -50, max_val = 50;
+public:
+	integer_itemWithLimits() { itemTypeName = "integer_itemWithLimits"; }
+	integer_itemWithLimits(int min = -50, int max = 50) {
+		int temp;
+		if (min > max)
+		{
+			temp = min;
+			min = max;
+			max = temp;
+		}
+		else
+		{ 
+			min_val = min;
+			max_val = max;
+		}
 
+	}
+	~integer_itemWithLimits() { cout << "integer_itemWithLimits destructor called" << endl; } // can remove the printout after testing
+
+	int getItemVal() { return item_value; }
+
+	virtual void printItemOnScreen()
+	{
+		if (isEmpty())
+			cout << "Item is empty." << endl;
+		else
+			cout << "Item value is " << item_value << " . " << endl;
+	}
+
+	virtual void enterItemFromKeyboard()
+	{
+		if (isLocked())
+			cout << "Error in enterItemFromKeyboard: Item is locked" << endl;
+		else
+		{
+			cout << "Insert integer element then hit enter. " << "range between " << min_val << "and " << max_val << endl;
+			cin >> item_value;
+
+			while (item_value < max_val || item_value > min_val)
+			{
+				cout << "sorry that input was out of range" << endl;
+				cin >> item_value;
+			}
+			cout << endl;
+
+			// item filled
+			empty = false;
+		}
+	}
+
+	virtual void generateRandomItem()
+	{
+		if (isLocked())
+			cout << "Error in generateRandomItem: Item is locked" << endl;
+		else
+		{
+			int item;
+			int max_rand_val = max_val;
+
+			item = rand();
+			item = item % (max_val - min_val + 1) + min_val;
+
+			// turn to negative 30% of the time
+			if ((rand() % 10) >= 7)
+				item = (-1) * item;
+
+			item_value = item;
+			// item filled
+			empty = false;
+		}
+	}
+
+	void generateRandomItemWithinLimits(int Min_val, int Max_val)
+	{
+		if (isLocked())
+			cout << "Error in generateRandomItem: Item is locked" << endl;
+		if (Min_val < min_val || Max_val > max_val)
+		{
+			cout << "Error in generateRandomItemWithinLimits: inputs out of range" << endl;
+		}
+		else
+		{
+			int item;
+
+			if (Min_val > Max_val)
+			{
+				int temp = Min_val;
+				Min_val = Max_val;
+				Max_val = temp;
+			}
+
+			int max_rand_val = Max_val - Min_val;
+
+			item = rand();
+			item = item % (max_rand_val);
+			item = item + Min_val;
+			item_value = item;
+			// item filled
+			empty = false;
+		}
+	}
+
+	//virtual void loadItemFromFile(FILE* fin);
+
+	virtual bool IsLargerThan(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL)
+	{
+		bool result = false;
+
+		// if the other item is "empty" (non allocated) don't do any comparison
+		if (other_item == NULL)
+			return false;
+
+
+		// first typecast the other item to confimr it is the same as this;
+		integer_item* typecasted_other_item = typecastItem(other_item, this);
+
+		// check that it worked
+		if (typecasted_other_item == NULL)
+		{
+			cout << endl << "Item type is: ";
+			cout << itemTypeName << endl;
+			return false;
+			// items of the wrong type (or null pointers) will be pushed to the end of the list
+		}
+
+		// now verify if the other item is larger than the curren
+		if (getItemVal() > (typecasted_other_item->getItemVal()))
+			result = true;
+
+
+		// chek if there are sorting options to apply 
+		if (sort_criteria != NULL)
+		{
+			// if sorting is in descending order the result is reversed 
+			if (!(sort_criteria->getAscending()))
+				result = !result;
+		}
+
+		return result;
+	}
+
+	virtual basic_item* allocateEmptyItem()
+	{
+		basic_item* result = new integer_item;
+		if (result == NULL)
+		{
+			cout << endl << "Out of memeory allocating ";
+			cout << itemTypeName << endl;
+		}
+		return result;
+	}
+	virtual void deallocateItem(basic_item* itemToDestroy)
+	{
+		if (itemToDestroy != NULL)
+		{
+			// first typecast the other item to confimr it is the same as this;
+			integer_item* typecasted_other_item = typecastItem(itemToDestroy, this);
+			delete typecasted_other_item;
+		}
+	}
+
+	virtual bool compatibilityCheck(basic_item* other_item)
+	{
+		bool result = false;
+
+		// if the other item is "empty" (non allocated) don't do any comparison
+		if (other_item != NULL)
+		{
+			// typecast the other item to confirm it is the same as this;
+			integer_item* typecasted_other_item = typecastItem(other_item, this);
+			if (typecasted_other_item != NULL)
+				result = true;
+			else
+			{
+				cout << endl << "Check failed for Item type: ";
+				cout << itemTypeName << endl;
+			}
+		}
+		return result;
+	}
+
+};
 class intmat_item: public basic_item{
 protected:
 	static const int matsize=2;
@@ -512,6 +697,7 @@ public:
 	}
 
 };
+
 
 
 //#include "generalArray_v2.h"
