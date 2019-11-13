@@ -92,19 +92,24 @@ void test_Individualtem()
 {
 	// Try each one below (ucomment one line at a time)
 	// When ready, repleace these with items of the type you have implemented 
-	
+	integer_itemWithLimits testintWL1, testintWL1a;
 	integer_item testitem1, testitem1a; basic_sort_criteria testsort_crit;
 	//intmat_item testitem1, testitem1a; intmat_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
 
 	
 	// 
 	cout << "Test input funcitons:" << endl;
-	testItemFunctions_part1(&testitem1);
+//	testItemFunctions_part1(&testitem1);
+	testItemFunctions_part1(&testintWL1);
+
 	cout << endl;
 	cout << "Now with locked item:" << endl;
-	testitem1.setLocked(true);
-	testItemFunctions_part1(&testitem1);
-	testitem1.setLocked(false);
+//	testitem1.setLocked(true);
+	testintWL1.setLocked(true);
+//	testItemFunctions_part1(&testitem1);
+	testItemFunctions_part1(&testintWL1);
+	//testitem1.setLocked(false);
+	testintWL1.setLocked(false);
 	cout << endl;
 	
 	
@@ -113,12 +118,14 @@ void test_Individualtem()
 	//testItemFunctions_part2(&testitem1, &testitem1a, NULL);
 	
 	// this uses the full default comparison rule (via user input)
-	testItemFunctions_part2(&testitem1, &testitem1a, &testsort_crit);
+//	testItemFunctions_part2(&testitem1, &testitem1a, &testsort_crit);
+	testItemFunctions_part2(&testintWL1, &testintWL1a, &testsort_crit);
 	cout << endl;
 	
 	
 	cout << "Test allocate/deallocate funcitons:" << endl;
-	testItemFunctions_part3(&testitem1);
+	//testItemFunctions_part3(&testitem1);
+	testItemFunctions_part3(&testintWL1);
 	cout << endl;
 }
 

@@ -151,7 +151,7 @@ public:
 		}
 	}
 	
-	void generateRandomItemWithinLimits(int Min_val, int Max_val)
+	void generateRandomItemWithinLimits(int min_val, int max_val)
 	{
 		if (isLocked())
 			cout << "Error in generateRandomItem: Item is locked" << endl;
@@ -159,18 +159,18 @@ public:
 		{
 			int item;
 
-			if (Min_val > max_val)
+			if (min_val > max_val)
 			{
-				int temp = Min_val;
-				Min_val = max_val;
-				max_val = temp;
+				int temp = min_val;
+				min_val = max_val;
+				min_val = temp;
 			}
 
-			int max_rand_val = max_val - Min_val;
+			int max_rand_val = max_val - min_val;
 
 			item = rand();
 			item = item % (max_rand_val);
-			item = item + Min_val;
+			item = item + min_val;
 			item_value = item;
 			// item filled
 			empty = false;
@@ -312,21 +312,22 @@ protected:
 	int min_val = -50, max_val = 50;
 public:
 	integer_itemWithLimits() { itemTypeName = "integer_itemWithLimits"; }
-	integer_itemWithLimits(int min = -50, int max = 50) {
-		int temp;
-		if (min > max)
-		{
-			temp = min;
-			min = max;
-			max = temp;
-		}
-		else
-		{ 
-			min_val = min;
-			max_val = max;
-		}
 
-	}
+	//integer_itemWithLimits(int min = -50, int max = 50) {
+	//	int temp;
+	//	if (min > max)
+	//	{
+	//		temp = min;
+	//		min = max;
+	//		max = temp;
+	//	}
+	//	else
+	//	{ 
+	//		min_val = min;
+	//		max_val = max;
+	//	}
+	//}
+
 	~integer_itemWithLimits() { cout << "integer_itemWithLimits destructor called" << endl; } // can remove the printout after testing
 
 	int getItemVal() { return item_value; }
@@ -348,7 +349,7 @@ public:
 			cout << "Insert integer element then hit enter. " << "range between " << min_val << "and " << max_val << endl;
 			cin >> item_value;
 
-			while (item_value < max_val || item_value > min_val)
+			while (item_value > max_val || item_value < min_val)
 			{
 				cout << "sorry that input was out of range" << endl;
 				cin >> item_value;
