@@ -479,6 +479,17 @@ public:
 	}
 
 };
+
+class composite_item : basic_item {
+protected:
+	char first_name[20];
+	char second_name[20];
+
+	unsigned int birth_day;
+	unsigned int birth_month;
+	unsigned int birth_year;
+	
+};
 class intmat_item: public basic_item{
 protected:
 	static const int matsize=2;
