@@ -170,7 +170,7 @@ void testArrayFunctions_part2(item_array& testArray, basic_sort_criteria& testso
 	cout << "Done." << endl;
 
 	cout << " Sort array and print the result: " << endl;
-	testArray.bubblesort(&testsort_crit);
+	testArray.quickSort(&testsort_crit);
 	testArray.printArrayOnScreen();
 	cout << "Done." << endl;
 }
@@ -181,7 +181,7 @@ void test_EntireArray()
 	// When ready, repleace these with items of the type you have implemented 
 	//integer_item testitem; basic_sort_criteria testsort_crit;
 
-	integer_itemWithLimits testitem; intmat_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
+	integer_itemWithLimits testitem(false); intmat_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
 
 
 	item_array testArray;

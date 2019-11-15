@@ -386,6 +386,52 @@ public:
 			cout << "No Element allocated to lock/unlock." << endl;
 	}
 	//
+	int partition(int low, int high , basic_sort_criteria* sort_criteria_ptr = NULL)
+	{
+	
+		//int low = 0;
+		basic_item* pivot = getElementPtr(high); // pivot  
+		int i = (low - 1); // Index of smaller element  
+
+		for (int j = low; j <= high - 1; j++)
+		{
+			basic_item* curr_item = getElementPtr(j);
+			bool compare = curr_item->IsLargerThan(pivot, sort_criteria_ptr);
+			if (compare)
+			{
+				i++; // increment index of smaller element  
+				swapElements(i, j);
+			}
+		}
+		swapElements(i + 1, high);
+		return (i + 1);
+	}
+
+	void quickSort(basic_sort_criteria* sort_criteria_ptr = NULL)
+	{
+		int max_array_val = getMaxSize() - 1;
+		quickSort_inner(0, max_array_val, sort_criteria_ptr);
+	}
+	void quickSort_inner(int low, int high, basic_sort_criteria* sort_criteria_ptr = NULL)
+	{
+		//int low = 0;
+		int pi;
+		if (low < high)
+		{
+			/* pi is partitioning index, arr[p] is now
+			at right place */
+			pi = partition(low, high, sort_criteria_ptr);
+			
+
+			
+
+			// Separately sort elements before  
+			// partition and after partition  
+			quickSort_inner(low, pi - 1, sort_criteria_ptr);
+			quickSort_inner(pi + 1, high, sort_criteria_ptr);
+		}
+	}
+
 	void bubblesort(basic_sort_criteria* sort_criteria_ptr=NULL)
 	{
 		// Parse the array with a double for loop.

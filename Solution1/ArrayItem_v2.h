@@ -318,9 +318,12 @@ protected:
 	}
 
 public:
-	integer_itemWithLimits() {
+	integer_itemWithLimits(bool manual_input = false) {
 		itemTypeName = "integer_itemWithLimits"; 
-		inpuRangeFromKeyboard();
+		if (manual_input)
+		{
+			inpuRangeFromKeyboard();
+		}
 	}
 
 	~integer_itemWithLimits() { cout << "integer_itemWithLimits destructor called" << endl; } // can remove the printout after testing
