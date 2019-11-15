@@ -310,8 +310,18 @@ class integer_itemWithLimits : public integer_item {
 protected:
 	int item_value;
 	int min_val = -50, max_val = 50;
+	void swap(int* xp, int* yp)
+	{
+		int temp = *xp;
+		*xp = *yp;
+		*yp = temp;
+	}
+
 public:
-	integer_itemWithLimits() { itemTypeName = "integer_itemWithLimits"; }
+	integer_itemWithLimits() {
+		itemTypeName = "integer_itemWithLimits"; 
+		inpuRangeFromKeyboard();
+	}
 
 	~integer_itemWithLimits() { cout << "integer_itemWithLimits destructor called" << endl; } // can remove the printout after testing
 
@@ -323,6 +333,37 @@ public:
 			cout << "Item is empty." << endl;
 		else
 			cout << "Item value is " << item_value << " . " << endl;
+	}
+
+	void inpuRangeFromKeyboard()
+	{
+		string default_val;
+		cout << "input max range value" << endl;
+		cin >> max_val;
+		while (cin.fail())
+		{
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "sorry please enter an integer" << endl;
+			cout << "input max range value" << endl;
+			cin >> max_val;
+		}
+		cout << endl;
+		cout << "input min range value" << endl;
+		cin >> min_val;
+		while (cin.fail())
+		{
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "sorry please enter an integer" << endl;
+			cout << "input min range value" << endl;
+			cin >> min_val;
+		}
+		if (min_val > max_val)
+		{
+			swap(&max_val, &min_val);
+		}
+		cout << endl;
 	}
 
 	virtual void enterItemFromKeyboard()
@@ -344,8 +385,8 @@ public:
 			// item filled
 			empty = false;
 		}
-	}
 
+	}
 	virtual void generateRandomItem()
 	{
 		if (isLocked())
@@ -357,10 +398,6 @@ public:
 
 			item = rand();
 			item = item % (max_val - min_val + 1) + min_val;
-
-			// turn to negative 30% of the time
-			if ((rand() % 10) >= 7)
-				item = (-1) * item;
 
 			item_value = item;
 			// item filled
@@ -382,9 +419,7 @@ public:
 
 			if (Min_val > Max_val)
 			{
-				int temp = Min_val;
-				Min_val = Max_val;
-				Max_val = temp;
+				swap(&max_val, &min_val);
 			}
 
 			int max_rand_val = Max_val - Min_val;
