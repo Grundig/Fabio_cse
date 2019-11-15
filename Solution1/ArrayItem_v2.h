@@ -322,7 +322,7 @@ public:
 		itemTypeName = "integer_itemWithLimits"; 
 		if (manual_input)
 		{
-			inpuRangeFromKeyboard();
+			inputRangeFromKeyboard();
 		}
 	}
 
@@ -338,7 +338,7 @@ public:
 			cout << "Item value is " << item_value << " . " << endl;
 	}
 
-	void inpuRangeFromKeyboard()
+	void inputRangeFromKeyboard()
 	{
 		string default_val;
 		cout << "input max range value" << endl;
@@ -680,6 +680,49 @@ public:
 		{
 			cout << "Date not set" << endl;
 		}
+	}
+
+
+};
+
+class composite_item : public integer_item {
+protected:
+	// string to hold first name, second name
+	char first_name[20];
+	char second_name[20];
+
+	date the_date;
+
+
+
+
+public:
+	composite_item() { itemTypeName = "composite_item"; }
+	~composite_item() { cout << "composite_item destructor call" << endl; }
+
+	void enterNameFromKeyboard()
+	{
+		cout << "Enter first name: " << endl;
+		cin >> first_name;
+		cout << "Enter second name: " << endl;
+		cin >> second_name;
+	}
+
+	virtual void enterItemFromKeyboard()
+	{
+		enterNameFromKeyboard)();
+		the_date.inputDateFromKeyboard();
+	}
+
+	void printName()
+	{
+		cout << first_name << " " << second_name << endl;
+	}
+
+	void printNameAndDate()
+	{
+		printName();
+		the_date.printDate();
 	}
 
 
