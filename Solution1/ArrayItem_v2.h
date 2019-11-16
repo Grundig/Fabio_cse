@@ -8,6 +8,7 @@
 #include <string>
 
 #include <iostream>
+#include <random>
 using namespace std;
 
 
@@ -518,7 +519,167 @@ public:
 
 };
 
-class  
+class string_item : basic_item
+{
+protected:
+	string item_value;
+public:
+	string_item() { itemTypeName = "integer_item"; }
+	~string_item() { cout << "integer_item destructor called" << endl; } // can remove the printout after testing
+
+	string getItemVal() { return item_value; }
+
+	virtual void printItemOnScreen()
+	{
+		if (isEmpty())
+			cout << "Item is empty." << endl;
+		else
+			cout << "Item value is " << item_value << " . " << endl;
+	}
+
+	virtual void enterItemFromKeyboard()
+	{
+		if (isLocked())
+			cout << "Error in enterItemFromKeyboard: Item is locked" << endl;
+		else
+		{
+			cout << "Insert integer element then hit enter." << endl;
+			cin >> item_value;
+			cout << endl;
+
+			// item filled
+			empty = false;
+		}
+	}
+
+	virtual void generateRandomItem()
+	{
+		const std::string characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+		int item;
+		int max_rand_val = 15;
+
+		item = rand();
+		item = item % (max_rand_val + 1);
+
+		random_device random_device;
+		mt19937 generator(random_device());
+		uniform_int_distribution<> distribution(0, characters.size() - 1);
+
+		std::string random_string;
+
+		for (std::size_t i = 0; i < item; ++i)
+		{
+			random_string += characters[distribution(generator)];
+		}
+
+		item_value = random_string;
+	}
+
+	void generateRandomItemWithinLimits(int min_val, int max_val)
+	{
+		if (isLocked())
+			cout << "Error in generateRandomItem: Item is locked" << endl;
+		else
+		{
+			int item;
+
+			if (min_val > max_val)
+			{
+				int temp = min_val;
+				min_val = max_val;
+				min_val = temp;
+			}
+
+			int max_rand_val = max_val - min_val;
+
+			item = rand();
+			item = item % (max_rand_val);
+			item = item + min_val;
+			item_value = item;
+			// item filled
+			empty = false;
+		}
+	}
+
+	//virtual void loadItemFromFile(FILE* fin);
+
+	virtual bool IsLargerThan(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL)
+	{
+		bool result = false;
+
+		// if the other item is "empty" (non allocated) don't do any comparison
+		if (other_item == NULL)
+			return false;
+
+
+		// first typecast the other item to confimr it is the same as this;
+		integer_item* typecasted_other_item = typecastItem(other_item, this);
+
+		// check that it worked
+		if (typecasted_other_item == NULL)
+		{
+			cout << endl << "Item type is: ";
+			cout << itemTypeName << endl;
+			return false;
+			// items of the wrong type (or null pointers) will be pushed to the end of the list
+		}
+
+		// now verify if the other item is larger than the curren
+		if (getItemVal() > (typecasted_other_item->getItemVal()))
+			result = true;
+
+
+		// chek if there are sorting options to apply 
+		if (sort_criteria != NULL)
+		{
+			// if sorting is in descending order the result is reversed 
+			if (!(sort_criteria->getAscending()))
+				result = !result;
+		}
+
+		return result;
+	}
+
+	virtual basic_item* allocateEmptyItem()
+	{
+		basic_item* result = new integer_item;
+		if (result == NULL)
+		{
+			cout << endl << "Out of memeory allocating ";
+			cout << itemTypeName << endl;
+		}
+		return result;
+	}
+	virtual void deallocateItem(basic_item* itemToDestroy)
+	{
+		if (itemToDestroy != NULL)
+		{
+			// first typecast the other item to confimr it is the same as this;
+			integer_item* typecasted_other_item = typecastItem(itemToDestroy, this);
+			delete typecasted_other_item;
+		}
+	}
+
+	virtual bool compatibilityCheck(basic_item* other_item)
+	{
+		bool result = false;
+
+		// if the other item is "empty" (non allocated) don't do any comparison
+		if (other_item != NULL)
+		{
+			// typecast the other item to confirm it is the same as this;
+			integer_item* typecasted_other_item = typecastItem(other_item, this);
+			if (typecasted_other_item != NULL)
+				result = true;
+			else
+			{
+				cout << endl << "Check failed for Item type: ";
+				cout << itemTypeName << endl;
+			}
+		}
+		return result;
+	}
+};
 
 class composite_item : basic_item {
 protected:
@@ -807,7 +968,7 @@ public:
 	void printNameAndDate()
 	{
 		printName();
-		the_date.printDate();
+		//the_date.printDate();
 	}
 
 
