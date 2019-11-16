@@ -322,7 +322,7 @@ public:
 		itemTypeName = "integer_itemWithLimits"; 
 		if (manual_input)
 		{
-			inpuRangeFromKeyboard();
+			inputRangeFromKeyboard();
 		}
 	}
 
@@ -338,7 +338,7 @@ public:
 			cout << "Item value is " << item_value << " . " << endl;
 	}
 
-	void inpuRangeFromKeyboard()
+	void inputRangeFromKeyboard()
 	{
 		string default_val;
 		cout << "input max range value" << endl;
@@ -517,6 +517,217 @@ public:
 	}
 
 };
+
+class date {
+protected:
+	unsigned int day;
+	//enum month{int_val, jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec, sup_val};
+	unsigned int year;
+
+	unsigned int month;
+
+	bool date_set;
+
+public:
+	date() {
+		date_set = false;
+	}
+	//~date();
+
+	void inputDateFromKeyboard()
+	{
+		int temp_day, temp_month, temp_year;
+		bool valid = false;
+
+		do {
+			cout << "Enter day" << endl;
+			cin >> temp_day;
+			cout << "Enter month" << endl;
+			cin >> temp_month;
+			cout << "Enter year" << endl;
+			cin >> temp_year;
+
+			valid = true;
+
+			if (temp_day < 1 || temp_day > 31)
+			{
+				cout << "Invalid date 1. Please enter again" << endl;
+				valid = false;
+			}
+			else if (temp_month < 1 || temp_month > 12)
+			{
+				cout << "Invalid month. Please enter again" << endl;
+				valid = false;
+			}
+			else if (temp_month == 2)
+			{
+				if (temp_day < 1 || temp_day > 28)
+				{
+					cout << "Invalid date (feb). Please enter again " << endl;
+					valid = false;
+				}
+			}
+			else if (temp_month == 4 || temp_month == 6 || temp_month == 9 || temp_month == 11)
+			{
+				if (temp_day > 30)
+				{
+					cout << "Invalid date 2. Please enter again" << endl;
+					valid = false;
+				}
+			}
+		} while (valid == false);
+
+		day = temp_day;
+		month = temp_month;
+		year = temp_year;
+
+		date_set = true;
+	}
+
+	void inputRandomDate()
+	{
+		int temp_day;
+		int temp_month;
+		int temp_year;
+
+		bool valid = false;
+
+		cout << "Inputting random date" << endl;
+
+		do {
+			temp_day = rand() % 31 + 1;
+			temp_month = rand() % 12 + 1;
+			temp_year = rand() % 2019 + 1;
+
+			valid = true;
+
+			if (temp_day < 1 || temp_day > 31)
+			{
+				valid = false;
+			}
+			else if (temp_month < 1 || temp_month > 12)
+			{
+				valid = false;
+			}
+			else if (temp_month == 2)
+			{
+				if (temp_day < 1 || temp_day > 28)
+				{
+					valid = false;
+				}
+			}
+			else if (temp_month == 4 || temp_month == 6 || temp_month == 9 || temp_month == 11)
+			{
+				if (temp_day > 30)
+				{
+					valid = false;
+				}
+			}
+		} while (valid == false);
+
+		day = temp_day;
+		month = temp_month;
+		year = temp_year;
+
+		date_set = true;
+	}
+
+	int getDay()
+	{
+		if (date_set == true)
+		{
+			return day;
+		}
+	}
+
+	int getMonth()
+	{
+		if (date_set == true)
+		{
+			return month;
+		}
+	}
+
+	int getYear()
+	{
+		if (date_set == true)
+		{
+			return year;
+		}
+	}
+
+
+
+	void printDate()
+	{
+		if (date_set == true)
+		{
+			cout << "DD = " << day << endl;
+
+			if (day < 10)
+			{
+				cout << "0";
+			}
+			cout << day << endl;
+
+			cout << "MM = " << month << endl;
+			if (month < 10) { cout << "0"; }
+			cout << month << endl;
+
+			cout << "YYYY = " << year << endl;
+		}
+		else
+		{
+			cout << "Date not set" << endl;
+		}
+	}
+
+
+};
+
+class composite_item : public integer_item {
+protected:
+	// string to hold first name, second name
+	char first_name[20];
+	char second_name[20];
+
+	date the_date;
+
+
+
+
+public:
+	composite_item() { itemTypeName = "composite_item"; }
+	~composite_item() { cout << "composite_item destructor call" << endl; }
+
+	void enterNameFromKeyboard()
+	{
+		cout << "Enter first name: " << endl;
+		cin >> first_name;
+		cout << "Enter second name: " << endl;
+		cin >> second_name;
+	}
+
+	virtual void enterItemFromKeyboard()
+	{
+		enterNameFromKeyboard)();
+		the_date.inputDateFromKeyboard();
+	}
+
+	void printName()
+	{
+		cout << first_name << " " << second_name << endl;
+	}
+
+	void printNameAndDate()
+	{
+		printName();
+		the_date.printDate();
+	}
+
+
+};
+
 class intmat_item: public basic_item{
 protected:
 	static const int matsize=2;

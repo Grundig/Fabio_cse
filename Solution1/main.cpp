@@ -200,10 +200,19 @@ void test_EntireArray()
 	cout << "Done." << endl;
 }
 
+void test_CompositeItem() 
+{
+	composite_item test_item;
+	test_item.enterNameFromKeyboard();
+	test_item.printName();
 
-void main()
+}
+
+
+int main()
 {
 	//test_Individualtem();
-	test_EntireArray();
+	//test_EntireArray();
+	test_CompositeItem();
 }
 
