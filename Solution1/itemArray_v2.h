@@ -397,7 +397,7 @@ public:
 		{
 			basic_item* curr_item = getElementPtr(j);
 			bool compare = curr_item->IsLargerThan(pivot, sort_criteria_ptr);
-			if (compare)
+			if (!compare)
 			{
 				i++; // increment index of smaller element  
 				swapElements(i, j);

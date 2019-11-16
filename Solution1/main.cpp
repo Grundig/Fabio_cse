@@ -183,7 +183,6 @@ void test_EntireArray()
 
 	integer_itemWithLimits testitem(false); intmat_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
 
-
 	item_array testArray;
 
 	cout << "The type of item used for all entries in the array is:"; 
@@ -193,7 +192,7 @@ void test_EntireArray()
 
 	cout << "Testing Array allocation and data entry: " << endl;
 	//testArrayFunctions_part1(testArray);
-	testArray.allocateArrayAndItems(10);
+	testArray.allocateArrayAndItems(50);
 	cout << "Done." << endl << endl;
 
 	cout << "Testing Array sorting " << endl;
