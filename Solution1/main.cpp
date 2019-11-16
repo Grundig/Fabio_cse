@@ -19,6 +19,10 @@ void testItemFunctions_part1(basic_item* item_ptr)
 	cout << "Function requesting user to input item value" << endl;
 	item_ptr->enterItemFromKeyboard();
 	cout << endl;
+
+	cout << "Function requesting user to input item value" << endl;
+	item_ptr->enterItemFromKeyboard();
+	cout << endl;
 	
 	cout << "Function printing item on Screen" << endl;
 	item_ptr->printItemOnScreen();
@@ -99,7 +103,7 @@ void test_Individualtem()
 	
 	// 
 	cout << "Test input funcitons:" << endl;
-	//testItemFunctions_part1(&testitem1);
+//	testItemFunctions_part1(&testitem1);
 	testItemFunctions_part1(&testintWL1);
 
 	cout << endl;
@@ -176,7 +180,8 @@ void test_EntireArray()
 	// Try each one below (ucomment one line at a time)
 	// When ready, repleace these with items of the type you have implemented 
 	//integer_item testitem; basic_sort_criteria testsort_crit;
-	intmat_item testitem; intmat_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
+
+	integer_itemWithLimits testitem(false); intmat_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
 
 	item_array testArray;
 
@@ -187,7 +192,7 @@ void test_EntireArray()
 
 	cout << "Testing Array allocation and data entry: " << endl;
 	//testArrayFunctions_part1(testArray);
-	testArray.allocateArrayAndItems(10);
+	testArray.allocateArrayAndItems(50);
 	cout << "Done." << endl << endl;
 
 	cout << "Testing Array sorting " << endl;
@@ -195,10 +200,19 @@ void test_EntireArray()
 	cout << "Done." << endl;
 }
 
-
-void main()
+void test_CompositeItem() 
 {
-	test_Individualtem();
+	composite_item test_item;
+	test_item.enterNameFromKeyboard();
+	test_item.printName();
+
+}
+
+
+int main()
+{
+	//test_Individualtem();
 	//test_EntireArray();
+	test_CompositeItem();
 }
 

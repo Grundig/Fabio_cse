@@ -310,8 +310,21 @@ class integer_itemWithLimits : public integer_item {
 protected:
 	int item_value;
 	int min_val = -50, max_val = 50;
+	void swap(int* xp, int* yp)
+	{
+		int temp = *xp;
+		*xp = *yp;
+		*yp = temp;
+	}
+
 public:
-	integer_itemWithLimits() { itemTypeName = "integer_itemWithLimits"; }
+	integer_itemWithLimits(bool manual_input = false) {
+		itemTypeName = "integer_itemWithLimits"; 
+		if (manual_input)
+		{
+			inputRangeFromKeyboard();
+		}
+	}
 
 	~integer_itemWithLimits() { cout << "integer_itemWithLimits destructor called" << endl; } // can remove the printout after testing
 
@@ -323,6 +336,37 @@ public:
 			cout << "Item is empty." << endl;
 		else
 			cout << "Item value is " << item_value << " . " << endl;
+	}
+
+	void inputRangeFromKeyboard()
+	{
+		string default_val;
+		cout << "input max range value" << endl;
+		cin >> max_val;
+		while (cin.fail())
+		{
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "sorry please enter an integer" << endl;
+			cout << "input max range value" << endl;
+			cin >> max_val;
+		}
+		cout << endl;
+		cout << "input min range value" << endl;
+		cin >> min_val;
+		while (cin.fail())
+		{
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "sorry please enter an integer" << endl;
+			cout << "input min range value" << endl;
+			cin >> min_val;
+		}
+		if (min_val > max_val)
+		{
+			swap(&max_val, &min_val);
+		}
+		cout << endl;
 	}
 
 	virtual void enterItemFromKeyboard()
@@ -344,8 +388,8 @@ public:
 			// item filled
 			empty = false;
 		}
-	}
 
+	}
 	virtual void generateRandomItem()
 	{
 		if (isLocked())
@@ -357,10 +401,6 @@ public:
 
 			item = rand();
 			item = item % (max_val - min_val + 1) + min_val;
-
-			// turn to negative 30% of the time
-			if ((rand() % 10) >= 7)
-				item = (-1) * item;
 
 			item_value = item;
 			// item filled
@@ -382,9 +422,7 @@ public:
 
 			if (Min_val > Max_val)
 			{
-				int temp = Min_val;
-				Min_val = Max_val;
-				Max_val = temp;
+				swap(&max_val, &min_val);
 			}
 
 			int max_rand_val = Max_val - Min_val;
@@ -480,16 +518,216 @@ public:
 
 };
 
-class composite_item : basic_item {
+class date {
 protected:
+	unsigned int day;
+	//enum month{int_val, jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec, sup_val};
+	unsigned int year;
+
+	unsigned int month;
+
+	bool date_set;
+
+public:
+	date() {
+		date_set = false;
+	}
+	//~date();
+
+	void inputDateFromKeyboard()
+	{
+		int temp_day, temp_month, temp_year;
+		bool valid = false;
+
+		do {
+			cout << "Enter day" << endl;
+			cin >> temp_day;
+			cout << "Enter month" << endl;
+			cin >> temp_month;
+			cout << "Enter year" << endl;
+			cin >> temp_year;
+
+			valid = true;
+
+			if (temp_day < 1 || temp_day > 31)
+			{
+				cout << "Invalid date 1. Please enter again" << endl;
+				valid = false;
+			}
+			else if (temp_month < 1 || temp_month > 12)
+			{
+				cout << "Invalid month. Please enter again" << endl;
+				valid = false;
+			}
+			else if (temp_month == 2)
+			{
+				if (temp_day < 1 || temp_day > 28)
+				{
+					cout << "Invalid date (feb). Please enter again " << endl;
+					valid = false;
+				}
+			}
+			else if (temp_month == 4 || temp_month == 6 || temp_month == 9 || temp_month == 11)
+			{
+				if (temp_day > 30)
+				{
+					cout << "Invalid date 2. Please enter again" << endl;
+					valid = false;
+				}
+			}
+		} while (valid == false);
+
+		day = temp_day;
+		month = temp_month;
+		year = temp_year;
+
+		date_set = true;
+	}
+
+	void inputRandomDate()
+	{
+		int temp_day;
+		int temp_month;
+		int temp_year;
+
+		bool valid = false;
+
+		cout << "Inputting random date" << endl;
+
+		do {
+			temp_day = rand() % 31 + 1;
+			temp_month = rand() % 12 + 1;
+			temp_year = rand() % 2019 + 1;
+
+			valid = true;
+
+			if (temp_day < 1 || temp_day > 31)
+			{
+				valid = false;
+			}
+			else if (temp_month < 1 || temp_month > 12)
+			{
+				valid = false;
+			}
+			else if (temp_month == 2)
+			{
+				if (temp_day < 1 || temp_day > 28)
+				{
+					valid = false;
+				}
+			}
+			else if (temp_month == 4 || temp_month == 6 || temp_month == 9 || temp_month == 11)
+			{
+				if (temp_day > 30)
+				{
+					valid = false;
+				}
+			}
+		} while (valid == false);
+
+		day = temp_day;
+		month = temp_month;
+		year = temp_year;
+
+		date_set = true;
+	}
+
+	int getDay()
+	{
+		if (date_set == true)
+		{
+			return day;
+		}
+	}
+
+	int getMonth()
+	{
+		if (date_set == true)
+		{
+			return month;
+		}
+	}
+
+	int getYear()
+	{
+		if (date_set == true)
+		{
+			return year;
+		}
+	}
+
+
+
+	void printDate()
+	{
+		if (date_set == true)
+		{
+			cout << "DD = " << day << endl;
+
+			if (day < 10)
+			{
+				cout << "0";
+			}
+			cout << day << endl;
+
+			cout << "MM = " << month << endl;
+			if (month < 10) { cout << "0"; }
+			cout << month << endl;
+
+			cout << "YYYY = " << year << endl;
+		}
+		else
+		{
+			cout << "Date not set" << endl;
+		}
+	}
+
+
+};
+
+class composite_item : public integer_item {
+protected:
+	// string to hold first name, second name
 	char first_name[20];
 	char second_name[20];
 
-	unsigned int birth_day;
-	unsigned int birth_month;
-	unsigned int birth_year;
-	
+	date the_date;
+
+
+
+
+public:
+	composite_item() { itemTypeName = "composite_item"; }
+	~composite_item() { cout << "composite_item destructor call" << endl; }
+
+	void enterNameFromKeyboard()
+	{
+		cout << "Enter first name: " << endl;
+		cin >> first_name;
+		cout << "Enter second name: " << endl;
+		cin >> second_name;
+	}
+
+	virtual void enterItemFromKeyboard()
+	{
+		enterNameFromKeyboard)();
+		the_date.inputDateFromKeyboard();
+	}
+
+	void printName()
+	{
+		cout << first_name << " " << second_name << endl;
+	}
+
+	void printNameAndDate()
+	{
+		printName();
+		the_date.printDate();
+	}
+
+
 };
+
 class intmat_item: public basic_item{
 protected:
 	static const int matsize=2;
