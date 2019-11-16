@@ -530,7 +530,7 @@ protected:
 	
 };
 
-class date: integer_itemWithLimits{
+class date: integer_item {
 protected:
 	unsigned int day;
 	//enum month{int_val, jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec, sup_val};
@@ -595,11 +595,44 @@ public:
 
 		date_set = true;
 	}
-	virtual bool IsLargerThan(basic_item* basicItem, basic_sort_criteria* sort_criteria_ptr = NULL)
+	virtual bool IsLargerThan(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL)
 	{
+		bool result = false;
 
+		// if the other item is "empty" (non allocated) don't do any comparison
+		if (other_item == NULL)
+			return false;
+
+
+		// first typecast the other item to confimr it is the same as this;
+		integer_item* typecasted_other_item = typecastItem(other_item, this);
+
+		// check that it worked
+		if (typecasted_other_item == NULL)
+		{
+			cout << endl << "Item type is: ";
+			cout << itemTypeName << endl;
+			return false;
+			// items of the wrong type (or null pointers) will be pushed to the end of the list
+		}
+
+		// now verify if the other item is larger than the curren
+		if (getYear() > (typecasted_other_item->getItemVal()))
+			result = true;
+
+
+		// chek if there are sorting options to apply 
+		if (sort_criteria != NULL)
+		{
+			// if sorting is in descending order the result is reversed 
+			if (!(sort_criteria->getAscending()))
+				result = !result;
+		}
+
+		return result;
 	}
-	void inputRandomDate()
+
+	virtual void generateRandomItem()
 	{
 		int temp_day;
 		int temp_month;
@@ -671,9 +704,7 @@ public:
 		}
 	}
 
-
-
-	void printDate()
+	virtual void printItemOnScreen()
 	{
 		if (date_set == true)
 		{
@@ -697,7 +728,45 @@ public:
 		}
 	}
 
+	virtual basic_item* allocateEmptyItem()
+	{
+		basic_item* result = new integer_itemWithLimits;
+		if (result == NULL)
+		{
+			cout << endl << "Out of memeory allocating ";
+			cout << itemTypeName << endl;
+		}
+		return result;
+	}
+	virtual void deallocateItem(basic_item* itemToDestroy)
+	{
+		if (itemToDestroy != NULL)
+		{
+			// first typecast the other item to confimr it is the same as this;
+			integer_item* typecasted_other_item = typecastItem(itemToDestroy, this);
+			delete typecasted_other_item;
+		}
+	}
 
+	virtual bool compatibilityCheck(basic_item* other_item)
+	{
+		bool result = false;
+
+		// if the other item is "empty" (non allocated) don't do any comparison
+		if (other_item != NULL)
+		{
+			// typecast the other item to confirm it is the same as this;
+			integer_item* typecasted_other_item = typecastItem(other_item, this);
+			if (typecasted_other_item != NULL)
+				result = true;
+			else
+			{
+				cout << endl << "Check failed for Item type: ";
+				cout << itemTypeName << endl;
+			}
+		}
+		return result;
+	}
 };
 
 class composite_item : public integer_item {
