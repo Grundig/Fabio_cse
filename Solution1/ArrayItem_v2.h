@@ -518,7 +518,19 @@ public:
 
 };
 
-class date {
+
+class composite_item : basic_item {
+protected:
+	char first_name[20];
+	char second_name[20];
+
+	unsigned int birth_day;
+	unsigned int birth_month;
+	unsigned int birth_year;
+	
+};
+
+class date: integer_itemWithLimits{
 protected:
 	unsigned int day;
 	//enum month{int_val, jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec, sup_val};
@@ -534,7 +546,7 @@ public:
 	}
 	//~date();
 
-	void inputDateFromKeyboard()
+	virtual void enterItemFromKeyboard()
 	{
 		int temp_day, temp_month, temp_year;
 		bool valid = false;
@@ -583,7 +595,10 @@ public:
 
 		date_set = true;
 	}
+	virtual bool IsLargerThan(basic_item* basicItem, basic_sort_criteria* sort_criteria_ptr = NULL)
+	{
 
+	}
 	void inputRandomDate()
 	{
 		int temp_day;
@@ -710,8 +725,8 @@ public:
 
 	virtual void enterItemFromKeyboard()
 	{
-		enterNameFromKeyboard)();
-		the_date.inputDateFromKeyboard();
+		enterNameFromKeyboard();
+		the_date.enterItemFromKeyboard();
 	}
 
 	void printName()
@@ -727,6 +742,7 @@ public:
 
 
 };
+
 
 class intmat_item: public basic_item{
 protected:
