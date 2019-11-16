@@ -8,7 +8,6 @@
 #include <string>
 
 #include <iostream>
-#include <random>
 using namespace std;
 
 
@@ -519,186 +518,18 @@ public:
 
 };
 
-class string_item : basic_item
-{
-protected:
-	string item_value;
-public:
-	string_item() { itemTypeName = "integer_item"; }
-	~string_item() { cout << "integer_item destructor called" << endl; } // can remove the printout after testing
 
-	string getItemVal() { return item_value; }
-
-	virtual void printItemOnScreen()
-	{
-		if (isEmpty())
-			cout << "Item is empty." << endl;
-		else
-			cout << "Item value is " << item_value << " . " << endl;
-	}
-
-	virtual void enterItemFromKeyboard()
-	{
-		if (isLocked())
-			cout << "Error in enterItemFromKeyboard: Item is locked" << endl;
-		else
-		{
-			cout << "Insert integer element then hit enter." << endl;
-			cin >> item_value;
-			cout << endl;
-
-			// item filled
-			empty = false;
-		}
-	}
-
-	virtual void generateRandomItem()
-	{
-		const std::string characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-		int item;
-		int max_rand_val = 15;
-
-		item = rand();
-		item = item % (max_rand_val + 1);
-
-		random_device random_device;
-		mt19937 generator(random_device());
-		uniform_int_distribution<> distribution(0, characters.size() - 1);
-
-		std::string random_string;
-
-		for (std::size_t i = 0; i < item; ++i)
-		{
-			random_string += characters[distribution(generator)];
-		}
-
-		item_value = random_string;
-	}
-
-	void generateRandomItemWithinLimits(int min_val, int max_val)
-	{
-		if (isLocked())
-			cout << "Error in generateRandomItem: Item is locked" << endl;
-		else
-		{
-			int item;
-
-			if (min_val > max_val)
-			{
-				int temp = min_val;
-				min_val = max_val;
-				min_val = temp;
-			}
-
-			int max_rand_val = max_val - min_val;
-
-			item = rand();
-			item = item % (max_rand_val);
-			item = item + min_val;
-			item_value = item;
-			// item filled
-			empty = false;
-		}
-	}
-
-	//virtual void loadItemFromFile(FILE* fin);
-
-	virtual bool IsLargerThan(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL)
-	{
-		bool result = false;
-
-		// if the other item is "empty" (non allocated) don't do any comparison
-		if (other_item == NULL)
-			return false;
-
-
-		// first typecast the other item to confimr it is the same as this;
-		integer_item* typecasted_other_item = typecastItem(other_item, this);
-
-		// check that it worked
-		if (typecasted_other_item == NULL)
-		{
-			cout << endl << "Item type is: ";
-			cout << itemTypeName << endl;
-			return false;
-			// items of the wrong type (or null pointers) will be pushed to the end of the list
-		}
-
-		// now verify if the other item is larger than the curren
-		if (getItemVal() > (typecasted_other_item->getItemVal()))
-			result = true;
-
-
-		// chek if there are sorting options to apply 
-		if (sort_criteria != NULL)
-		{
-			// if sorting is in descending order the result is reversed 
-			if (!(sort_criteria->getAscending()))
-				result = !result;
-		}
-
-		return result;
-	}
-
-	virtual basic_item* allocateEmptyItem()
-	{
-		basic_item* result = new integer_item;
-		if (result == NULL)
-		{
-			cout << endl << "Out of memeory allocating ";
-			cout << itemTypeName << endl;
-		}
-		return result;
-	}
-	virtual void deallocateItem(basic_item* itemToDestroy)
-	{
-		if (itemToDestroy != NULL)
-		{
-			// first typecast the other item to confimr it is the same as this;
-			integer_item* typecasted_other_item = typecastItem(itemToDestroy, this);
-			delete typecasted_other_item;
-		}
-	}
-
-	virtual bool compatibilityCheck(basic_item* other_item)
-	{
-		bool result = false;
-
-		// if the other item is "empty" (non allocated) don't do any comparison
-		if (other_item != NULL)
-		{
-			// typecast the other item to confirm it is the same as this;
-			integer_item* typecasted_other_item = typecastItem(other_item, this);
-			if (typecasted_other_item != NULL)
-				result = true;
-			else
-			{
-				cout << endl << "Check failed for Item type: ";
-				cout << itemTypeName << endl;
-			}
-		}
-		return result;
-	}
-};
-
-class composite_item : basic_item {
-protected:
-	char first_name[20];
-	char second_name[20];
-
-	unsigned int birth_day;
-	unsigned int birth_month;
-	unsigned int birth_year;
-	
-};
-
-class date: integer_item {
+class date: integer_item{
 protected:
 	unsigned int day;
 	//enum month{int_val, jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec, sup_val};
 	unsigned int year;
 
 	unsigned int month;
+
+	unsigned int date_array[3]; // index 0 is day, 1 is month, 2 is year
+
+	//enum day_month_year{int_val, day, month, ear};
 
 	bool date_set;
 
@@ -751,49 +582,21 @@ public:
 			}
 		} while (valid == false);
 
-		day = temp_day;
-		month = temp_month;
-		year = temp_year;
-
+		date_array[0] = temp_day;
+		date_array[1] = temp_month;
+		date_array[2] = temp_year;
+		
 		date_set = true;
 	}
-	virtual bool IsLargerThan(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL)
+	virtual bool IsLargerThan(basic_item* basicItem, basic_sort_criteria* sort_criteria_ptr = NULL)
 	{
 		bool result = false;
 
-		// if the other item is "empty" (non allocated) don't do any comparison
-		if (other_item == NULL)
+		if (other_item == null)
 			return false;
 
 
-		// first typecast the other item to confimr it is the same as this;
-		integer_item* typecasted_other_item = typecastItem(other_item, this);
-
-		// check that it worked
-		if (typecasted_other_item == NULL)
-		{
-			cout << endl << "Item type is: ";
-			cout << itemTypeName << endl;
-			return false;
-			// items of the wrong type (or null pointers) will be pushed to the end of the list
-		}
-
-		// now verify if the other item is larger than the curren
-		if (getYear() > (typecasted_other_item->getItemVal()))
-			result = true;
-
-
-		// chek if there are sorting options to apply 
-		if (sort_criteria != NULL)
-		{
-			// if sorting is in descending order the result is reversed 
-			if (!(sort_criteria->getAscending()))
-				result = !result;
-		}
-
-		return result;
 	}
-
 	virtual void generateRandomItem()
 	{
 		int temp_day;
@@ -807,7 +610,7 @@ public:
 		do {
 			temp_day = rand() % 31 + 1;
 			temp_month = rand() % 12 + 1;
-			temp_year = rand() % 2019 + 1;
+			temp_year = 1900 + rand() % 100 + 1;
 
 			valid = true;
 
@@ -835,54 +638,32 @@ public:
 			}
 		} while (valid == false);
 
-		day = temp_day;
-		month = temp_month;
-		year = temp_year;
+		date_array[0] = temp_day;
+		date_array[1] = temp_month;
+		date_array[2] = temp_year;
 
 		date_set = true;
 	}
 
-	int getDay()
-	{
-		if (date_set == true)
-		{
-			return day;
-		}
-	}
 
-	int getMonth()
-	{
-		if (date_set == true)
-		{
-			return month;
-		}
-	}
-
-	int getYear()
-	{
-		if (date_set == true)
-		{
-			return year;
-		}
-	}
 
 	virtual void printItemOnScreen()
 	{
 		if (date_set == true)
 		{
-			cout << "DD = " << day << endl;
+			cout << "DD = " << date_array[0] << endl;
 
-			if (day < 10)
+			if (date_array[0] < 10)
 			{
 				cout << "0";
 			}
-			cout << day << endl;
+			cout << date_array[0] << endl;
 
-			cout << "MM = " << month << endl;
-			if (month < 10) { cout << "0"; }
-			cout << month << endl;
+			cout << "MM = " << date_array[1] << endl;
+			if (date_array[1] < 10) { cout << "0"; }
+			cout << date_array[1] << endl;
 
-			cout << "YYYY = " << year << endl;
+			cout << "YYYY = " << date_array[2] << endl;
 		}
 		else
 		{
@@ -890,45 +671,7 @@ public:
 		}
 	}
 
-	virtual basic_item* allocateEmptyItem()
-	{
-		basic_item* result = new integer_itemWithLimits;
-		if (result == NULL)
-		{
-			cout << endl << "Out of memeory allocating ";
-			cout << itemTypeName << endl;
-		}
-		return result;
-	}
-	virtual void deallocateItem(basic_item* itemToDestroy)
-	{
-		if (itemToDestroy != NULL)
-		{
-			// first typecast the other item to confimr it is the same as this;
-			integer_item* typecasted_other_item = typecastItem(itemToDestroy, this);
-			delete typecasted_other_item;
-		}
-	}
 
-	virtual bool compatibilityCheck(basic_item* other_item)
-	{
-		bool result = false;
-
-		// if the other item is "empty" (non allocated) don't do any comparison
-		if (other_item != NULL)
-		{
-			// typecast the other item to confirm it is the same as this;
-			integer_item* typecasted_other_item = typecastItem(other_item, this);
-			if (typecasted_other_item != NULL)
-				result = true;
-			else
-			{
-				cout << endl << "Check failed for Item type: ";
-				cout << itemTypeName << endl;
-			}
-		}
-		return result;
-	}
 };
 
 class composite_item : public integer_item {
@@ -960,16 +703,16 @@ public:
 		the_date.enterItemFromKeyboard();
 	}
 
-	void printName()
-	{
-		cout << first_name << " " << second_name << endl;
-	}
+	//void printName()
+	//{
+	//	cout << first_name << " " << second_name << endl;
+	//}
 
-	void printNameAndDate()
-	{
-		printName();
-		//the_date.printDate();
-	}
+	//void printNameAndDate()
+	//{
+	//	printName();
+	//	the_date.printDate();
+	//}
 
 
 };
