@@ -518,6 +518,7 @@ public:
 
 };
 
+class  
 
 class composite_item : basic_item {
 protected:
