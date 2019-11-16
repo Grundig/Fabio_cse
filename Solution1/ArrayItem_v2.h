@@ -8,6 +8,7 @@
 #include <string>
 
 #include <iostream>
+#include <random>
 using namespace std;
 
 
@@ -95,7 +96,162 @@ public:
 	//friend class item_array;
 	friend class general_item_array;
 };
+class basic_string_item : public basic_item {
+protected:
+	string item_value;
+public:
+	basic_string_item() {
+		itemTypeName = "basic_string_item"; 
+		generateRandomItem();
+	}
+	~basic_string_item() { cout << "basic_string_item destructor called" << endl; } // can remove the printout after testing
 
+	string getItemVal() { return item_value; }
+
+	virtual void printItemOnScreen()
+	{
+		if (isEmpty())
+			cout << "Item is empty." << endl;
+		else
+			cout << "Item value is " << item_value << " . " << endl;
+	}
+
+	virtual void enterItemFromKeyboard()
+	{
+		if (isLocked())
+			cout << "Error in enterItemFromKeyboard: Item is locked" << endl;
+		else
+		{
+			cout << "Insert integer element then hit enter." << endl;
+			cin >> item_value;
+			cout << endl;
+
+			// item filled
+			empty = false;
+		}
+	}
+
+	virtual void generateRandomItem()
+	{
+		int max_val = 12, min_val = 3;
+		const std::string characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+		int length;
+		int max_rand_val = max_val;
+
+		length = rand();
+		length = length % (max_val - min_val + 1) + min_val;
+
+		random_device random_device;
+		mt19937 generator(random_device());
+		uniform_int_distribution<> distribution(0, characters.size() - 1);
+
+		std::string random_string;
+
+		for (std::size_t i = 0; i < length; ++i)
+		{
+			random_string += characters[distribution(generator)];
+		}
+
+		item_value = random_string;
+		empty = false;
+	}
+
+
+
+	//virtual void loadItemFromFile(FILE* fin);
+
+	virtual bool IsLargerThan(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL)
+	{
+		bool result = false;
+
+		// if the other item is "empty" (non allocated) don't do any comparison
+		if (other_item == NULL)
+			return false;
+
+
+		// first typecast the other item to confimr it is the same as this;
+		basic_string_item* typecasted_other_item = typecastItem(other_item, this);
+
+		// check that it worked
+		if (typecasted_other_item == NULL)
+		{
+			cout << endl << "Item type is: ";
+			cout << itemTypeName << endl;
+			return false;
+			// items of the wrong type (or null pointers) will be pushed to the end of the list
+		}
+
+		for (int i = 0; i < item_value.size(); i++) {
+			if (item_value[i] == typecasted_other_item->getItemVal()[i])
+			{
+				continue;
+			}
+			else if (item_value[i] > typecasted_other_item->getItemVal()[i])
+			{
+				result = true;
+				break;
+			}
+			else
+			{
+				result = false;
+				break;
+			}
+		}
+
+
+
+		// chek if there are sorting options to apply 
+		if (sort_criteria != NULL)
+		{
+			// if sorting is in descending order the result is reversed 
+			if (!(sort_criteria->getAscending()))
+				result = !result;
+		}
+
+		return result;
+	}
+
+	virtual basic_item* allocateEmptyItem()
+	{
+		basic_item* result = new basic_string_item;
+		if (result == NULL)
+		{
+			cout << endl << "Out of memeory allocating ";
+			cout << itemTypeName << endl;
+		}
+		return result;
+	}
+	virtual void deallocateItem(basic_item* itemToDestroy)
+	{
+		if (itemToDestroy != NULL)
+		{
+			// first typecast the other item to confimr it is the same as this;
+			basic_string_item* typecasted_other_item = typecastItem(itemToDestroy, this);
+			delete typecasted_other_item;
+		}
+	}
+
+	virtual bool compatibilityCheck(basic_item* other_item)
+	{
+		bool result = false;
+
+		// if the other item is "empty" (non allocated) don't do any comparison
+		if (other_item != NULL)
+		{
+			// typecast the other item to confirm it is the same as this;
+			basic_string_item* typecasted_other_item = typecastItem(other_item, this);
+			if (typecasted_other_item != NULL)
+				result = true;
+			else
+			{
+				cout << endl << "Check failed for Item type: ";
+				cout << itemTypeName << endl;
+			}
+		}
+		return result;
+	}
+
+};
 //
 class integer_item: public basic_item{
 protected:
@@ -588,15 +744,15 @@ public:
 		
 		date_set = true;
 	}
-	virtual bool IsLargerThan(basic_item* basicItem, basic_sort_criteria* sort_criteria_ptr = NULL)
-	{
-		bool result = false;
+	//virtual bool IsLargerThan(basic_item* basicItem, basic_sort_criteria* sort_criteria_ptr = NULL)
+	//{
+	//	bool result = false;
 
-		if (other_item == null)
-			return false;
+	//	if (other_item == null)
+	//		return false;
 
 
-	}
+	//}
 	virtual void generateRandomItem()
 	{
 		int temp_day;

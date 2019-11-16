@@ -181,12 +181,12 @@ void test_EntireArray()
 	// When ready, repleace these with items of the type you have implemented 
 	//integer_item testitem; basic_sort_criteria testsort_crit;
 
-	integer_itemWithLimits testitem(false); intmat_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
+	basic_string_item testitem; intmat_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
 
 	item_array testArray;
 
 	cout << "The type of item used for all entries in the array is:"; 
-	testitem.printItemTypeName();	
+	//testitem.printItemTypeName();	
 	testArray.attachItemPrototype(&testitem);
 	cout << endl << endl << endl;
 
@@ -204,7 +204,7 @@ void test_CompositeItem()
 {
 	composite_item test_item;
 	test_item.enterNameFromKeyboard();
-	test_item.printName();
+	//test_item.printName();
 
 }
 
@@ -212,7 +212,7 @@ void test_CompositeItem()
 int main()
 {
 	//test_Individualtem();
-	//test_EntireArray();
-	test_CompositeItem();
+	test_EntireArray();
+	//test_CompositeItem();
 }
 
