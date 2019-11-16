@@ -216,8 +216,7 @@ void test_EntireArray()
 void test_CompositeItem() 
 {
 	composite_item test_item;
-	test_item.enterNameFromKeyboard();
-	//test_item.printName();
+	test_item.enterItemFromKeyboard();
 
 }
 
@@ -239,8 +238,8 @@ void test_DateItem()
 int main()
 {
 	//test_Individualtem();
-	test_EntireArray();
-	//test_CompositeItem();
+	//test_EntireArray();
+	test_CompositeItem();
 	//test_DateItem();
 }
 

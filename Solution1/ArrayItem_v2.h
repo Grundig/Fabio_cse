@@ -6,6 +6,7 @@
 #include <ctime>
 #include <cmath>
 #include <string>
+#include <vector>
 
 #include <iostream>
 #include <random>
@@ -99,14 +100,22 @@ public:
 class basic_string_item : public basic_item {
 protected:
 	string item_value;
+	string nameType;
 public:
-	basic_string_item() {
+	basic_string_item(string name = "name") {
 		itemTypeName = "basic_string_item"; 
+		nameType = nameType;
 		generateRandomItem();
 	}
 	~basic_string_item() { cout << "basic_string_item destructor called" << endl; } // can remove the printout after testing
 
 	string getItemVal() { return item_value; }
+
+	virtual void setLocked(bool lock_input)
+	{
+		if (!isEmpty())
+			locked = lock_input;
+	}
 
 	virtual void printItemOnScreen()
 	{
@@ -122,7 +131,7 @@ public:
 			cout << "Error in enterItemFromKeyboard: Item is locked" << endl;
 		else
 		{
-			cout << "Insert integer element then hit enter." << endl;
+			cout << "Insert "<< nameType << "then hit enter." << endl;
 			cin >> item_value;
 			cout << endl;
 
@@ -675,7 +684,7 @@ public:
 };
 
 
-class date_item: public integer_item{
+class date_item: public basic_item{
 protected:
 	//unsigned int day;
 	//enum month{int_val, jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec, sup_val};
@@ -911,7 +920,7 @@ public:
 		if (itemToDestroy != NULL)
 		{
 			// first typecast the other item to confimr it is the same as this;
-			integer_item* typecasted_other_item = typecastItem(itemToDestroy, this);
+			basic_item* typecasted_other_item = typecastItem(itemToDestroy, this);
 			delete typecasted_other_item;
 		}
 	}
@@ -939,11 +948,12 @@ public:
 
 };
 
-class composite_item : public integer_item {
+class composite_item{
 protected:
 	// string to hold first name, second name
-	char first_name[20];
-	char second_name[20];
+
+	std::vector<basic_item*> composite_item_vector;
+
 
 	date_item the_date;
 
@@ -951,15 +961,29 @@ protected:
 
 
 public:
-	composite_item() { itemTypeName = "composite_item"; }
+	composite_item() {
+		composite_item_vector.push_back(new basic_string_item("first name"));
+		composite_item_vector.push_back(new basic_string_item("second name"));
+		composite_item_vector.push_back(new date_item());
+	}
 	~composite_item() { cout << "composite_item destructor call" << endl; }
 
 	void enterNameFromKeyboard()
 	{
-		cout << "Enter first name: " << endl;
-		cin >> first_name;
-		cout << "Enter second name: " << endl;
-		cin >> second_name;
+		cout << "first name:"<< endl;
+		cout << endl;
+		composite_item_vector[0]->printItemTypeName();
+		composite_item_vector[0]->enterItemFromKeyboard();
+		cout << "second name:" << endl;
+		cout << endl;
+		composite_item_vector[1]->enterItemFromKeyboard();
+		cout << "date" << endl;
+		cout << endl;
+		composite_item_vector[2]->enterItemFromKeyboard();
+		//cout << "Enter first name: " << endl;
+		//cin >> first_name;
+		//cout << "Enter second name: " << endl;
+		//cin >> second_name;
 	}
 
 	virtual void enterItemFromKeyboard()
