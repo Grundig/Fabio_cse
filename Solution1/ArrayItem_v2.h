@@ -519,24 +519,17 @@ public:
 };
 
 
-class composite_item : basic_item {
-protected:
-	char first_name[20];
-	char second_name[20];
-
-	unsigned int birth_day;
-	unsigned int birth_month;
-	unsigned int birth_year;
-	
-};
-
-class date: integer_itemWithLimits{
+class date: integer_item{
 protected:
 	unsigned int day;
 	//enum month{int_val, jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec, sup_val};
 	unsigned int year;
 
 	unsigned int month;
+
+	unsigned int date_array[3]; // index 0 is day, 1 is month, 2 is year
+
+	//enum day_month_year{int_val, day, month, ear};
 
 	bool date_set;
 
@@ -589,17 +582,22 @@ public:
 			}
 		} while (valid == false);
 
-		day = temp_day;
-		month = temp_month;
-		year = temp_year;
-
+		date_array[0] = temp_day;
+		date_array[1] = temp_month;
+		date_array[2] = temp_year;
+		
 		date_set = true;
 	}
 	virtual bool IsLargerThan(basic_item* basicItem, basic_sort_criteria* sort_criteria_ptr = NULL)
 	{
+		bool result = false;
+
+		if (other_item == null)
+			return false;
+
 
 	}
-	void inputRandomDate()
+	virtual void generateRandomItem()
 	{
 		int temp_day;
 		int temp_month;
@@ -612,7 +610,7 @@ public:
 		do {
 			temp_day = rand() % 31 + 1;
 			temp_month = rand() % 12 + 1;
-			temp_year = rand() % 2019 + 1;
+			temp_year = 1900 + rand() % 100 + 1;
 
 			valid = true;
 
@@ -640,56 +638,32 @@ public:
 			}
 		} while (valid == false);
 
-		day = temp_day;
-		month = temp_month;
-		year = temp_year;
+		date_array[0] = temp_day;
+		date_array[1] = temp_month;
+		date_array[2] = temp_year;
 
 		date_set = true;
 	}
 
-	int getDay()
+
+
+	virtual void printItemOnScreen()
 	{
 		if (date_set == true)
 		{
-			return day;
-		}
-	}
+			cout << "DD = " << date_array[0] << endl;
 
-	int getMonth()
-	{
-		if (date_set == true)
-		{
-			return month;
-		}
-	}
-
-	int getYear()
-	{
-		if (date_set == true)
-		{
-			return year;
-		}
-	}
-
-
-
-	void printDate()
-	{
-		if (date_set == true)
-		{
-			cout << "DD = " << day << endl;
-
-			if (day < 10)
+			if (date_array[0] < 10)
 			{
 				cout << "0";
 			}
-			cout << day << endl;
+			cout << date_array[0] << endl;
 
-			cout << "MM = " << month << endl;
-			if (month < 10) { cout << "0"; }
-			cout << month << endl;
+			cout << "MM = " << date_array[1] << endl;
+			if (date_array[1] < 10) { cout << "0"; }
+			cout << date_array[1] << endl;
 
-			cout << "YYYY = " << year << endl;
+			cout << "YYYY = " << date_array[2] << endl;
 		}
 		else
 		{
@@ -729,16 +703,16 @@ public:
 		the_date.enterItemFromKeyboard();
 	}
 
-	void printName()
-	{
-		cout << first_name << " " << second_name << endl;
-	}
+	//void printName()
+	//{
+	//	cout << first_name << " " << second_name << endl;
+	//}
 
-	void printNameAndDate()
-	{
-		printName();
-		the_date.printDate();
-	}
+	//void printNameAndDate()
+	//{
+	//	printName();
+	//	the_date.printDate();
+	//}
 
 
 };
