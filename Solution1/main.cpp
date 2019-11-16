@@ -166,7 +166,7 @@ void testArrayFunctions_part2(item_array& testArray, basic_sort_criteria& testso
 	cout << "Done." << endl;
 
 	cout << " Sort array and print the result: " << endl;
-	testArray.bubblesort(&testsort_crit);
+	testArray.quickSort(&testsort_crit);
 	testArray.printArrayOnScreen();
 	cout << "Done." << endl;
 }
