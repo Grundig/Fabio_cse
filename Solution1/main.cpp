@@ -99,37 +99,50 @@ void test_Individualtem()
 	integer_itemWithLimits testintWL1, testintWL1a;
 	integer_item testitem1, testitem1a; basic_sort_criteria testsort_crit;
 	//intmat_item testitem1, testitem1a; intmat_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
-
+	date_item testdateitem1, testdateitem1a;
 	
 	// 
 	cout << "Test input funcitons:" << endl;
 //	testItemFunctions_part1(&testitem1);
-	testItemFunctions_part1(&testintWL1);
+	//testitemfunctions_part1(&testintwl1);
+	//testItemFunctions_part1(&testdateitem1);
 
 	cout << endl;
 	cout << "Now with locked item:" << endl;
 //	testitem1.setLocked(true);
-	testintWL1.setLocked(true);
+	//testintWL1.setLocked(true);
+	//testdateitem1.setLocked(true);
+
+
 //	testItemFunctions_part1(&testitem1);
-	testItemFunctions_part1(&testintWL1);
+	//testitemfunctions_part1(&testintwl1);
+	//testItemFunctions_part1(&testdateitem1);
+
+
 	//testitem1.setLocked(false);
-	testintWL1.setLocked(false);
+	//testintWL1.setLocked(false);
+	testdateitem1.setLocked(false);
 	cout << endl;
 	
 	
 	cout << "Test comparison of two items:" << endl;	
 	// this uses the default comparison option:
 	//testItemFunctions_part2(&testitem1, &testitem1a, NULL);
-	testItemFunctions_part2(&testintWL1, &testintWL1a, NULL);
+	//testItemFunctions_part2(&testintWL1, &testintWL1a, NULL);
+	testItemFunctions_part2(&testdateitem1, &testdateitem1a, NULL);
+
+
 	// this uses the full default comparison rule (via user input)
 //	testItemFunctions_part2(&testitem1, &testitem1a, &testsort_crit);
-	testItemFunctions_part2(&testintWL1, &testintWL1a, &testsort_crit);
+	//testItemFunctions_part2(&testintWL1, &testintWL1a, &testsort_crit);
+	testItemFunctions_part2(&testdateitem1, &testdateitem1a, &testsort_crit);
 	cout << endl;
 	
 	
 	cout << "Test allocate/deallocate funcitons:" << endl;
 	//testItemFunctions_part3(&testitem1);
-	testItemFunctions_part3(&testintWL1);
+	//testItemFunctions_part3(&testintWL1);
+	testItemFunctions_part3(&testdateitem1);
 	cout << endl;
 }
 
@@ -181,7 +194,7 @@ void test_EntireArray()
 	// When ready, repleace these with items of the type you have implemented 
 	//integer_item testitem; basic_sort_criteria testsort_crit;
 
-	integer_itemWithLimits testitem(false); intmat_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
+	date_item testitem; intmat_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
 
 	item_array testArray;
 
@@ -192,7 +205,7 @@ void test_EntireArray()
 
 	cout << "Testing Array allocation and data entry: " << endl;
 	//testArrayFunctions_part1(testArray);
-	testArray.allocateArrayAndItems(50);
+	testArray.allocateArrayAndItems(10);
 	cout << "Done." << endl << endl;
 
 	cout << "Testing Array sorting " << endl;
@@ -204,15 +217,30 @@ void test_CompositeItem()
 {
 	composite_item test_item;
 	test_item.enterNameFromKeyboard();
-	test_item.printName();
+	//test_item.printName();
 
+}
+
+void test_DateItem()
+{
+	date_item test_date1;
+	date_item test_date2;
+
+	test_date1.generateRandomItem();
+	test_date2.generateRandomItem();
+
+	test_date1.printItemOnScreen();
+	test_date2.printItemOnScreen();
+
+	//test_date1.IsLargerThan(test_date2);
 }
 
 
 int main()
 {
 	//test_Individualtem();
-	//test_EntireArray();
-	test_CompositeItem();
+	test_EntireArray();
+	//test_CompositeItem();
+	//test_DateItem();
 }
 

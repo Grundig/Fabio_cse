@@ -519,25 +519,27 @@ public:
 };
 
 
-class date: integer_item{
+class date_item: public integer_item{
 protected:
-	unsigned int day;
+	//unsigned int day;
 	//enum month{int_val, jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec, sup_val};
-	unsigned int year;
+	//unsigned int year;
 
-	unsigned int month;
+	//unsigned int month;
 
 	unsigned int date_array[3]; // index 0 is day, 1 is month, 2 is year
 
-	//enum day_month_year{int_val, day, month, ear};
+	enum day_month_year{day, month, year, sup_val};
+	day_month_year dmy;
 
 	bool date_set;
 
 public:
-	date() {
+	date_item() {
 		date_set = false;
+		itemTypeName = "date_item";
 	}
-	//~date();
+	~date_item() { cout << "Date item destructor called" << endl; }
 
 	virtual void enterItemFromKeyboard()
 	{
@@ -582,21 +584,22 @@ public:
 			}
 		} while (valid == false);
 
-		date_array[0] = temp_day;
+		//date_array[0] = temp_day;
+		date_array[day] = temp_day;
 		date_array[1] = temp_month;
 		date_array[2] = temp_year;
 		
 		date_set = true;
 	}
-	virtual bool IsLargerThan(basic_item* basicItem, basic_sort_criteria* sort_criteria_ptr = NULL)
-	{
-		bool result = false;
 
-		if (other_item == null)
-			return false;
+	// functions to return day/month/year
+	int getDay() { return date_array[0]; }
 
+	int getMonth() { return date_array[1]; }
+		
+	int getYear() { return date_array[2]; }
+		
 
-	}
 	virtual void generateRandomItem()
 	{
 		int temp_day;
@@ -651,7 +654,7 @@ public:
 	{
 		if (date_set == true)
 		{
-			cout << "DD = " << date_array[0] << endl;
+			cout << "DD = ";
 
 			if (date_array[0] < 10)
 			{
@@ -659,7 +662,7 @@ public:
 			}
 			cout << date_array[0] << endl;
 
-			cout << "MM = " << date_array[1] << endl;
+			cout << "MM = ";
 			if (date_array[1] < 10) { cout << "0"; }
 			cout << date_array[1] << endl;
 
@@ -671,6 +674,104 @@ public:
 		}
 	}
 
+	// ascending should bring up the oldest item first
+	virtual bool IsLargerThan(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL)
+	{
+		bool result = false;
+
+		// if the other item is "empty" (non allocated) don't do any comparison
+		if (other_item == NULL)
+			return false;
+
+
+		// first typecast the other item to confimr it is the same as this;
+		date_item* typecasted_other_item = typecastItem(other_item, this);
+
+		// check that it worked
+		if (typecasted_other_item == NULL)
+		{
+			cout << endl << "Item type is: ";
+			cout << itemTypeName << endl;
+			return false;
+			// items of the wrong type (or null pointers) will be pushed to the end of the list
+		}
+
+		// now verify if the other item is larger than the current
+		// for the date item, is LARGER constitutes an OLDER DATE
+		// ie YY = 1994 is considered larger than YY = 2000
+
+		// if year is smaller (earlier)
+		// if the year is the same, proceed to month
+		/*int testval = getYear();
+		int test_val = typecasted_other_item->getYear();*/
+		if (getYear() < (typecasted_other_item->getYear()))
+			result = true;
+		else if (getYear()  == (typecasted_other_item->getYear()))
+		{
+			if (getMonth() < typecasted_other_item->getMonth())
+				result = true;
+			else if (getMonth() == typecasted_other_item->getMonth())
+			{
+				// what if two dates are the same, the item we are calling from is considered larger
+				if (getDay() <= typecasted_other_item->getDay())
+					result = true;
+				else
+					result = false;
+			}
+		}
+
+
+		// chek if there are sorting options to apply 
+		if (sort_criteria != NULL)
+		{
+			// if sorting is in descending order the result is reversed 
+			if (!(sort_criteria->getAscending()))
+				result = !result;
+		}
+
+		return result;
+	}
+
+	virtual basic_item* allocateEmptyItem()
+	{
+		basic_item* result = new date_item;
+		if (result == NULL)
+		{
+			cout << endl << "Out of memeory allocating ";
+			cout << itemTypeName << endl;
+		}
+		return result;
+	}
+	virtual void deallocateItem(basic_item* itemToDestroy)
+	{
+		if (itemToDestroy != NULL)
+		{
+			// first typecast the other item to confimr it is the same as this;
+			integer_item* typecasted_other_item = typecastItem(itemToDestroy, this);
+			delete typecasted_other_item;
+		}
+	}
+
+	virtual bool compatibilityCheck(basic_item* other_item)
+	{
+		bool result = false;
+
+		// if the other item is "empty" (non allocated) don't do any comparison
+		if (other_item != NULL)
+		{
+			// typecast the other item to confirm it is the same as this;
+			date_item* typecasted_other_item = typecastItem(other_item, this);
+			if (typecasted_other_item != NULL)
+				result = true;
+			else
+			{
+				cout << endl << "Check failed for Item type: ";
+				cout << itemTypeName << endl;
+			}
+		}
+		return result;
+	}
+
 
 };
 
@@ -680,7 +781,7 @@ protected:
 	char first_name[20];
 	char second_name[20];
 
-	date the_date;
+	date_item the_date;
 
 
 
