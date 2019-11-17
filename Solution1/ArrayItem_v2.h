@@ -443,7 +443,7 @@ public:
 	virtual void setOptionFromKeyboard()
 	{
 		char sortoption;
-		cout << "Sort option: Type F for first name; Type S for second name; Type D for full date; then press ENTER" << endl;
+		cout << "Sort option: Type F for first name; Type S for second name; Type D for full date; Type M for day and month; then press ENTER" << endl;
 		cin >> sortoption;
 		switch (sortoption) {
 		case 'F':
@@ -754,7 +754,7 @@ protected:
 
 	//unsigned int month;
 
-	bool dataSortType = true;
+	bool dataSortType;
 
 	unsigned int date_array[3]; // index 0 is day, 1 is month, 2 is year
 
@@ -769,11 +769,6 @@ public:
 		itemTypeName = "date_item";
 	}
 	~date_item() { cout << "Date item destructor called" << endl; }
-
-	void setDataSortType(bool type)
-	{
-		dataSortType = type;
-	}
 
 	virtual void enterItemFromKeyboard()
 	{
@@ -920,7 +915,23 @@ public:
 	virtual bool IsLargerThan(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL)
 	{
 		bool result = false;
+		compositeItem_sort_criteria CompositeSortOption;
 
+		if (sort_criteria != NULL)
+		{
+			// first typecast the other item to confimr it is the same as this;
+			compositeItem_sort_criteria* typecasted_sortoption = typecastItem(sort_criteria, &CompositeSortOption);
+			if (typecasted_sortoption != NULL)
+				CompositeSortOption.setOption(typecasted_sortoption->getOption());
+		}
+
+
+		auto test = CompositeSortOption.getOption();
+		switch (CompositeSortOption.getOption()) {
+			case(compositeItem_sort_criteria::DayAndMonth):
+				dataSortType = false;
+				break;
+		}
 		// if the other item is "empty" (non allocated) don't do any comparison
 		if (other_item == NULL)
 			return false;
@@ -946,9 +957,25 @@ public:
 		// if the year is the same, proceed to month
 		/*int testval = getYear();
 		int test_val = typecasted_other_item->getYear();*/
-		if (getYear() < (typecasted_other_item->getYear()) && dataSortType)
-			result = true;
-		else if (getYear()  == (typecasted_other_item->getYear()) && dataSortType)
+		if(dataSortType)
+		{
+			if (getYear() < (typecasted_other_item->getYear()))
+				result = true;
+			else if (getYear() == (typecasted_other_item->getYear()))
+			{
+				if (getMonth() < typecasted_other_item->getMonth())
+					result = true;
+				else if (getMonth() == typecasted_other_item->getMonth())
+				{
+					// what if two dates are the same, the item we are calling from is considered larger
+					if (getDay() <= typecasted_other_item->getDay())
+						result = true;
+					else
+						result = false;
+				}
+			}
+		}
+		else
 		{
 			if (getMonth() < typecasted_other_item->getMonth())
 				result = true;
@@ -961,6 +988,7 @@ public:
 					result = false;
 			}
 		}
+
 
 
 		// chek if there are sorting options to apply 
@@ -1082,6 +1110,7 @@ public:
 		// first typecast the other item to confimr it is the same as this;
 		composite_item* typecasted_other_item = typecastItem(other_item, this);
 
+
 		//check that it worked
 		if (typecasted_other_item == NULL)
 		{
@@ -1099,7 +1128,8 @@ public:
 				CompositeSortOption.setOption(typecasted_sortoption->getOption());
 		}
 
-		;
+		
+
 		auto test = typecasted_other_item->getCompsite_item(0);
 		// now verify if the other item is larger than the curren
 		switch (CompositeSortOption.getOption()) {
@@ -1113,8 +1143,7 @@ public:
 			result = composite_item_vector[2]->IsLargerThan(typecasted_other_item->getCompsite_item(2), sort_criteria);
 			break;
 		case(compositeItem_sort_criteria::DayAndMonth):
-			// to be doneS
-		//	result = composite_item_vector[2]->IsLargerThan(typecasted_other_item->getCompsite_item(2), sort_criteria);
+			result = composite_item_vector[2]->IsLargerThan(typecasted_other_item->getCompsite_item(2), sort_criteria);
 			break;
 
 		}
