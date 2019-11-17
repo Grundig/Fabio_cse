@@ -1041,13 +1041,10 @@ public:
 	virtual void enterItemFromKeyboard()
 	{
 		cout << "first name:"<< endl;
-		cout << endl;
 		composite_item_vector[0]->enterItemFromKeyboard();
 		cout << "second name:" << endl;
-		cout << endl;
 		composite_item_vector[1]->enterItemFromKeyboard();
 		cout << "date" << endl;
-		cout << endl;
 		composite_item_vector[2]->enterItemFromKeyboard();
 	}
 
@@ -1115,6 +1112,11 @@ public:
 		case(compositeItem_sort_criteria::fullDate):
 			result = composite_item_vector[2]->IsLargerThan(typecasted_other_item->getCompsite_item(2), sort_criteria);
 			break;
+		case(compositeItem_sort_criteria::DayAndMonth):
+			// to be doneS
+		//	result = composite_item_vector[2]->IsLargerThan(typecasted_other_item->getCompsite_item(2), sort_criteria);
+			break;
+
 		}
 
 		// chek if ascending/decenting sorting applies 
@@ -1145,23 +1147,6 @@ public:
 			// first typecast the other item to confirm it is the same as this;
 			composite_item* typecasted_other_item = typecastItem(itemToDestroy, this);
 			delete typecasted_other_item;
-		}
-	}
-
-	bool setSortType(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL, sortType type = sortType::firstName)
-	{
-		switch (type)
-		{
-			case sortType::firstName:
-				return composite_item_vector[0]->IsLargerThan(other_item, sort_criteria);
-				break;
-			case sortType::secondName:
-				return composite_item_vector[0]->IsLargerThan(other_item, sort_criteria);
-				break;
-			case sortType::fullDate:
-				return composite_item_vector[1]->IsLargerThan(other_item, sort_criteria);
-				break;
-
 		}
 	}
 
