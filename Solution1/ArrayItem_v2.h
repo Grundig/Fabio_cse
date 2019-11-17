@@ -12,6 +12,8 @@
 #include <random>
 using namespace std;
 
+enum class sortType { firstName, secondName, fullDate, DayAndMonth };
+
 
 ////// this is needed to check compatibility between items (and to use a derived-class pointer that is passes as "base class")
 template <class Base, class Derived> Derived* typecastItem(Base* basic_ptr, Derived* derivedItem_ptr)
@@ -97,15 +99,15 @@ public:
 	//friend class item_array;
 	friend class general_item_array;
 };
-class basic_string_item : public basic_item {
+class basic_string_item : public basic_item{
 protected:
 	string item_value;
 	string nameType;
 public:
 	basic_string_item(string name = "name") {
 		itemTypeName = "basic_string_item"; 
-		nameType = nameType;
-		generateRandomItem();
+		nameType = name;
+		//generateRandomItem();
 	}
 	~basic_string_item() { cout << "basic_string_item destructor called" << endl; } // can remove the printout after testing
 
@@ -131,7 +133,7 @@ public:
 			cout << "Error in enterItemFromKeyboard: Item is locked" << endl;
 		else
 		{
-			cout << "Insert "<< nameType << "then hit enter." << endl;
+			cout << "Insert "<< nameType << " then hit enter." << endl;
 			cin >> item_value;
 			cout << endl;
 
@@ -423,6 +425,66 @@ public:
 	
 };
 
+class compositeItem_sort_criteria : public basic_sort_criteria {
+public:
+	enum sortType { start, firstName, secondName, fullDate, DayAndMonth, stop };
+private:
+	sortType thesortoption;
+public:
+	compositeItem_sort_criteria() { setOption(firstName); }
+	void setOption(sortType value)
+	{
+		if ((value > start) && (value < stop))
+			thesortoption = value;
+		else
+			thesortoption = firstName;
+	}
+	sortType getOption() { return thesortoption; }
+	virtual void setOptionFromKeyboard()
+	{
+		char sortoption;
+		cout << "Sort option: Type F for first name; Type S for second name; Type D for full date; then press ENTER" << endl;
+		cin >> sortoption;
+		switch (sortoption) {
+		case 'F':
+		case 'f':
+			setOption(firstName);
+			break;
+		case 'S':
+		case 's':
+			setOption(secondName);
+			break;
+		case 'D':
+		case 'd':
+			setOption(fullDate);
+			break;
+		case 'M':
+		case 'm':
+			setOption(DayAndMonth);
+			break;
+		}
+		basic_sort_criteria::setOptionFromKeyboard();
+	}
+	virtual void printOptionToScreen()
+	{
+		cout << "composite_item Sorting by ";
+		switch (getOption()) {
+		case firstName:
+			cout << "first name " << endl;
+			break;
+		case secondName:
+			cout << "second name " << endl;
+			break;
+		case fullDate:
+			cout << "full date " << endl;
+			break;
+		case DayAndMonth:
+			cout << "day and month" << endl;
+			break;
+		}
+		basic_sort_criteria::printOptionToScreen();
+	}
+};
 
 
 class intmat_sort_criteria : public basic_sort_criteria{
@@ -692,6 +754,8 @@ protected:
 
 	//unsigned int month;
 
+	bool dataSortType = true;
+
 	unsigned int date_array[3]; // index 0 is day, 1 is month, 2 is year
 
 	enum day_month_year{day, month, year, sup_val};
@@ -705,6 +769,11 @@ public:
 		itemTypeName = "date_item";
 	}
 	~date_item() { cout << "Date item destructor called" << endl; }
+
+	void setDataSortType(bool type)
+	{
+		dataSortType = type;
+	}
 
 	virtual void enterItemFromKeyboard()
 	{
@@ -833,17 +902,17 @@ public:
 			{
 				cout << "0";
 			}
-			cout << date_array[0] << endl;
+			cout << date_array[0] << " ";
 
 			cout << "MM = ";
 			if (date_array[1] < 10) { cout << "0"; }
-			cout << date_array[1] << endl;
+			cout << date_array[1] << " ";
 
 			cout << "YYYY = " << date_array[2] << endl;
 		}
 		else
 		{
-			cout << "Date not set" << endl;
+			cout << "Date not set" << " ";
 		}
 	}
 
@@ -877,9 +946,9 @@ public:
 		// if the year is the same, proceed to month
 		/*int testval = getYear();
 		int test_val = typecasted_other_item->getYear();*/
-		if (getYear() < (typecasted_other_item->getYear()))
+		if (getYear() < (typecasted_other_item->getYear()) && dataSortType)
 			result = true;
-		else if (getYear()  == (typecasted_other_item->getYear()))
+		else if (getYear()  == (typecasted_other_item->getYear()) && dataSortType)
 		{
 			if (getMonth() < typecasted_other_item->getMonth())
 				result = true;
@@ -919,6 +988,7 @@ public:
 	{
 		if (itemToDestroy != NULL)
 		{
+			delete[] date_array;
 			// first typecast the other item to confimr it is the same as this;
 			basic_item* typecasted_other_item = typecastItem(itemToDestroy, this);
 			delete typecasted_other_item;
@@ -948,31 +1018,30 @@ public:
 
 };
 
-class composite_item{
+class composite_item: public basic_item{
 protected:
 	// string to hold first name, second name
 
-	std::vector<basic_item*> composite_item_vector;
-
-
-	date_item the_date;
-
-
+	vector<basic_item*> composite_item_vector;
 
 
 public:
 	composite_item() {
+		//itemTypeName = "composite_item";
 		composite_item_vector.push_back(new basic_string_item("first name"));
 		composite_item_vector.push_back(new basic_string_item("second name"));
 		composite_item_vector.push_back(new date_item());
 	}
 	~composite_item() { cout << "composite_item destructor call" << endl; }
 
-	void enterNameFromKeyboard()
+	basic_item* getCompsite_item(int item)
+	{
+		return composite_item_vector[item];
+	}
+	virtual void enterItemFromKeyboard()
 	{
 		cout << "first name:"<< endl;
 		cout << endl;
-		composite_item_vector[0]->printItemTypeName();
 		composite_item_vector[0]->enterItemFromKeyboard();
 		cout << "second name:" << endl;
 		cout << endl;
@@ -980,28 +1049,145 @@ public:
 		cout << "date" << endl;
 		cout << endl;
 		composite_item_vector[2]->enterItemFromKeyboard();
-		//cout << "Enter first name: " << endl;
-		//cin >> first_name;
-		//cout << "Enter second name: " << endl;
-		//cin >> second_name;
 	}
 
-	virtual void enterItemFromKeyboard()
+	//These must be implemented by any derived item	
+	virtual void printItemOnScreen()
 	{
-		enterNameFromKeyboard();
-		the_date.enterItemFromKeyboard();
+		cout << "first name:" << endl;
+		cout << endl;
+		composite_item_vector[0]->printItemOnScreen();
+		cout << "second name:" << endl;
+		cout << endl;
+		composite_item_vector[1]->printItemOnScreen();
+		cout << "date" << endl;
+		cout << endl;
+		composite_item_vector[2]->printItemOnScreen();
+	}
+	//virtual void loadItemFromFile(FILE* fin)=0;
+	virtual void generateRandomItem()
+	{
+		composite_item_vector[0]->generateRandomItem();
+		composite_item_vector[1]->generateRandomItem();
+		composite_item_vector[2]->generateRandomItem();
+	}
+	virtual bool IsLargerThan(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL)
+	{
+
+		bool result = false;
+		compositeItem_sort_criteria CompositeSortOption;
+
+		// if the other item is "empty" (non allocated) don't do any comparison
+		if (other_item == NULL)
+			return false;
+		
+
+		// first typecast the other item to confimr it is the same as this;
+		composite_item* typecasted_other_item = typecastItem(other_item, this);
+
+		//check that it worked
+		if (typecasted_other_item == NULL)
+		{
+			cout << "Other item is not of type intmat2x2_item." << endl;
+			return false;
+			// items of the wrong type (or null pointers) will be pushed to the end of the list
+		}
+
+		// check if the sort_option is specific for the int_mat
+		if (sort_criteria != NULL)
+		{
+			// first typecast the other item to confimr it is the same as this;
+			compositeItem_sort_criteria* typecasted_sortoption = typecastItem(sort_criteria, &CompositeSortOption);
+			if (typecasted_sortoption != NULL)
+				CompositeSortOption.setOption(typecasted_sortoption->getOption());
+		}
+
+		;
+		auto test = typecasted_other_item->getCompsite_item(0);
+		// now verify if the other item is larger than the curren
+		switch (CompositeSortOption.getOption()) {
+		case(compositeItem_sort_criteria::firstName):
+			result = composite_item_vector[0]->IsLargerThan(typecasted_other_item->getCompsite_item(0), sort_criteria);
+			break;
+		case(compositeItem_sort_criteria::secondName):	
+			result = composite_item_vector[1]->IsLargerThan(typecasted_other_item->getCompsite_item(1), sort_criteria);
+			break;
+		case(compositeItem_sort_criteria::fullDate):
+			result = composite_item_vector[2]->IsLargerThan(typecasted_other_item->getCompsite_item(2), sort_criteria);
+			break;
+		}
+
+		// chek if ascending/decenting sorting applies 
+		if (sort_criteria != NULL)
+		{
+			// if sorting is in descending order the result is reversed 
+			if (!(sort_criteria->getAscending()))
+				result = !result;
+		}
+
+		return result;
+	}
+	virtual basic_item* allocateEmptyItem()
+	{
+		basic_item* result = new composite_item;
+		if (result == NULL)
+		{
+			cout << endl << "Out of memory allocating ";
+			cout << itemTypeName << endl;
+		}
+		return result;
+	}
+	virtual void deallocateItem(basic_item* itemToDestroy)
+	{
+
+		if (itemToDestroy != NULL)
+		{
+			// first typecast the other item to confirm it is the same as this;
+			composite_item* typecasted_other_item = typecastItem(itemToDestroy, this);
+			delete typecasted_other_item;
+		}
 	}
 
-	//void printName()
-	//{
-	//	cout << first_name << " " << second_name << endl;
-	//}
+	bool setSortType(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL, sortType type = sortType::firstName)
+	{
+		switch (type)
+		{
+			case sortType::firstName:
+				return composite_item_vector[0]->IsLargerThan(other_item, sort_criteria);
+				break;
+			case sortType::secondName:
+				return composite_item_vector[0]->IsLargerThan(other_item, sort_criteria);
+				break;
+			case sortType::fullDate:
+				return composite_item_vector[1]->IsLargerThan(other_item, sort_criteria);
+				break;
 
-	//void printNameAndDate()
-	//{
-	//	printName();
-	//	the_date.printDate();
-	//}
+		}
+	}
+
+	virtual bool compatibilityCheck(basic_item* other_item)
+	{
+		bool result = false;
+
+		// if the other item is "empty" (non allocated) don't do any comparison
+		if (other_item != NULL)
+		{
+			// typecast the other item to confirm it is the same as this;
+			composite_item* typecasted_other_item = typecastItem(other_item, this);
+			if (typecasted_other_item != NULL)
+				result = true;
+			else
+			{
+				cout << endl << "Check failed for Item type: ";
+				cout << itemTypeName << endl;
+			}
+		}
+
+
+		return result;
+	}
+
+
 
 
 };

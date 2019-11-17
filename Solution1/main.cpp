@@ -194,7 +194,7 @@ void test_EntireArray()
 	// When ready, repleace these with items of the type you have implemented 
 	//integer_item testitem; basic_sort_criteria testsort_crit;
 
-	date_item testitem; intmat_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
+	composite_item testitem; compositeItem_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
 
 	item_array testArray;
 
@@ -205,7 +205,7 @@ void test_EntireArray()
 
 	cout << "Testing Array allocation and data entry: " << endl;
 	//testArrayFunctions_part1(testArray);
-	testArray.allocateArrayAndItems(10);
+	testArray.allocateArrayAndItems(100);
 	cout << "Done." << endl << endl;
 
 	cout << "Testing Array sorting " << endl;
@@ -217,6 +217,8 @@ void test_CompositeItem()
 {
 	composite_item test_item;
 	test_item.enterItemFromKeyboard();
+	test_item.generateRandomItem();
+	test_item.printItemOnScreen();
 
 }
 
@@ -238,8 +240,8 @@ void test_DateItem()
 int main()
 {
 	//test_Individualtem();
-	//test_EntireArray();
-	test_CompositeItem();
+	test_EntireArray();
+	//test_CompositeItem();
 	//test_DateItem();
 }
 
