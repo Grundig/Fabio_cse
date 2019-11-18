@@ -1586,12 +1586,12 @@ protected:
 	// string to hold first name, second name, nationality
 
 	vector<basic_item*> studentrecord_item_vector;
-	string allowed_blood_types[8] = [];
+	vector<string> allowed_blood_types;
 
 
 public:
 	studentrecord_item() {
-
+		allowed_blood_types.push_back("");
 		//itemTypeName = "composite_item";
 		studentrecord_item_vector.push_back(new basic_string_item("first name"));
 		studentrecord_item_vector.push_back(new basic_string_item("second name"));
@@ -1602,7 +1602,7 @@ public:
 		studentrecord_item_vector.push_back(new integer_itemWithLimits("level"));
 		studentrecord_item_vector.push_back(new integer_itemWithLimits("cgs_mark"));
 		studentrecord_item_vector.push_back(new date_item());
-		studentrecord_item_vector.push_back(new basic_string_itemWithLimits("blod type")); // can make a blod_type item?
+		studentrecord_item_vector.push_back(new basic_string_itemWithLimits("blod type", allowed_blood_types)); // can make a blod_type item?
 
 	}
 	~studentrecord_item() { cout << "studentrecord_item destructor call" << endl; }
