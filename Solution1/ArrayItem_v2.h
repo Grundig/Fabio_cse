@@ -1412,25 +1412,197 @@ public:
 
 };
 
+class basic_string_itemWithLimits : public basic_string_item
+{
+protected:
+	vector<string> allowed_strings_vector;
+
+
+public:
+	basic_string_itemWithLimits(string name, vector<string> allowed_strings) {
+			
+		allowed_strings_vector = allowed_strings;
+	}
+	~basic_string_itemWithLimits() { cout << "basic_string_itemWithLimits destructor call" << endl; }
+
+	string getAllowed_strings_item(int item)
+	{
+		return allowed_strings_vector[item];
+	}
+
+	virtual void setLocked(bool lock_input)
+	{
+		if (!isEmpty())
+			locked = lock_input;
+	}
+
+	virtual void printItemOnScreen()
+	{
+		if (isEmpty())
+			cout << "Item is empty." << endl;
+		else
+			cout << "Item value is " << item_value << " . " << endl;
+	}
+
+	virtual void enterItemFromKeyboard()
+	{
+		if (isLocked())
+			cout << "Error in enterItemFromKeyboard: Item is locked" << endl;
+		else
+		{
+			cout << "Insert " << nameType << " then hit enter." << endl;
+			cin >> item_value;
+			cout << endl;
+
+			// item filled
+			empty = false;
+		}
+	}
+
+	virtual void generateRandomItem()
+	{
+		int max_val = 12, min_val = 3;
+		const std::string characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+		int length;
+		int max_rand_val = max_val;
+
+		length = rand();
+		length = length % (max_val - min_val + 1) + min_val;
+
+		random_device random_device;
+		mt19937 generator(random_device());
+		uniform_int_distribution<> distribution(0, characters.size() - 1);
+
+		std::string random_string;
+
+		for (std::size_t i = 0; i < length; ++i)
+		{
+			random_string += characters[distribution(generator)];
+		}
+
+		item_value = random_string;
+		empty = false;
+	}
+
+
+
+	//virtual void loadItemFromFile(FILE* fin);
+
+	virtual bool IsLargerThan(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL)
+	{
+		bool result = false;
+
+		// if the other item is "empty" (non allocated) don't do any comparison
+		if (other_item == NULL)
+			return false;
+
+
+		// first typecast the other item to confimr it is the same as this;
+		basic_string_item* typecasted_other_item = typecastItem(other_item, this);
+
+		// check that it worked
+		if (typecasted_other_item == NULL)
+		{
+			cout << endl << "Item type is: ";
+			cout << itemTypeName << endl;
+			return false;
+			// items of the wrong type (or null pointers) will be pushed to the end of the list
+		}
+
+		for (int i = 0; i < item_value.size(); i++) {
+			if (item_value[i] == typecasted_other_item->getItemVal()[i])
+			{
+				continue;
+			}
+			else if (item_value[i] > typecasted_other_item->getItemVal()[i])
+			{
+				result = true;
+				break;
+			}
+			else
+			{
+				result = false;
+				break;
+			}
+		}
+
+
+
+		// chek if there are sorting options to apply 
+		if (sort_criteria != NULL)
+		{
+			// if sorting is in descending order the result is reversed 
+			if (!(sort_criteria->getAscending()))
+				result = !result;
+		}
+
+		return result;
+	}
+
+	virtual basic_item* allocateEmptyItem()
+	{
+		basic_item* result = new basic_string_item;
+		if (result == NULL)
+		{
+			cout << endl << "Out of memeory allocating ";
+			cout << itemTypeName << endl;
+		}
+		return result;
+	}
+	virtual void deallocateItem(basic_item* itemToDestroy)
+	{
+		if (itemToDestroy != NULL)
+		{
+			// first typecast the other item to confimr it is the same as this;
+			basic_string_item* typecasted_other_item = typecastItem(itemToDestroy, this);
+			delete typecasted_other_item;
+		}
+	}
+
+	virtual bool compatibilityCheck(basic_item* other_item)
+	{
+		bool result = false;
+
+		// if the other item is "empty" (non allocated) don't do any comparison
+		if (other_item != NULL)
+		{
+			// typecast the other item to confirm it is the same as this;
+			basic_string_item* typecasted_other_item = typecastItem(other_item, this);
+			if (typecasted_other_item != NULL)
+				result = true;
+			else
+			{
+				cout << endl << "Check failed for Item type: ";
+				cout << itemTypeName << endl;
+			}
+		}
+		return result;
+	}
+
+};
+
 class studentrecord_item : public basic_item {
 protected:
 	// string to hold first name, second name, nationality
 
 	vector<basic_item*> studentrecord_item_vector;
+	string allowed_blood_types[8] = [];
 
 
 public:
 	studentrecord_item() {
+
 		//itemTypeName = "composite_item";
 		studentrecord_item_vector.push_back(new basic_string_item("first name"));
 		studentrecord_item_vector.push_back(new basic_string_item("second name"));
 		studentrecord_item_vector.push_back(new basic_string_item("nationality"));
-		studentrecord_item_vector.push_back(new basic_string_item("degree"));
+		studentrecord_item_vector.push_back(new basic_string_item("type"));
+		studentrecord_item_vector.push_back(new basic_string_item("program"));
 		studentrecord_item_vector.push_back(new integer_itemWithLimits("student_id"));
 		studentrecord_item_vector.push_back(new integer_itemWithLimits("level"));
 		studentrecord_item_vector.push_back(new integer_itemWithLimits("cgs_mark"));
 		studentrecord_item_vector.push_back(new date_item());
-		studentrecord_item_vector.push_back(new basic_string_item("blood_type")); // can make a blod_type item?
+		studentrecord_item_vector.push_back(new basic_string_itemWithLimits("blod type")); // can make a blod_type item?
 
 	}
 	~studentrecord_item() { cout << "studentrecord_item destructor call" << endl; }
