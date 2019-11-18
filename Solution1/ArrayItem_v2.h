@@ -99,6 +99,7 @@ public:
 	//friend class item_array;
 	friend class general_item_array;
 };
+
 class basic_string_item : public basic_item{
 protected:
 	string item_value;
@@ -263,7 +264,7 @@ public:
 	}
 
 };
-//
+
 class integer_item: public basic_item{
 protected:
 	int item_value;	
@@ -486,7 +487,6 @@ public:
 	}
 };
 
-
 class intmat_sort_criteria : public basic_sort_criteria{
 public:
 	enum matsortoptions{inf_val=0, sort_maxval, sort_determ, sup_val};
@@ -533,6 +533,7 @@ public:
 		basic_sort_criteria::printOptionToScreen();
 	}
 };
+
 class integer_itemWithLimits : public integer_item {
 protected:
 	int item_value;
@@ -744,7 +745,6 @@ public:
 	}
 
 };
-
 
 class date_item: public basic_item{
 protected:
@@ -1206,7 +1206,6 @@ public:
 
 };
 
-
 class intmat_item: public basic_item{
 protected:
 	static const int matsize=2;
@@ -1413,8 +1412,44 @@ public:
 
 };
 
+class studentrecord_item : public basic_item {
+protected:
+	// string to hold first name, second name, nationality
+
+	vector<basic_item*> studentrecord_item_vector;
 
 
+public:
+	studentrecord_item() {
+		//itemTypeName = "composite_item";
+		studentrecord_item_vector.push_back(new basic_string_item("first name"));
+		studentrecord_item_vector.push_back(new basic_string_item("second name"));
+		studentrecord_item_vector.push_back(new basic_string_item("nationality"));
+		studentrecord_item_vector.push_back(new basic_string_item("degree"));
+		studentrecord_item_vector.push_back(new integer_itemWithLimits("student_id"));
+		studentrecord_item_vector.push_back(new integer_itemWithLimits("level"));
+		studentrecord_item_vector.push_back(new integer_itemWithLimits("cgs_mark"));
+		studentrecord_item_vector.push_back(new date_item());
+		studentrecord_item_vector.push_back(new basic_string_item("blood_type")); // can make a blod_type item?
+
+	}
+	~studentrecord_item() { cout << "studentrecord_item destructor call" << endl; }
+
+	basic_item* getStudentrecord_item(int item)
+	{
+		return studentrecord_item_vector[item];
+	}
+
+	virtual void printItemOnScreen() = 0;
+	virtual void enterItemFromKeyboard() = 0;
+	virtual void generateRandomItem() = 0;
+	virtual bool IsLargerThan(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL) = 0;
+	virtual basic_item* allocateEmptyItem() = 0;
+	virtual void deallocateItem(basic_item* itemToDestroy) = 0;
+	virtual bool compatibilityCheck(basic_item* other_item) = 0;
+
+
+};
 //#include "generalArray_v2.h"
 
 #endif
