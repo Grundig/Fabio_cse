@@ -647,6 +647,7 @@ protected:
 	int item_value;
 	int min_val = -50, max_val = 50;
 	string name;
+
 	void swap(int* xp, int* yp)
 	{
 		int temp = *xp;
@@ -681,7 +682,7 @@ public:
 	void inputRangeFromKeyboard()
 	{
 		string default_val;
-		cout << "input max range value" << endl;
+		cout << "input max range value " << endl;
 		cin >> max_val;
 		while (cin.fail())
 		{
@@ -715,7 +716,7 @@ public:
 			cout << "Error in enterItemFromKeyboard: Item is locked" << endl;
 		else
 		{
-			cout << "Insert integer "<< name <<"element then hit enter. " << "range between " << min_val << "and " << max_val << endl;
+			cout << "Insert integer "<< name << " element then hit enter. " << "range between " << min_val << " and " << max_val << endl;
 			cin >> item_value;
 
 			while (item_value > max_val || item_value < min_val)
@@ -1567,16 +1568,16 @@ public:
 			cout << "Error in enterItemFromKeyboard: Item is locked" << endl;
 		else
 		{
-			cout << "these are the available options" << endl;
+			cout << "Please enter degree program. These are the available options:" << endl;
 			for (std::vector<string>::const_iterator i = allowed_strings_vector.begin(); i != allowed_strings_vector.end(); ++i)
 				cout << *i << ' ';
 			cout << endl;
 			cout << "Insert " << nameType << " then hit enter." << endl;
 			cin >> tempVal;
-
+			
 			while (!(find(allowed_strings_vector.begin(), allowed_strings_vector.end(), tempVal) != allowed_strings_vector.end()))
 			{
-				cout << "sorry what you just typed was not part of the options please try agian" << endl;
+				cout << "Invalid options. Please try again." << endl;
 
 				cout << "these are the available options" << endl;
 				for (std::vector<string>::const_iterator i = allowed_strings_vector.begin(); i != allowed_strings_vector.end(); ++i)
@@ -1721,9 +1722,9 @@ public:
 		studentrecord_item_vector.push_back(new basic_string_item("first name"));
 		studentrecord_item_vector.push_back(new basic_string_item("second name"));
 		studentrecord_item_vector.push_back(new basic_string_item("nationality"));
-		studentrecord_item_vector.push_back(new basic_string_item("type"));
-		studentrecord_item_vector.push_back(new basic_string_itemWithLimits("program", allowed_programs));
-		studentrecord_item_vector.push_back(new integer_itemWithLimits(51000000, 52099999, "student_id"));
+		studentrecord_item_vector.push_back(new basic_string_item("degree level"));
+		studentrecord_item_vector.push_back(new basic_string_itemWithLimits("degree program", allowed_programs));
+		studentrecord_item_vector.push_back(new integer_itemWithLimits(51000000, 52099999, "student id", false));
 		studentrecord_item_vector.push_back(new basic_string_itemWithLimits("level", allowed_levels));
 		studentrecord_item_vector.push_back(new integer_itemWithLimits(0, 22, "cgs_mark"));
 		studentrecord_item_vector.push_back(new date_item());
@@ -1749,7 +1750,7 @@ public:
 	{
 		for (int i = 0; i < studentrecord_item_vector.size(); i++)
 		{
-			studentrecord_item_vector[i]->printItemOnScreen();
+			studentrecord_item_vector[i]->enterItemFromKeyboard();
 		}
 	}
 

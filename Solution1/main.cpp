@@ -223,6 +223,15 @@ void test_CompositeItem()
 
 }
 
+void test_studentRecordItem()
+{
+	studentrecord_item test_item;
+	test_item.enterItemFromKeyboard();
+	test_item.printItemOnScreen();
+	test_item.generateRandomItem();
+	test_item.printItemOnScreen();
+}
+
 void test_DateItem()
 {
 	date_item test_date1;
@@ -240,9 +249,18 @@ void test_DateItem()
 
 int main()
 {
-	test_Individualtem();
+	//test_Individualtem();
 	//test_EntireArray();
 	//test_CompositeItem();
 	//test_DateItem();
+	//test_studentRecordItem();
+
+	integer_itemWithLimits limit_test(40,100,"name",false);
+	//integer_itemWithLimits limit_test;
+	//limit_test.enterItemFromKeyboard();
+	//limit_test.inputRangeFromKeyboard();
+	limit_test.enterItemFromKeyboard();
+	limit_test.printItemOnScreen();
+
 }
 
