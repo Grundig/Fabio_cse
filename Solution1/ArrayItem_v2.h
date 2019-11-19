@@ -647,6 +647,7 @@ protected:
 	int item_value;
 	int min_val = -50, max_val = 50;
 	string name;
+
 	void swap(int* xp, int* yp)
 	{
 		int temp = *xp;
@@ -681,7 +682,7 @@ public:
 	void inputRangeFromKeyboard()
 	{
 		string default_val;
-		cout << "input max range value" << endl;
+		cout << "input max range value " << endl;
 		cin >> max_val;
 		while (cin.fail())
 		{
@@ -715,7 +716,7 @@ public:
 			cout << "Error in enterItemFromKeyboard: Item is locked" << endl;
 		else
 		{
-			cout << "Insert integer "<< name <<"element then hit enter. " << "range between " << min_val << "and " << max_val << endl;
+			cout << "Insert integer "<< name << " element then hit enter. " << "range between " << min_val << " and " << max_val << endl;
 			cin >> item_value;
 
 			while (item_value > max_val || item_value < min_val)
@@ -1567,16 +1568,16 @@ public:
 			cout << "Error in enterItemFromKeyboard: Item is locked" << endl;
 		else
 		{
-			cout << "these are the available options" << endl;
+			cout << "Please enter degree program. These are the available options:" << endl;
 			for (std::vector<string>::const_iterator i = allowed_strings_vector.begin(); i != allowed_strings_vector.end(); ++i)
 				cout << *i << ' ';
 			cout << endl;
 			cout << "Insert " << nameType << " then hit enter." << endl;
 			cin >> tempVal;
-
+			
 			while (!(find(allowed_strings_vector.begin(), allowed_strings_vector.end(), tempVal) != allowed_strings_vector.end()))
 			{
-				cout << "sorry what you just typed was not part of the options please try agian" << endl;
+				cout << "Invalid options. Please try again." << endl;
 
 				cout << "these are the available options" << endl;
 				for (std::vector<string>::const_iterator i = allowed_strings_vector.begin(); i != allowed_strings_vector.end(); ++i)
@@ -1713,22 +1714,22 @@ protected:
 public:
 	studentrecord_item() {
 
-        allowed_blood_types = { "O–", "O+", "A–", "A+", "B–", "B+", "AB–", "AB+" };
-		allowed_levels = { "MEng", "BEng"};
-		allowed_programs = { "EEE", "Mech", "Chem", "Civil", "Petr"};
+		allowed_blood_types = { "O–", "O+", "A–", "A+", "B–", "B+", "AB–", "AB+" };
+		allowed_levels = { "MEng", "BEng" };
+		allowed_programs = { "EEE", "Mech", "Chem", "Civil", "Petr" };
 		itemTypeName = "studentrecord_item";
 
 		studentrecord_item_vector.push_back(new basic_string_item("first name"));
 		studentrecord_item_vector.push_back(new basic_string_item("second name"));
 		studentrecord_item_vector.push_back(new basic_string_item("nationality"));
-		studentrecord_item_vector.push_back(new basic_string_item("type"));
-		studentrecord_item_vector.push_back(new basic_string_itemWithLimits("program", allowed_programs));
-		studentrecord_item_vector.push_back(new integer_itemWithLimits(51000000,52099999,"student_id"));
+		studentrecord_item_vector.push_back(new basic_string_item("degree level"));
+		studentrecord_item_vector.push_back(new basic_string_itemWithLimits("degree program", allowed_programs));
+		studentrecord_item_vector.push_back(new integer_itemWithLimits(51000000, 52099999, "student id", false));
 		studentrecord_item_vector.push_back(new basic_string_itemWithLimits("level", allowed_levels));
-		studentrecord_item_vector.push_back(new integer_itemWithLimits(0,22,"cgs_mark"));
+		studentrecord_item_vector.push_back(new integer_itemWithLimits(0, 22, "cgs_mark"));
 		studentrecord_item_vector.push_back(new date_item());
 		studentrecord_item_vector.push_back(new basic_string_itemWithLimits("blood type", allowed_blood_types)); // can make a blod_type item?
-		studentrecord_item_vector.push_back(new integer_itemWithLimits(0,300,"height"));
+		studentrecord_item_vector.push_back(new integer_itemWithLimits(0, 300, "height"));
 
 	}
 	~studentrecord_item() { cout << "studentrecord_item destructor call" << endl; }
@@ -1744,12 +1745,12 @@ public:
 			studentrecord_item_vector[i]->printItemOnScreen();
 		}
 	}
-	
-	virtual void enterItemFromKeyboard() 
+
+	virtual void enterItemFromKeyboard()
 	{
 		for (int i = 0; i < studentrecord_item_vector.size(); i++)
 		{
-			studentrecord_item_vector[i]->printItemOnScreen();
+			studentrecord_item_vector[i]->enterItemFromKeyboard();
 		}
 	}
 
@@ -1765,7 +1766,7 @@ public:
 	{
 
 		bool result = false;
-		compositeItem_sort_criteria st;
+		studentrecord_item_sort_criteria RecordSortOption;
 
 		// if the other item is "empty" (non allocated) don't do any comparison
 		if (other_item == NULL)
@@ -1773,7 +1774,7 @@ public:
 
 
 		// first typecast the other item to confimr it is the same as this;
-		composite_item* typecasted_other_item = typecastItem(other_item, this);
+		studentrecord_item* typecasted_other_item = typecastItem(other_item, this);
 
 
 		//check that it worked
@@ -1788,27 +1789,57 @@ public:
 		if (sort_criteria != NULL)
 		{
 			// first typecast the other item to confimr it is the same as this;
-			compositeItem_sort_criteria* typecasted_sortoption = typecastItem(sort_criteria, &CompositeSortOption);
+			studentrecord_item_sort_criteria* typecasted_sortoption = typecastItem(sort_criteria, &RecordSortOption);
 			if (typecasted_sortoption != NULL)
-				CompositeSortOption.setOption(typecasted_sortoption->getOption());
+				RecordSortOption.setOption(typecasted_sortoption->getOption());
 		}
 
 		// now verify if the other item is larger than the curren
-		switch (CompositeSortOption.getOption()) {
-		case(compositeItem_sort_criteria::firstName):
-			result = composite_item_vector[0]->IsLargerThan(typecasted_other_item->getCompsite_item(0), sort_criteria);
-			break;
-		case(compositeItem_sort_criteria::secondName):
-			result = composite_item_vector[1]->IsLargerThan(typecasted_other_item->getCompsite_item(1), sort_criteria);
-			break;
-		case(compositeItem_sort_criteria::fullDate):
-			result = composite_item_vector[2]->IsLargerThan(typecasted_other_item->getCompsite_item(2), sort_criteria);
-			break;
-		case(compositeItem_sort_criteria::DayAndMonth):
-			result = composite_item_vector[2]->IsLargerThan(typecasted_other_item->getCompsite_item(2), sort_criteria);
-			break;
+		//for (int i = (int)(studentrecord_item_sort_criteria::start); i < (int)(studentrecord_item_sort_criteria::stop); i++)
+		//{
 
-		}
+		//}
+
+		result = studentrecord_item_vector[(int)sort_criteria]->IsLargerThan(typecasted_other_item->getStudentrecord_item((int)sort_criteria), sort_criteria);
+		
+		//switch (RecordSortOption.getOption()) {
+		//case(studentrecord_item_sort_criteria::firstName):
+		//	result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(0), sort_criteria);
+		//	break;
+		//case(studentrecord_item_sort_criteria::secondName):
+		//	result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(1), sort_criteria);
+		//	break;
+		//case(studentrecord_item_sort_criteria::n):
+		//	result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(2), sort_criteria);
+		//	break;
+		//case(studentrecord_item_sort_criteria::firstName):
+		//	result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(3), sort_criteria);
+		//	break;
+		//case(studentrecord_item_sort_criteria::firstName):
+		//	result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(4), sort_criteria);
+		//	break;
+		//case(studentrecord_item_sort_criteria::firstName):
+		//	result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(5), sort_criteria);
+		//	break;
+		//case(studentrecord_item_sort_criteria::firstName):
+		//	result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(6), sort_criteria);
+		//	break;
+		//case(studentrecord_item_sort_criteria::firstName):
+		//	result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(7), sort_criteria);
+		//	break;
+		//case(studentrecord_item_sort_criteria::firstName):
+		//	result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(8), sort_criteria);
+		//	break;
+		//case(studentrecord_item_sort_criteria::firstName):
+		//	result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(9), sort_criteria);
+		//	break;
+		//case(studentrecord_item_sort_criteria::firstName):
+		//	result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(10), sort_criteria);
+		//	break;
+
+
+	
+
 
 		// chek if ascending/decenting sorting applies 
 		if (sort_criteria != NULL)
@@ -1823,19 +1854,53 @@ public:
 
 	virtual basic_item* allocateEmptyItem()
 	{
-		for (int i = 0; i < studentrecord_item_vector.size(); i++)
+		basic_item* result = new studentrecord_item;
+		if (result == NULL)
 		{
-			studentrecord_item_vector[i]->allocateEmptyItem();
+			cout << endl << "Out of memory allocating ";
+			cout << itemTypeName << endl;
 		}
+		return result;
 	}
 
 	virtual void deallocateItem(basic_item* itemToDestroy)
 	{
 
+		if (itemToDestroy != NULL)
+		{
+			// first typecast the other item to confirm it is the same as this;
+			studentrecord_item* typecasted_other_item = typecastItem(itemToDestroy, this);
+			delete typecasted_other_item;
+		}
+	}
+
+	virtual bool compatibilityCheck(basic_item* other_item)
+	{
+		bool result = false;
+
+		// if the other item is "empty" (non allocated) don't do any comparison
+		if (other_item != NULL)
+		{
+			// typecast the other item to confirm it is the same as this;
+			studentrecord_item* typecasted_other_item = typecastItem(other_item, this);
+			if (typecasted_other_item != NULL)
+				result = true;
+			else
+			{
+				cout << endl << "Check failed for Item type: ";
+				cout << itemTypeName << endl;
+			}
+		}
+
+
+		return result;
 	}
 
 
-	virtual bool compatibilityCheck(basic_item* other_item) = 0;
+
+
+
+
 
 
 };
