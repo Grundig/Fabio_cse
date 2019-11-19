@@ -446,7 +446,7 @@ public:
 		char sortoption;
 		cout << "Sort option: Type F for first name; Type S for second name; Type D for full date; Type M for day and month;" << endl;
 		cout << "Sort option: Type N for nationality; Type I for studetId; Type P for programme; Type L for level;" << endl;
-		cout << "Sort option: Type C for CGS; Type B for biodata; then press ENTER" << endl;
+		cout << "Sort option: Type C for CGS; Type B for blood Type; then press ENTER" << endl;
 
 		cin >> sortoption;
 		switch (sortoption) {
