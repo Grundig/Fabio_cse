@@ -1055,7 +1055,7 @@ protected:
 
 public:
 	composite_item() {
-		//itemTypeName = "composite_item";
+		itemTypeName = "composite_item";
 		composite_item_vector.push_back(new basic_string_item("first name"));
 		composite_item_vector.push_back(new basic_string_item("second name"));
 		composite_item_vector.push_back(new date_item());
@@ -1419,8 +1419,12 @@ protected:
 
 
 public:
+	basic_string_itemWithLimits() {
+		itemTypeName = "composite_item";
+	}
 	basic_string_itemWithLimits(string name, vector<string> allowed_strings) {
-			
+		
+		nameType = name;
 		allowed_strings_vector = allowed_strings;
 	}
 	~basic_string_itemWithLimits() { cout << "basic_string_itemWithLimits destructor call" << endl; }
@@ -1446,41 +1450,44 @@ public:
 
 	virtual void enterItemFromKeyboard()
 	{
+		string tempVal;
 		if (isLocked())
 			cout << "Error in enterItemFromKeyboard: Item is locked" << endl;
 		else
 		{
-			cout << "Insert " << nameType << " then hit enter." << endl;
-			cin >> item_value;
+			cout << "these are the available options" << endl;
+			for (std::vector<string>::const_iterator i = allowed_strings_vector.begin(); i != allowed_strings_vector.end(); ++i)
+				cout << *i << ' ';
 			cout << endl;
+			cout << "Insert " << nameType << " then hit enter." << endl;
+			cin >> tempVal;
 
-			// item filled
+			while (!(find(allowed_strings_vector.begin(), allowed_strings_vector.end(), tempVal) != allowed_strings_vector.end()))
+			{
+				cout << "sorry what you just typed was not part of the options please try agian" << endl;
+
+				cout << "these are the available options" << endl;
+				for (std::vector<string>::const_iterator i = allowed_strings_vector.begin(); i != allowed_strings_vector.end(); ++i)
+					cout << *i << ' ';
+				cout << endl;
+				cout << "Insert " << nameType << " then hit enter." << endl;
+				cin >> tempVal;
+				cout << endl;
+			}
+
+			item_value = tempVal;
 			empty = false;
+			
 		}
 	}
 
 	virtual void generateRandomItem()
 	{
-		int max_val = 12, min_val = 3;
-		const std::string characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-		int length;
-		int max_rand_val = max_val;
 
-		length = rand();
-		length = length % (max_val - min_val + 1) + min_val;
+		int index = rand();
+		index = index % allowed_strings_vector.size();
 
-		random_device random_device;
-		mt19937 generator(random_device());
-		uniform_int_distribution<> distribution(0, characters.size() - 1);
-
-		std::string random_string;
-
-		for (std::size_t i = 0; i < length; ++i)
-		{
-			random_string += characters[distribution(generator)];
-		}
-
-		item_value = random_string;
+		item_value = allowed_strings_vector[index];
 		empty = false;
 	}
 
@@ -1541,7 +1548,7 @@ public:
 
 	virtual basic_item* allocateEmptyItem()
 	{
-		basic_item* result = new basic_string_item;
+		basic_item* result = new basic_string_itemWithLimits;
 		if (result == NULL)
 		{
 			cout << endl << "Out of memeory allocating ";
@@ -1554,7 +1561,7 @@ public:
 		if (itemToDestroy != NULL)
 		{
 			// first typecast the other item to confimr it is the same as this;
-			basic_string_item* typecasted_other_item = typecastItem(itemToDestroy, this);
+			basic_string_itemWithLimits* typecasted_other_item = typecastItem(itemToDestroy, this);
 			delete typecasted_other_item;
 		}
 	}
@@ -1567,7 +1574,7 @@ public:
 		if (other_item != NULL)
 		{
 			// typecast the other item to confirm it is the same as this;
-			basic_string_item* typecasted_other_item = typecastItem(other_item, this);
+			basic_string_itemWithLimits* typecasted_other_item = typecastItem(other_item, this);
 			if (typecasted_other_item != NULL)
 				result = true;
 			else
@@ -1587,12 +1594,20 @@ protected:
 
 	vector<basic_item*> studentrecord_item_vector;
 	vector<string> allowed_blood_types;
-
+	string list[8] = { "O–", "O+", "A–", "A+", "B–", "B+", "AB–", "AB+" };
 
 public:
 	studentrecord_item() {
-		allowed_blood_types.push_back("");
-		//itemTypeName = "composite_item";
+		//allowed_blood_types(s, s + sizeof(s) / sizeof(s[0]));
+		itemTypeName = "studentrecord_item";
+		allowed_blood_types.push_back("O–");
+		allowed_blood_types.push_back("O+");
+		allowed_blood_types.push_back("A–");
+		allowed_blood_types.push_back("A+");
+		allowed_blood_types.push_back("B–");
+		allowed_blood_types.push_back("B+");
+		allowed_blood_types.push_back("AB–");
+		allowed_blood_types.push_back("AB+");
 		studentrecord_item_vector.push_back(new basic_string_item("first name"));
 		studentrecord_item_vector.push_back(new basic_string_item("second name"));
 		studentrecord_item_vector.push_back(new basic_string_item("nationality"));
