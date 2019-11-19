@@ -645,7 +645,7 @@ public:
 class integer_itemWithLimits : public integer_item {
 protected:
 	int item_value;
-	int min_val = -50, max_val = 50;
+	int min_val, max_val;
 	string name;
 
 	void swap(int* xp, int* yp)
@@ -658,7 +658,7 @@ protected:
 public:
 	integer_itemWithLimits( int min = -50, int max = 50, string name_val = "test values", bool manual_input = false) {
 		min_val = min;
-		min_val = max;
+		max_val = max;
 		itemTypeName = "integer_itemWithLimits"; 
 		name = name_val;
 		if (manual_input)
