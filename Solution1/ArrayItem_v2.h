@@ -1743,6 +1743,10 @@ public:
 	virtual void deallocateItem(basic_item* itemToDestroy) = 0;
 	virtual bool compatibilityCheck(basic_item* other_item) = 0;
 
+	virtual void printItemOnScreen()
+	{
+		
+	}
 
 };
 //#include "generalArray_v2.h"
