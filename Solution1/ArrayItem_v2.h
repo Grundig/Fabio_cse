@@ -426,6 +426,114 @@ public:
 	
 };
 
+class studentrecord_item_sort_criteria : public basic_sort_criteria {
+public:
+	enum sortType { start, firstName, secondName, fullDate, DayAndMonth, nationality, studedId, programme, level, CGS, biodata, stop };
+private:
+	sortType thesortoption;
+public:
+	studentrecord_item_sort_criteria() { setOption(firstName); }
+	void setOption(sortType value)
+	{
+		if ((value > start) && (value < stop))
+			thesortoption = value;
+		else
+			thesortoption = firstName;
+	}
+	sortType getOption() { return thesortoption; }
+	virtual void setOptionFromKeyboard()
+	{
+		char sortoption;
+		cout << "Sort option: Type F for first name; Type S for second name; Type D for full date; Type M for day and month;" << endl;
+		cout << "Sort option: Type N for nationality; Type I for studetId; Type P for programme; Type L for level;" << endl;
+		cout << "Sort option: Type C for CGS; Type B for biodata; then press ENTER" << endl;
+
+		cin >> sortoption;
+		switch (sortoption) {
+		case 'F':
+		case 'f':
+			setOption(firstName);
+			break;
+		case 'S':
+		case 's':
+			setOption(secondName);
+			break;
+		case 'D':
+		case 'd':
+			setOption(fullDate);
+			break;
+		case 'M':
+		case 'm':
+			setOption(DayAndMonth);
+			break;
+		case 'N':
+		case 'n':
+			setOption(nationality);
+			break;
+		case 'I':
+		case 'i':
+			setOption(studedId);
+			break;
+		case 'P':
+		case 'p':
+			setOption(programme);
+			break;
+		case 'L':
+		case 'l':
+			setOption(level);
+			break;
+		case 'C':
+		case 'c':
+			setOption(CGS);
+			break;
+		case 'B':
+		case 'b':
+			setOption(biodata);
+			break;
+		}
+		basic_sort_criteria::setOptionFromKeyboard();
+	}
+	virtual void printOptionToScreen()
+	{
+		cout << "composite_item Sorting by ";
+		switch (getOption()) {
+		case firstName:
+			cout << "first name " << endl;
+			break;
+		case secondName:
+			cout << "second name " << endl;
+			break;
+		case fullDate:
+			cout << "full date " << endl;
+			break;
+		case DayAndMonth:
+			cout << "day and month" << endl;
+			break;
+		case nationality:
+			cout << "nationality" << endl;
+			break;
+		case studedId:
+			cout << "student id" << endl;
+			break;
+		case programme:
+			cout << "degreee programme" << endl;
+			break;
+		case level:
+			cout << "degreee level" << endl;
+			break;
+		case CGS:
+			cout << "average CGS grade" << endl;
+			break;
+		case biodata:
+			cout << "bio data" << endl;
+			break;
+		}
+
+
+		basic_sort_criteria::printOptionToScreen();
+	}
+};
+
 class compositeItem_sort_criteria : public basic_sort_criteria {
 public:
 	enum sortType { start, firstName, secondName, fullDate, DayAndMonth, stop };
