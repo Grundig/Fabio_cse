@@ -538,6 +538,7 @@ class integer_itemWithLimits : public integer_item {
 protected:
 	int item_value;
 	int min_val = -50, max_val = 50;
+	string name;
 	void swap(int* xp, int* yp)
 	{
 		int temp = *xp;
@@ -546,8 +547,9 @@ protected:
 	}
 
 public:
-	integer_itemWithLimits(bool manual_input = false) {
+	integer_itemWithLimits(string name_val, bool manual_input = false) {
 		itemTypeName = "integer_itemWithLimits"; 
+		name = name_val;
 		if (manual_input)
 		{
 			inputRangeFromKeyboard();
@@ -603,7 +605,7 @@ public:
 			cout << "Error in enterItemFromKeyboard: Item is locked" << endl;
 		else
 		{
-			cout << "Insert integer element then hit enter. " << "range between " << min_val << "and " << max_val << endl;
+			cout << "Insert integer "<< name <<"element then hit enter. " << "range between " << min_val << "and " << max_val << endl;
 			cin >> item_value;
 
 			while (item_value > max_val || item_value < min_val)
@@ -1420,6 +1422,8 @@ protected:
 
 public:
 	basic_string_itemWithLimits() {
+		vector<string> tempVect = {"test_val", "test_val2"};
+		allowed_strings_vector = tempVect;
 		itemTypeName = "composite_item";
 	}
 	basic_string_itemWithLimits(string name, vector<string> allowed_strings) {
@@ -1594,27 +1598,25 @@ protected:
 
 	vector<basic_item*> studentrecord_item_vector;
 	vector<string> allowed_blood_types;
-	string list[8] = { "O–", "O+", "A–", "A+", "B–", "B+", "AB–", "AB+" };
+	vector<string> allowed_levels;
+	vector<string> allowed_programs;
+
 
 public:
 	studentrecord_item() {
-		//allowed_blood_types(s, s + sizeof(s) / sizeof(s[0]));
+
+        allowed_blood_types = { "O–", "O+", "A–", "A+", "B–", "B+", "AB–", "AB+" };
+		allowed_levels = { "MEng", "BEng"};
+		allowed_programs = { "EEE", "Mech", "Chem", "Civil", "Petr"};
 		itemTypeName = "studentrecord_item";
-		allowed_blood_types.push_back("O–");
-		allowed_blood_types.push_back("O+");
-		allowed_blood_types.push_back("A–");
-		allowed_blood_types.push_back("A+");
-		allowed_blood_types.push_back("B–");
-		allowed_blood_types.push_back("B+");
-		allowed_blood_types.push_back("AB–");
-		allowed_blood_types.push_back("AB+");
+
 		studentrecord_item_vector.push_back(new basic_string_item("first name"));
 		studentrecord_item_vector.push_back(new basic_string_item("second name"));
 		studentrecord_item_vector.push_back(new basic_string_item("nationality"));
 		studentrecord_item_vector.push_back(new basic_string_item("type"));
-		studentrecord_item_vector.push_back(new basic_string_item("program"));
+		studentrecord_item_vector.push_back(new basic_string_itemWithLimits("program", allowed_programs));
 		studentrecord_item_vector.push_back(new integer_itemWithLimits("student_id"));
-		studentrecord_item_vector.push_back(new integer_itemWithLimits("level"));
+		studentrecord_item_vector.push_back(new basic_string_itemWithLimits("level", allowed_levels));
 		studentrecord_item_vector.push_back(new integer_itemWithLimits("cgs_mark"));
 		studentrecord_item_vector.push_back(new date_item());
 		studentrecord_item_vector.push_back(new basic_string_itemWithLimits("blod type", allowed_blood_types)); // can make a blod_type item?
