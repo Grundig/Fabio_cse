@@ -547,7 +547,7 @@ protected:
 	}
 
 public:
-	integer_itemWithLimits(string name_val, bool manual_input = false) {
+	integer_itemWithLimits(string name_val = "test values", bool manual_input = false) {
 		itemTypeName = "integer_itemWithLimits"; 
 		name = name_val;
 		if (manual_input)
@@ -1098,6 +1098,7 @@ public:
 		composite_item_vector[1]->generateRandomItem();
 		composite_item_vector[2]->generateRandomItem();
 	}
+
 	virtual bool IsLargerThan(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL)
 	{
 
@@ -1130,9 +1131,6 @@ public:
 				CompositeSortOption.setOption(typecasted_sortoption->getOption());
 		}
 
-		
-
-		auto test = typecasted_other_item->getCompsite_item(0);
 		// now verify if the other item is larger than the curren
 		switch (CompositeSortOption.getOption()) {
 		case(compositeItem_sort_criteria::firstName):
