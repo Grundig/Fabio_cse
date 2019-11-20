@@ -1793,7 +1793,7 @@ public:
 
 		}
 		int index = RecordSortOption.getOption();
-		result = studentrecord_item_vector[(int)index]->IsLargerThan(typecasted_other_item->getStudentrecord_item(index),sort_criteria);
+		result = studentrecord_item_vector[index]->IsLargerThan(typecasted_other_item->getStudentrecord_item(index),sort_criteria);
 		// now verify if the other item is larger than the curren
 		//for (int i = (int)(studentrecord_item_sort_criteria::start); i < (int)(studentrecord_item_sort_criteria::stop); i++)
 		//{

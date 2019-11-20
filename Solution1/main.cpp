@@ -99,7 +99,7 @@ void test_Individualtem()
 	integer_itemWithLimits testintWL1, testintWL1a;
 	integer_item testitem1, testitem1a; basic_sort_criteria testsort_crit;
 	//intmat_item testitem1, testitem1a; intmat_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
-	date_item testdateitem1, testdateitem1a;
+	studentrecord_item testdateitem1, testdateitem1a;
 	
 	// 
 	cout << "Test input funcitons:" << endl;
@@ -239,9 +239,18 @@ void test_DateItem()
 
 int main()
 {
-	test_Individualtem();
+	
 	//test_EntireArray();
 	//test_CompositeItem();
 	//test_DateItem();
+
+	integer_itemWithLimits item1, item2;
+	item1.generateRandomItem();
+	item2.generateRandomItem();
+
+	item1.printItemOnScreen();
+	item2.printItemOnScreen();
+
+	cout<<item1.IsLargerThan(&item2)<<endl;
 }
 
