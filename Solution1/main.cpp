@@ -19,6 +19,10 @@ void testItemFunctions_part1(basic_item* item_ptr)
 	cout << "Function requesting user to input item value" << endl;
 	item_ptr->enterItemFromKeyboard();
 	cout << endl;
+
+	cout << "Function requesting user to input item value" << endl;
+	item_ptr->enterItemFromKeyboard();
+	cout << endl;
 	
 	cout << "Function printing item on Screen" << endl;
 	item_ptr->printItemOnScreen();
@@ -92,33 +96,54 @@ void test_Individualtem()
 {
 	// Try each one below (ucomment one line at a time)
 	// When ready, repleace these with items of the type you have implemented 
-	
+	vector<std::string> v = { "xyzzy", "plugh", "abracadabra" };
+	integer_itemWithLimits testintWL1, testintWL1a;
 	integer_item testitem1, testitem1a; basic_sort_criteria testsort_crit;
 	//intmat_item testitem1, testitem1a; intmat_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
-
+	basic_string_itemWithLimits testdateitem1("test", v), testdateitem1a("test", v);
 	
 	// 
 	cout << "Test input funcitons:" << endl;
-	testItemFunctions_part1(&testitem1);
+//	testItemFunctions_part1(&testitem1);
+	//testitemfunctions_part1(&testintwl1);
+	testItemFunctions_part1(&testdateitem1);
+
 	cout << endl;
 	cout << "Now with locked item:" << endl;
-	testitem1.setLocked(true);
-	testItemFunctions_part1(&testitem1);
-	testitem1.setLocked(false);
+//	testitem1.setLocked(true);
+	//testintWL1.setLocked(true);
+	testdateitem1.setLocked(true);
+
+
+//	testItemFunctions_part1(&testitem1);
+	//testitemfunctions_part1(&testintwl1);
+	testItemFunctions_part1(&testdateitem1);
+
+
+	//testitem1.setLocked(false);
+	//testintWL1.setLocked(false);
+	testdateitem1.setLocked(false);
 	cout << endl;
 	
 	
 	cout << "Test comparison of two items:" << endl;	
 	// this uses the default comparison option:
 	//testItemFunctions_part2(&testitem1, &testitem1a, NULL);
-	
+	//testItemFunctions_part2(&testintWL1, &testintWL1a, NULL);
+	testItemFunctions_part2(&testdateitem1, &testdateitem1a, NULL);
+
+
 	// this uses the full default comparison rule (via user input)
-	testItemFunctions_part2(&testitem1, &testitem1a, &testsort_crit);
+//	testItemFunctions_part2(&testitem1, &testitem1a, &testsort_crit);
+	//testItemFunctions_part2(&testintWL1, &testintWL1a, &testsort_crit);
+	testItemFunctions_part2(&testdateitem1, &testdateitem1a, &testsort_crit);
 	cout << endl;
 	
 	
 	cout << "Test allocate/deallocate funcitons:" << endl;
-	testItemFunctions_part3(&testitem1);
+	//testItemFunctions_part3(&testitem1);
+	//testItemFunctions_part3(&testintWL1);
+	testItemFunctions_part3(&testdateitem1);
 	cout << endl;
 }
 
@@ -159,7 +184,7 @@ void testArrayFunctions_part2(item_array& testArray, basic_sort_criteria& testso
 	cout << "Done." << endl;
 
 	cout << " Sort array and print the result: " << endl;
-	testArray.bubblesort(&testsort_crit);
+	testArray.quickSort(&testsort_crit);
 	testArray.printArrayOnScreen();
 	cout << "Done." << endl;
 }
@@ -169,7 +194,8 @@ void test_EntireArray()
 	// Try each one below (ucomment one line at a time)
 	// When ready, repleace these with items of the type you have implemented 
 	//integer_item testitem; basic_sort_criteria testsort_crit;
-	intmat_item testitem; intmat_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
+
+	composite_item testitem; compositeItem_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
 
 	item_array testArray;
 
@@ -180,7 +206,7 @@ void test_EntireArray()
 
 	cout << "Testing Array allocation and data entry: " << endl;
 	//testArrayFunctions_part1(testArray);
-	testArray.allocateArrayAndItems(10);
+	testArray.allocateArrayAndItems(100);
 	cout << "Done." << endl << endl;
 
 	cout << "Testing Array sorting " << endl;
@@ -188,10 +214,53 @@ void test_EntireArray()
 	cout << "Done." << endl;
 }
 
-
-void main()
+void test_CompositeItem() 
 {
-	test_Individualtem();
+	composite_item test_item;
+	test_item.enterItemFromKeyboard();
+	test_item.generateRandomItem();
+	test_item.printItemOnScreen();
+
+}
+
+void test_studentRecordItem()
+{
+	studentrecord_item test_item;
+	test_item.enterItemFromKeyboard();
+	test_item.printItemOnScreen();
+	test_item.generateRandomItem();
+	test_item.printItemOnScreen();
+}
+
+void test_DateItem()
+{
+	date_item test_date1;
+	date_item test_date2;
+
+	test_date1.generateRandomItem();
+	test_date2.generateRandomItem();
+
+	test_date1.printItemOnScreen();
+	test_date2.printItemOnScreen();
+
+	//test_date1.IsLargerThan(test_date2);
+}
+
+
+int main()
+{
+	//test_Individualtem();
 	//test_EntireArray();
+	//test_CompositeItem();
+	//test_DateItem();
+	//test_studentRecordItem();
+
+	integer_itemWithLimits limit_test(40,100,"name",false);
+	//integer_itemWithLimits limit_test;
+	//limit_test.enterItemFromKeyboard();
+	//limit_test.inputRangeFromKeyboard();
+	limit_test.enterItemFromKeyboard();
+	limit_test.printItemOnScreen();
+
 }
 
