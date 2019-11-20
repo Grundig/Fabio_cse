@@ -194,7 +194,7 @@ void test_EntireArray()
 	// When ready, repleace these with items of the type you have implemented 
 	//integer_item testitem; basic_sort_criteria testsort_crit;
 
-	composite_item testitem; compositeItem_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
+	studentrecord_item testitem; studentrecord_item_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
 
 	item_array testArray;
 
@@ -240,17 +240,17 @@ void test_DateItem()
 int main()
 {
 	
-	//test_EntireArray();
+	test_EntireArray();
 	//test_CompositeItem();
 	//test_DateItem();
 
-	integer_itemWithLimits item1, item2;
+	/*integer_itemWithLimits item1, item2;
 	item1.generateRandomItem();
 	item2.generateRandomItem();
 
 	item1.printItemOnScreen();
 	item2.printItemOnScreen();
 
-	cout<<item1.IsLargerThan(&item2)<<endl;
+	cout<<item1.IsLargerThan(&item2)<<endl;*/
 }
 

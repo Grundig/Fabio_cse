@@ -426,7 +426,7 @@ public:
 
 class studentrecord_item_sort_criteria : public basic_sort_criteria {
 public:
-	enum sortType { start = 0, firstName, secondName, fullDate, DayAndMonth, nationality, studedId, programme, level, CGS, biodata, stop };
+	enum sortType { start = 0, firstName, secondName, fullDate, DayAndMonth, nationality, studedId, programme, level, CGS, bloodType, height, stop };
 	sortType thesortoption;
 private:
 
@@ -487,7 +487,11 @@ public:
 			break;
 		case 'B':
 		case 'b':
-			setOption(biodata);
+			setOption(bloodType);
+			break;
+		case 'H':
+		case 'h':
+			setOption(height);
 			break;
 		}
 		basic_sort_criteria::setOptionFromKeyboard();
@@ -523,8 +527,11 @@ public:
 		case CGS:
 			cout << "average CGS grade" << endl;
 			break;
-		case biodata:
+		case bloodType:
 			cout << "bio data" << endl;
+			break;
+		case height:
+			cout << "height" << endl;
 			break;
 		}
 
@@ -1792,8 +1799,7 @@ public:
 				RecordSortOption.setOption(typecasted_sortoption->getOption());
 
 		}
-		int index = RecordSortOption.getOption();
-		result = studentrecord_item_vector[index]->IsLargerThan(typecasted_other_item->getStudentrecord_item(index),sort_criteria);
+		
 		// now verify if the other item is larger than the curren
 		//for (int i = (int)(studentrecord_item_sort_criteria::start); i < (int)(studentrecord_item_sort_criteria::stop); i++)
 		//{
@@ -1801,42 +1807,38 @@ public:
 		//}
 
 
-		//switch (RecordSortOption.getOption()) {
-		//case(studentrecord_item_sort_criteria::firstName):
-		//	result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(0), sort_criteria);
-		//	break;
-		//case(studentrecord_item_sort_criteria::secondName):
-		//	result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(1), sort_criteria);
-		//	break;
-		//case(studentrecord_item_sort_criteria::n):
-		//	result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(2), sort_criteria);
-		//	break;
-		//case(studentrecord_item_sort_criteria::firstName):
-		//	result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(3), sort_criteria);
-		//	break;
-		//case(studentrecord_item_sort_criteria::firstName):
-		//	result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(4), sort_criteria);
-		//	break;
-		//case(studentrecord_item_sort_criteria::firstName):
-		//	result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(5), sort_criteria);
-		//	break;
-		//case(studentrecord_item_sort_criteria::firstName):
-		//	result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(6), sort_criteria);
-		//	break;
-		//case(studentrecord_item_sort_criteria::firstName):
-		//	result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(7), sort_criteria);
-		//	break;
-		//case(studentrecord_item_sort_criteria::firstName):
-		//	result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(8), sort_criteria);
-		//	break;
-		//case(studentrecord_item_sort_criteria::firstName):
-		//	result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(9), sort_criteria);
-		//	break;
-		//case(studentrecord_item_sort_criteria::firstName):
-		//	result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(10), sort_criteria);
-		//	break;
-
-
+		switch (RecordSortOption.getOption()) {
+		case(studentrecord_item_sort_criteria::firstName):
+			result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(0), sort_criteria);
+			break;
+		case(studentrecord_item_sort_criteria::secondName):
+			result = studentrecord_item_vector[1]->IsLargerThan(typecasted_other_item->getStudentrecord_item(1), sort_criteria);
+			break;
+		case(studentrecord_item_sort_criteria::nationality):
+			result = studentrecord_item_vector[2]->IsLargerThan(typecasted_other_item->getStudentrecord_item(2), sort_criteria);
+			break;
+		case(studentrecord_item_sort_criteria::programme):
+			result = studentrecord_item_vector[3]->IsLargerThan(typecasted_other_item->getStudentrecord_item(3), sort_criteria);
+			break;
+		case(studentrecord_item_sort_criteria::studedId):
+			result = studentrecord_item_vector[4]->IsLargerThan(typecasted_other_item->getStudentrecord_item(4), sort_criteria);
+			break;
+		case(studentrecord_item_sort_criteria::level):
+			result = studentrecord_item_vector[5]->IsLargerThan(typecasted_other_item->getStudentrecord_item(5), sort_criteria);
+			break;
+		case(studentrecord_item_sort_criteria::CGS):
+			result = studentrecord_item_vector[6]->IsLargerThan(typecasted_other_item->getStudentrecord_item(6), sort_criteria);
+			break;
+		case(studentrecord_item_sort_criteria::DayAndMonth):
+			result = studentrecord_item_vector[7]->IsLargerThan(typecasted_other_item->getStudentrecord_item(7), sort_criteria);
+			break;
+		case(studentrecord_item_sort_criteria::bloodType):
+			result = studentrecord_item_vector[8]->IsLargerThan(typecasted_other_item->getStudentrecord_item(8), sort_criteria);
+			break;
+		case(studentrecord_item_sort_criteria::height):
+			result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(9), sort_criteria);
+			break;
+		}
 	
 
 
