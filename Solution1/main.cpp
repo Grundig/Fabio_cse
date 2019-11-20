@@ -96,11 +96,10 @@ void test_Individualtem()
 {
 	// Try each one below (ucomment one line at a time)
 	// When ready, repleace these with items of the type you have implemented 
-	vector<std::string> v = { "xyzzy", "plugh", "abracadabra" };
 	integer_itemWithLimits testintWL1, testintWL1a;
 	integer_item testitem1, testitem1a; basic_sort_criteria testsort_crit;
 	//intmat_item testitem1, testitem1a; intmat_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
-	composite_item testdateitem1, testdateitem1a;
+	date_item testdateitem1, testdateitem1a;
 	
 	// 
 	cout << "Test input funcitons:" << endl;
@@ -112,7 +111,7 @@ void test_Individualtem()
 	cout << "Now with locked item:" << endl;
 //	testitem1.setLocked(true);
 	//testintWL1.setLocked(true);
-	testdateitem1.setLocked(true);
+	//testdateitem1.setLocked(true);
 
 
 //	testItemFunctions_part1(&testitem1);
@@ -223,15 +222,6 @@ void test_CompositeItem()
 
 }
 
-void test_studentRecordItem()
-{
-	studentrecord_item test_item;
-	test_item.enterItemFromKeyboard();
-	test_item.printItemOnScreen();
-	test_item.generateRandomItem();
-	test_item.printItemOnScreen();
-}
-
 void test_DateItem()
 {
 	date_item test_date1;
@@ -253,14 +243,5 @@ int main()
 	//test_EntireArray();
 	//test_CompositeItem();
 	//test_DateItem();
-	//test_studentRecordItem();
-
-	//integer_itemWithLimits limit_test(40,100,"name",false);
-	////integer_itemWithLimits limit_test;
-	////limit_test.enterItemFromKeyboard();
-	////limit_test.inputRangeFromKeyboard();
-	//limit_test.enterItemFromKeyboard();
-	//limit_test.printItemOnScreen();
-
 }
 
