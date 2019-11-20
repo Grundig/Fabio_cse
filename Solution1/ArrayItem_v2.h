@@ -428,9 +428,10 @@ public:
 
 class studentrecord_item_sort_criteria : public basic_sort_criteria {
 public:
-	enum sortType { start, firstName, secondName, fullDate, DayAndMonth, nationality, studedId, programme, level, CGS, biodata, stop };
-private:
+	enum sortType { start = 0, firstName, secondName, fullDate, DayAndMonth, nationality, studedId, programme, level, CGS, biodata, stop };
 	sortType thesortoption;
+private:
+
 public:
 	studentrecord_item_sort_criteria() { setOption(firstName); }
 	void setOption(sortType value)
@@ -1722,7 +1723,6 @@ public:
 		studentrecord_item_vector.push_back(new basic_string_item("first name"));
 		studentrecord_item_vector.push_back(new basic_string_item("second name"));
 		studentrecord_item_vector.push_back(new basic_string_item("nationality"));
-		studentrecord_item_vector.push_back(new basic_string_item("degree level"));
 		studentrecord_item_vector.push_back(new basic_string_itemWithLimits("degree program", allowed_programs));
 		studentrecord_item_vector.push_back(new integer_itemWithLimits(51000000, 52099999, "student id", false));
 		studentrecord_item_vector.push_back(new basic_string_itemWithLimits("level", allowed_levels));
@@ -1792,7 +1792,13 @@ public:
 			studentrecord_item_sort_criteria* typecasted_sortoption = typecastItem(sort_criteria, &RecordSortOption);
 			if (typecasted_sortoption != NULL)
 				RecordSortOption.setOption(typecasted_sortoption->getOption());
+			//int intdex = typecasted_sortoption->getOption();
+			studentrecord_item_sort_criteria* option = (studentrecord_item_sort_criteria*)sort_criteria;
+			int index = option->getOption();
+			result = studentrecord_item_vector[index]->IsLargerThan(typecasted_other_item->getStudentrecord_item((int)sort_criteria), sort_criteria);
+
 		}
+		result = studentrecord_item_vector[(int)studentrecord_item_sort_criteria::firstName]->IsLargerThan(typecasted_other_item->getStudentrecord_item((int)sort_criteria), sort_criteria);
 
 		// now verify if the other item is larger than the curren
 		//for (int i = (int)(studentrecord_item_sort_criteria::start); i < (int)(studentrecord_item_sort_criteria::stop); i++)
@@ -1800,7 +1806,6 @@ public:
 
 		//}
 
-		result = studentrecord_item_vector[(int)sort_criteria]->IsLargerThan(typecasted_other_item->getStudentrecord_item((int)sort_criteria), sort_criteria);
 		
 		//switch (RecordSortOption.getOption()) {
 		//case(studentrecord_item_sort_criteria::firstName):

@@ -100,13 +100,13 @@ void test_Individualtem()
 	integer_itemWithLimits testintWL1, testintWL1a;
 	integer_item testitem1, testitem1a; basic_sort_criteria testsort_crit;
 	//intmat_item testitem1, testitem1a; intmat_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
-	basic_string_itemWithLimits testdateitem1("test", v), testdateitem1a("test", v);
+	studentrecord_item testdateitem1, testdateitem1a;
 	
 	// 
 	cout << "Test input funcitons:" << endl;
 //	testItemFunctions_part1(&testitem1);
 	//testitemfunctions_part1(&testintwl1);
-	testItemFunctions_part1(&testdateitem1);
+	//testItemFunctions_part1(&testdateitem1);
 
 	cout << endl;
 	cout << "Now with locked item:" << endl;
@@ -117,7 +117,7 @@ void test_Individualtem()
 
 //	testItemFunctions_part1(&testitem1);
 	//testitemfunctions_part1(&testintwl1);
-	testItemFunctions_part1(&testdateitem1);
+	//testItemFunctions_part1(&testdateitem1);
 
 
 	//testitem1.setLocked(false);
@@ -249,18 +249,18 @@ void test_DateItem()
 
 int main()
 {
-	//test_Individualtem();
+	test_Individualtem();
 	//test_EntireArray();
 	//test_CompositeItem();
 	//test_DateItem();
 	//test_studentRecordItem();
 
-	integer_itemWithLimits limit_test(40,100,"name",false);
-	//integer_itemWithLimits limit_test;
+	//integer_itemWithLimits limit_test(40,100,"name",false);
+	////integer_itemWithLimits limit_test;
+	////limit_test.enterItemFromKeyboard();
+	////limit_test.inputRangeFromKeyboard();
 	//limit_test.enterItemFromKeyboard();
-	//limit_test.inputRangeFromKeyboard();
-	limit_test.enterItemFromKeyboard();
-	limit_test.printItemOnScreen();
+	//limit_test.printItemOnScreen();
 
 }
 
