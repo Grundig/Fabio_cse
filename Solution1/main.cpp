@@ -100,7 +100,7 @@ void test_Individualtem()
 	integer_itemWithLimits testintWL1, testintWL1a;
 	integer_item testitem1, testitem1a; basic_sort_criteria testsort_crit;
 	//intmat_item testitem1, testitem1a; intmat_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
-	studentrecord_item testdateitem1, testdateitem1a;
+	composite_item testdateitem1, testdateitem1a;
 	
 	// 
 	cout << "Test input funcitons:" << endl;

@@ -12,8 +12,6 @@
 #include <random>
 using namespace std;
 
-enum class sortType { firstName, secondName, fullDate, DayAndMonth };
-
 
 ////// this is needed to check compatibility between items (and to use a derived-class pointer that is passes as "base class")
 template <class Base, class Derived> Derived* typecastItem(Base* basic_ptr, Derived* derivedItem_ptr)
@@ -1785,28 +1783,24 @@ public:
 			// items of the wrong type (or null pointers) will be pushed to the end of the list
 		}
 
-		// check if the sort_option is specific for the int_mat
+		// check if the sort_option is specific for the studentrecord_item_sort_criteria
 		if (sort_criteria != NULL)
 		{
 			// first typecast the other item to confimr it is the same as this;
 			studentrecord_item_sort_criteria* typecasted_sortoption = typecastItem(sort_criteria, &RecordSortOption);
 			if (typecasted_sortoption != NULL)
 				RecordSortOption.setOption(typecasted_sortoption->getOption());
-			//int intdex = typecasted_sortoption->getOption();
-			studentrecord_item_sort_criteria* option = (studentrecord_item_sort_criteria*)sort_criteria;
-			int index = option->getOption();
-			result = studentrecord_item_vector[index]->IsLargerThan(typecasted_other_item->getStudentrecord_item((int)sort_criteria), sort_criteria);
 
 		}
-		result = studentrecord_item_vector[(int)studentrecord_item_sort_criteria::firstName]->IsLargerThan(typecasted_other_item->getStudentrecord_item((int)sort_criteria), sort_criteria);
-
+		int index = RecordSortOption.getOption();
+		result = studentrecord_item_vector[(int)index]->IsLargerThan(typecasted_other_item->getStudentrecord_item(index),sort_criteria);
 		// now verify if the other item is larger than the curren
 		//for (int i = (int)(studentrecord_item_sort_criteria::start); i < (int)(studentrecord_item_sort_criteria::stop); i++)
 		//{
 
 		//}
 
-		
+
 		//switch (RecordSortOption.getOption()) {
 		//case(studentrecord_item_sort_criteria::firstName):
 		//	result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(0), sort_criteria);
