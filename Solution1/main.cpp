@@ -240,7 +240,7 @@ void test_DateItem()
 int main()
 {
 	
-	test_EntireArray();
+	//test_EntireArray();
 	//test_CompositeItem();
 	//test_DateItem();
 
@@ -252,5 +252,16 @@ int main()
 	item2.printItemOnScreen();
 
 	cout<<item1.IsLargerThan(&item2)<<endl;*/
+
+	basic_string_item item1, item2;
+	item1.enterItemFromKeyboard();
+	item2.enterItemFromKeyboard();
+	
+	item1.printItemOnScreen();
+	item2.printItemOnScreen();
+
+	basic_sort_criteria criteria1;
+
+	cout << item1.doesInclude(&item2) << endl;
 }
 
