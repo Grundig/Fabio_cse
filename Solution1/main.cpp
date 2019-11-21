@@ -253,15 +253,6 @@ int main()
 
 	cout<<item1.IsLargerThan(&item2)<<endl;*/
 
-	basic_string_item item1, item2;
-	item1.enterItemFromKeyboard();
-	item2.enterItemFromKeyboard();
-	
-	item1.printItemOnScreen();
-	item2.printItemOnScreen();
 
-	basic_sort_criteria criteria1;
-
-	cout << item1.includes(&item2) << endl;
 }
 
