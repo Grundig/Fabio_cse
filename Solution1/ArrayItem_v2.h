@@ -325,7 +325,7 @@ public:
 		}
 	}
 
-	virtual bool doesInclude(basic_item* other_item)
+	virtual bool includes(basic_item* other_item)
 	{
 		bool result = false;
 
@@ -2159,6 +2159,44 @@ public:
 
 			return result;
 		}
+	}
+
+	virtual bool includes(basic_item* other_item)
+	{
+		bool result = false;
+
+		// if the other item is "empty" (non allocated) don't do any comparison
+		if (other_item == NULL)
+			return false;
+
+
+		// first typecast the other item to confimr it is the same as this;
+		basic_string_item* typecasted_other_item = typecastItem(other_item, this);
+
+		// check that it worked
+		if (typecasted_other_item == NULL)
+		{
+			cout << endl << "Item type is: ";
+			cout << itemTypeName << endl;
+			return false;
+			// items of the wrong type (or null pointers) will be pushed to the end of the list
+		}
+
+		string other_value = typecasted_other_item->getItemVal();
+		for (int i = 0; i < item_value.size(); i++) {
+			for (int j = 0; j < other_value.size(); j++)
+			{
+				if (item_value[j] == other_value[j]) {
+					result = true;
+					continue;
+				}
+				else
+					result = false;
+				break;
+			}
+
+		}
+		return result;
 	}
 
 	virtual basic_item* allocateEmptyItem()

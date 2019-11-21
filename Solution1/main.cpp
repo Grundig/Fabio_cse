@@ -262,6 +262,6 @@ int main()
 
 	basic_sort_criteria criteria1;
 
-	cout << item1.doesInclude(&item2) << endl;
+	cout << item1.includes(&item2) << endl;
 }
 
