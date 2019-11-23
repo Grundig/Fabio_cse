@@ -2249,19 +2249,26 @@ public:
 		}
 
 		string other_value = typecasted_other_item->getItemVal();
-		for (int i = 0; i < item_value.size(); i++) {
-			for (int j = 0; j < other_value.size(); j++)
-			{
-				if (item_value[j] == other_value[j]) {
-					result = true;
-					continue;
-				}
-				else
-					result = false;
-				break;
-			}
 
-		}
+		if (item_value.find(other_value) != string::npos || other_value.find(item_value) != string::npos)
+			result == true;
+		else
+			result = false;
+
+
+		//for (int i = 0; i < item_value.size(); i++) {
+		//	for (int j = 0; j < other_value.size(); j++)
+		//	{
+		//		if (item_value[j] == other_value[j]) {
+		//			result = true;
+		//			continue;
+		//		}
+		//		else
+		//			result = false;
+		//		break;
+		//	}
+
+		//}
 		return result;
 	}
 
