@@ -466,6 +466,21 @@ public:
 		}
 
 	}	
+
+	vector<basic_item*> simpleSearch(basic_item* target_item, basic_sort_criteria* search_criteria) {
+		
+		vector<basic_item*> output_array;
+
+		for(int i = 0; i <= this->getTotItems; i++)
+		{
+			basic_item* item = this->getElementPtr(i);
+			if (item->IsEqualTo(target_item, search_criteria)) 
+			{
+				output_array.push_back(item);
+			}
+		}
+		return output_array;
+	}
 };
 
 

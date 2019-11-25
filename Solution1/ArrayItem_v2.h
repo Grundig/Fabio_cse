@@ -86,6 +86,7 @@ public:
 	//virtual void loadItemFromFile(FILE* fin)=0;
 	virtual void generateRandomItem()=0;	
 	virtual bool IsLargerThan(basic_item* other_item, basic_sort_criteria* sort_criteria=NULL)=0;
+	virtual bool IsEqualTo(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL) = 0;
 	//virtual bool IsSmallerThan(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL) = 0;
 	virtual basic_item* allocateEmptyItem()=0;
 	virtual void deallocateItem(basic_item* itemToDestroy) = 0;
