@@ -481,6 +481,21 @@ public:
 		}
 		return output_array;
 	}
+
+	vector<basic_item*> advancedSearch(basic_item* min_target_item, basic_item* max_target_item, basic_sort_criteria* search_criteria) {
+
+		vector<basic_item*> output_array;
+
+		for (int i = 0; i <= this->getTotItems; i++)
+		{
+			basic_item* item = this->getElementPtr(i);
+			if (item->IsLargerThan(min_target_item, search_criteria) && !(item->IsLargerThan(max_target_item, search_criteria)))
+			{
+				output_array.push_back(item);
+			}
+		}
+		return output_array;
+	}
 };
 
 

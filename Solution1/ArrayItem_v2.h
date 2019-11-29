@@ -1525,6 +1525,55 @@ public:
 	//	return result;
 	//}
 
+	virtual bool IsEqualTo(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL)
+	{
+		bool result = false;
+		compositeItem_sort_criteria CompositeSortOption;
+
+		// if the other item is "empty" (non allocated) don't do any comparison
+		if (other_item == NULL)
+			return false;
+
+
+		// first typecast the other item to confimr it is the same as this;
+		date_item* typecasted_other_item = typecastItem(other_item, this);
+
+		// check that it worked
+		if (typecasted_other_item == NULL)
+		{
+			cout << endl << "Item type is: ";
+			cout << itemTypeName << endl;
+			return false;
+			// items of the wrong type (or null pointers) will be pushed to the end of the list
+		}
+
+		// now verify if the other item is larger than the curren
+		if (dataSortType)
+		{
+			if (getYear() == (typecasted_other_item->getYear()))
+				if (getMonth() == typecasted_other_item->getMonth())
+					if (getDay() == typecasted_other_item->getDay())
+						result = true;
+					else
+					{
+						if (getMonth() == typecasted_other_item->getMonth())
+							if (getDay() <= typecasted_other_item->getDay())
+								result = true;
+					}
+
+		}
+		// chek if there are sorting options to apply 
+		if (sort_criteria != NULL)
+		{
+			// if sorting is in descending order the result is reversed 
+			if (!(sort_criteria->getAscending()))
+				result = !result;
+		}
+
+		return result;
+	}
+
+
 	virtual basic_item* allocateEmptyItem()
 	{
 		basic_item* result = new date_item;
@@ -1652,7 +1701,7 @@ public:
 				CompositeSortOption.setOption(typecasted_sortoption->getOption());
 		}
 
-		// now verify if the other item is larger than the curren
+		// now verify if the other item is larger than the current
 		switch (CompositeSortOption.getOption()) {
 		case(compositeItem_sort_criteria::firstName):
 			result = composite_item_vector[0]->IsLargerThan(typecasted_other_item->getCompsite_item(0), sort_criteria);
@@ -1680,112 +1729,158 @@ public:
 		return result;
 	}
 
-	//virtual bool IsSmallerThan(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL)
-	//{
+	virtual bool IsEqualTo(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL)
+	{
 
-	//	bool result = false;
-	//	compositeItem_sort_criteria CompositeSortOption;
+		bool result = false;
+		compositeItem_sort_criteria CompositeSortOption;
 
-	//	// if the other item is "empty" (non allocated) don't do any comparison
-	//	if (other_item == NULL)
-	//		return false;
-
-
-	//	// first typecast the other item to confimr it is the same as this;
-	//	composite_item* typecasted_other_item = typecastItem(other_item, this);
+		// if the other item is "empty" (non allocated) don't do any comparison
+		if (other_item == NULL)
+			return false;
 
 
-	//	//check that it worked
-	//	if (typecasted_other_item == NULL)
-	//	{
-	//		cout << "Other item is not of type intmat2x2_item." << endl;
-	//		return false;
-	//		// items of the wrong type (or null pointers) will be pushed to the end of the list
-	//	}
+		// first typecast the other item to confimr it is the same as this;
+		composite_item* typecasted_other_item = typecastItem(other_item, this);
 
-	//	// check if the sort_option is specific for the int_mat
-	//	if (sort_criteria != NULL)
-	//	{
-	//		// first typecast the other item to confimr it is the same as this;
-	//		compositeItem_sort_criteria* typecasted_sortoption = typecastItem(sort_criteria, &CompositeSortOption);
-	//		if (typecasted_sortoption != NULL)
-	//			CompositeSortOption.setOption(typecasted_sortoption->getOption());
-	//	}
+		// check that it worked
+		if (typecasted_other_item == NULL)
+		{
+			cout << endl << "Item type is: ";
+			cout << itemTypeName << endl;
+			return false;
+			// items of the wrong type (or null pointers) will be pushed to the end of the list
+		}
 
-	//	// now verify if the other item is larger than the curren
-	//	switch (CompositeSortOption.getOption()) {
-	//	case(compositeItem_sort_criteria::firstName):
-	//		result = composite_item_vector[0]->IsSmallerThan(typecasted_other_item->getCompsite_item(0), sort_criteria);
-	//		break;
-	//	case(compositeItem_sort_criteria::secondName):
-	//		result = composite_item_vector[1]->IsLargerThan(typecasted_other_item->getCompsite_item(1), sort_criteria);
-	//		break;
-	//	case(compositeItem_sort_criteria::fullDate):
-	//		result = composite_item_vector[2]->IsLargerThan(typecasted_other_item->getCompsite_item(2), sort_criteria);
-	//		break;
-	//	case(compositeItem_sort_criteria::DayAndMonth):
-	//		result = composite_item_vector[2]->IsLargerThan(typecasted_other_item->getCompsite_item(2), sort_criteria);
-	//		break;
+		switch (CompositeSortOption.getOption()) {
+		case(compositeItem_sort_criteria::firstName):
+			result = composite_item_vector[0]->IsEqualTo(typecasted_other_item->getCompsite_item(0), sort_criteria);
+			break;
+		case(compositeItem_sort_criteria::secondName):
+			result = composite_item_vector[1]->IsEqualTo(typecasted_other_item->getCompsite_item(1), sort_criteria);
+			break;
+		case(compositeItem_sort_criteria::fullDate):
+			result = composite_item_vector[2]->IsEqualTo(typecasted_other_item->getCompsite_item(2), sort_criteria);
+			break;
+		case(compositeItem_sort_criteria::DayAndMonth):
+			result = composite_item_vector[2]->IsEqualTo(typecasted_other_item->getCompsite_item(2), sort_criteria);
+			break;
 
-	//	}
 
-	//	// chek if ascending/decenting sorting applies 
-	//	if (sort_criteria != NULL)
-	//	{
-	//		// if sorting is in descending order the result is reversed 
-	//		if (!(sort_criteria->getAscending()))
-	//			result = !result;
-	//	}
+			// chek if there are sorting options to apply 
+			if (sort_criteria != NULL)
+			{
+				// if sorting is in descending order the result is reversed 
+				if (!(sort_criteria->getAscending()))
+					result = !result;
+			}
+			return result;
+		}
 
-	//	return result;
-	//}
+
+		//virtual bool IsSmallerThan(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL)
+		//{
+
+		//	bool result = false;
+		//	compositeItem_sort_criteria CompositeSortOption;
+
+		//	// if the other item is "empty" (non allocated) don't do any comparison
+		//	if (other_item == NULL)
+		//		return false;
+
+
+		//	// first typecast the other item to confimr it is the same as this;
+		//	composite_item* typecasted_other_item = typecastItem(other_item, this);
+
+
+		//	//check that it worked
+		//	if (typecasted_other_item == NULL)
+		//	{
+		//		cout << "Other item is not of type intmat2x2_item." << endl;
+		//		return false;
+		//		// items of the wrong type (or null pointers) will be pushed to the end of the list
+		//	}
+
+		//	// check if the sort_option is specific for the int_mat
+		//	if (sort_criteria != NULL)
+		//	{
+		//		// first typecast the other item to confimr it is the same as this;
+		//		compositeItem_sort_criteria* typecasted_sortoption = typecastItem(sort_criteria, &CompositeSortOption);
+		//		if (typecasted_sortoption != NULL)
+		//			CompositeSortOption.setOption(typecasted_sortoption->getOption());
+		//	}
+
+		//	// now verify if the other item is larger than the curren
+		//	switch (CompositeSortOption.getOption()) {
+		//	case(compositeItem_sort_criteria::firstName):
+		//		result = composite_item_vector[0]->IsSmallerThan(typecasted_other_item->getCompsite_item(0), sort_criteria);
+		//		break;
+		//	case(compositeItem_sort_criteria::secondName):
+		//		result = composite_item_vector[1]->IsLargerThan(typecasted_other_item->getCompsite_item(1), sort_criteria);
+		//		break;
+		//	case(compositeItem_sort_criteria::fullDate):
+		//		result = composite_item_vector[2]->IsLargerThan(typecasted_other_item->getCompsite_item(2), sort_criteria);
+		//		break;
+		//	case(compositeItem_sort_criteria::DayAndMonth):
+		//		result = composite_item_vector[2]->IsLargerThan(typecasted_other_item->getCompsite_item(2), sort_criteria);
+		//		break;
+
+		//	}
+
+		//	// chek if ascending/decenting sorting applies 
+		//	if (sort_criteria != NULL)
+		//	{
+		//		// if sorting is in descending order the result is reversed 
+		//		if (!(sort_criteria->getAscending()))
+		//			result = !result;
+		//	}
+
+		//	return result;
+		//}
+	}
 
 	virtual basic_item* allocateEmptyItem()
 	{
 		basic_item* result = new composite_item;
 		if (result == NULL)
-		{
-			cout << endl << "Out of memory allocating ";
-			cout << itemTypeName << endl;
-		}
+			{
+				cout << endl << "Out of memory allocating ";
+				cout << itemTypeName << endl;
+			}
 		return result;
 	}
-	virtual void deallocateItem(basic_item* itemToDestroy)
-	{
-
-		if (itemToDestroy != NULL)
+	virtual void deallocateItem(basic_item * itemToDestroy)
 		{
-			// first typecast the other item to confirm it is the same as this;
-			composite_item* typecasted_other_item = typecastItem(itemToDestroy, this);
-			delete typecasted_other_item;
-		}
-	}
 
-	virtual bool compatibilityCheck(basic_item* other_item)
-	{
-		bool result = false;
-
-		// if the other item is "empty" (non allocated) don't do any comparison
-		if (other_item != NULL)
-		{
-			// typecast the other item to confirm it is the same as this;
-			composite_item* typecasted_other_item = typecastItem(other_item, this);
-			if (typecasted_other_item != NULL)
-				result = true;
-			else
+			if (itemToDestroy != NULL)
 			{
-				cout << endl << "Check failed for Item type: ";
-				cout << itemTypeName << endl;
+				// first typecast the other item to confirm it is the same as this;
+				composite_item* typecasted_other_item = typecastItem(itemToDestroy, this);
+				delete typecasted_other_item;
 			}
 		}
 
+	virtual bool compatibilityCheck(basic_item * other_item)
+		{
+			bool result = false;
 
-		return result;
-	}
+			// if the other item is "empty" (non allocated) don't do any comparison
+			if (other_item != NULL)
+			{
+				// typecast the other item to confirm it is the same as this;
+				composite_item* typecasted_other_item = typecastItem(other_item, this);
+				if (typecasted_other_item != NULL)
+					result = true;
+				else
+				{
+					cout << endl << "Check failed for Item type: ";
+					cout << itemTypeName << endl;
+				}
+			}
 
 
-
-
+			return result;
+		}
 };
 
 class intmat_item: public basic_item{
@@ -1948,6 +2043,50 @@ public:
 			// if sorting is in descending order the result is reversed 
 			if( !( sort_criteria->getAscending() ) )
 				result=!result;
+		}
+
+		return result;
+	}
+
+	virtual bool IsEqualTo(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL)
+	{
+		bool result = false;
+		intmat_sort_criteria matSortOption;
+
+		// if the other item is "empty" (non allocated) don't do any comparison
+		if (other_item == NULL)
+			return false;
+
+
+		// first typecast the other item to confimr it is the same as this;
+		intmat_item* typecasted_other_item = typecastItem(other_item, this);
+
+		// check that it worked
+		if (typecasted_other_item == NULL)
+		{
+			cout << endl << "Item type is: ";
+			cout << itemTypeName << endl;
+			return false;
+			// items of the wrong type (or null pointers) will be pushed to the end of the list
+		}
+
+		// now verify if the other item is larger than the curren
+		switch (matSortOption.getOption()) {
+		case(intmat_sort_criteria::sort_maxval):
+			if (getMaxVal() > (typecasted_other_item->getMaxVal()))
+				result = true;
+			break;
+		case(intmat_sort_criteria::sort_determ):
+			if (getDet() > (typecasted_other_item->getDet()))
+				result = true;
+			break;
+		}
+		// chek if there are sorting options to apply 
+		if (sort_criteria != NULL)
+		{
+			// if sorting is in descending order the result is reversed 
+			if (!(sort_criteria->getAscending()))
+				result = !result;
 		}
 
 		return result;
@@ -2454,6 +2593,96 @@ public:
 			break;
 		}
 	
+
+
+		// chek if ascending/decenting sorting applies 
+		if (sort_criteria != NULL)
+		{
+			// if sorting is in descending order the result is reversed 
+			if (!(sort_criteria->getAscending()))
+				result = !result;
+		}
+
+		return result;
+	}
+
+	virtual basic_item* allocateEmptyItem()
+	{
+		basic_item* result = new studentrecord_item;
+		if (result == NULL)
+		{
+			cout << endl << "Out of memory allocating ";
+			cout << itemTypeName << endl;
+		}
+		return result;
+	}
+
+	virtual bool IsEqualTo(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL)
+	{
+
+		bool result = false;
+		studentrecord_item_sort_criteria RecordSortOption;
+
+		// if the other item is "empty" (non allocated) don't do any comparison
+		if (other_item == NULL)
+			return false;
+
+
+		// first typecast the other item to confimr it is the same as this;
+		studentrecord_item* typecasted_other_item = typecastItem(other_item, this);
+
+
+		//check that it worked
+		if (typecasted_other_item == NULL)
+		{
+			cout << "Other item is not of type intmat2x2_item." << endl;
+			return false;
+			// items of the wrong type (or null pointers) will be pushed to the end of the list
+		}
+
+		// check if the sort_option is specific for the studentrecord_item_sort_criteria
+		if (sort_criteria != NULL)
+		{
+			// first typecast the other item to confimr it is the same as this;
+			studentrecord_item_sort_criteria* typecasted_sortoption = typecastItem(sort_criteria, &RecordSortOption);
+			if (typecasted_sortoption != NULL)
+				RecordSortOption.setOption(typecasted_sortoption->getOption());
+
+		}
+
+		switch (RecordSortOption.getOption()) {
+		case(studentrecord_item_sort_criteria::firstName):
+			result = studentrecord_item_vector[0]->IsEqualTo(typecasted_other_item->getStudentrecord_item(0), sort_criteria);
+			break;
+		case(studentrecord_item_sort_criteria::secondName):
+			result = studentrecord_item_vector[1]->IsEqualTo(typecasted_other_item->getStudentrecord_item(1), sort_criteria);
+			break;
+		case(studentrecord_item_sort_criteria::nationality):
+			result = studentrecord_item_vector[2]->IsEqualTo(typecasted_other_item->getStudentrecord_item(2), sort_criteria);
+			break;
+		case(studentrecord_item_sort_criteria::programme):
+			result = studentrecord_item_vector[3]->IsEqualTo(typecasted_other_item->getStudentrecord_item(3), sort_criteria);
+			break;
+		case(studentrecord_item_sort_criteria::studedId):
+			result = studentrecord_item_vector[4]->IsEqualTo(typecasted_other_item->getStudentrecord_item(4), sort_criteria);
+			break;
+		case(studentrecord_item_sort_criteria::level):
+			result = studentrecord_item_vector[5]->IsEqualTo(typecasted_other_item->getStudentrecord_item(5), sort_criteria);
+			break;
+		case(studentrecord_item_sort_criteria::CGS):
+			result = studentrecord_item_vector[6]->IsEqualTo(typecasted_other_item->getStudentrecord_item(6), sort_criteria);
+			break;
+		case(studentrecord_item_sort_criteria::DayAndMonth):
+			result = studentrecord_item_vector[7]->IsEqualTo(typecasted_other_item->getStudentrecord_item(7), sort_criteria);
+			break;
+		case(studentrecord_item_sort_criteria::bloodType):
+			result = studentrecord_item_vector[8]->IsEqualTo(typecasted_other_item->getStudentrecord_item(8), sort_criteria);
+			break;
+		case(studentrecord_item_sort_criteria::height):
+			result = studentrecord_item_vector[0]->IsEqualTo(typecasted_other_item->getStudentrecord_item(9), sort_criteria);
+			break;
+		}
+
 
 
 		// chek if ascending/decenting sorting applies 
