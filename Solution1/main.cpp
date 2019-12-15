@@ -96,7 +96,7 @@ void test_Individualtem()
 {
 	// Try each one below (ucomment one line at a time)
 	// When ready, repleace these with items of the type you have implemented 
-	integer_itemWithLimits testintWL1, testintWL1a;
+	integer_itemWithLimits		testintWL1, testintWL1a;
 	integer_item testitem1, testitem1a; basic_sort_criteria testsort_crit;
 	//intmat_item testitem1, testitem1a; intmat_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
 	studentrecord_item testdateitem1, testdateitem1a;
@@ -240,7 +240,7 @@ void test_DateItem()
 int main()
 {
 	
-	//test_EntireArray();
+	test_EntireArray();
 	//test_CompositeItem();
 	//test_DateItem();
 

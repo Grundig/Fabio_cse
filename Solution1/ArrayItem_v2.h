@@ -125,7 +125,7 @@ public:
 		if (isEmpty())
 			cout << "Item is empty." << endl;
 		else
-			cout << "Item value is " << item_value << " . " << endl;
+			cout << nameType << " : " << item_value << endl;
 	}
 
 	virtual void enterItemFromKeyboard()
@@ -427,7 +427,7 @@ public:
 		if(isEmpty())
 			cout << "Item is empty." << endl;
 		else
-			cout << "Item value is " << item_value << " . " << endl;
+			cout << "Item value is " << item_value << endl;
 	}
 
 	virtual void enterItemFromKeyboard()
@@ -910,7 +910,7 @@ public:
 		if (isEmpty())
 			cout << "Item is empty." << endl;
 		else
-			cout << "Item value is " << item_value << " . " << endl;
+			cout << "Item value is " << item_value << endl;
 	}
 
 	void inputRangeFromKeyboard()
@@ -1222,14 +1222,14 @@ public:
 
 		//date_array[0] = temp_day;
 		date_array[day] = temp_day;
-		date_array[1] = temp_month;
-		date_array[2] = temp_year;
+		date_array[month] = temp_month;
+		date_array[year] = temp_year;
 		
 		date_set = true;
 	}
 
 	// functions to return day/month/year
-	int getDay() { return date_array[0]; }
+	int getDay() { return date_array[day]; }
 	//virtual bool IsLargerThan(basic_item* basicItem, basic_sort_criteria* sort_criteria_ptr = NULL)
 	//{
 	//	bool result = false;
@@ -1237,9 +1237,9 @@ public:
 	//	if (other_item == null)
 	//		return false;
 
-	int getMonth() { return date_array[1]; }
+	int getMonth() { return date_array[month]; }
 		
-	int getYear() { return date_array[2]; }
+	int getYear() { return date_array[year]; }
 		
 
 
@@ -1251,8 +1251,6 @@ public:
 		int temp_year;
 
 		bool valid = false;
-
-		cout << "Inputting random date" << endl;
 
 		do {
 			temp_day = rand() % 31 + 1;
@@ -2152,7 +2150,7 @@ public:
 		if (isEmpty())
 			cout << "Item is empty." << endl;
 		else
-			cout << "Item value is " << item_value << " . " << endl;
+			cout << nameType << ": " << item_value << " . " << endl;
 	}
 
 	virtual void enterItemFromKeyboard()
@@ -2484,6 +2482,7 @@ public:
 	virtual void printItemOnScreen() {
 		for (int i = 0; i < studentrecord_item_vector.size(); i++)
 		{
+
 			studentrecord_item_vector[i]->printItemOnScreen();
 		}
 	}
@@ -2663,7 +2662,7 @@ public:
 			result = studentrecord_item_vector[8]->IsEqualTo(typecasted_other_item->getStudentrecord_item(8), sort_criteria);
 			break;
 		case(studentrecord_item_sort_criteria::height):
-			result = studentrecord_item_vector[0]->IsEqualTo(typecasted_other_item->getStudentrecord_item(9), sort_criteria);
+			result = studentrecord_item_vector[10]->IsEqualTo(typecasted_other_item->getStudentrecord_item(9), sort_criteria);
 			break;
 		}
 
