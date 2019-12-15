@@ -352,7 +352,7 @@ public:
 		string other_value = typecasted_other_item->getItemVal();
 
 		if (item_value.find(other_value) != string::npos || other_value.find(item_value) != string::npos)
-			result == true;
+			result = true;
 		else
 			result = false;
 		//for (int i = 0; i < item_value.size(); i++){
@@ -965,23 +965,7 @@ public:
 		}
 
 	}
-	virtual void generateRandomItem()
-	{
-		if (isLocked())
-			cout << "Error in generateRandomItem: Item is locked" << endl;
-		else
-		{
-			int item;
-			int max_rand_val = max_val;
 
-			item = rand();
-			item = item % (max_val - min_val + 1) + min_val;
-
-			item_value = item;
-			// item filled
-			empty = false;
-		}
-	}
 
 	void generateRandomItemWithinLimits(int Min_val, int Max_val)
 	{
@@ -2397,7 +2381,7 @@ public:
 		string other_value = typecasted_other_item->getItemVal();
 
 		if (item_value.find(other_value) != string::npos || other_value.find(item_value) != string::npos)
-			result == true;
+			result = true;
 		else
 			result = false;
 
@@ -2606,16 +2590,16 @@ public:
 		return result;
 	}
 
-	virtual basic_item* allocateEmptyItem()
-	{
-		basic_item* result = new studentrecord_item;
-		if (result == NULL)
-		{
-			cout << endl << "Out of memory allocating ";
-			cout << itemTypeName << endl;
-		}
-		return result;
-	}
+	//virtual basic_item* allocateEmptyItem()
+	//{
+	//	basic_item* result = new studentrecord_item;
+	//	if (result == NULL)
+	//	{
+	//		cout << endl << "Out of memory allocating ";
+	//		cout << itemTypeName << endl;
+	//	}
+	//	return result;
+	//}
 
 	virtual bool IsEqualTo(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL)
 	{

@@ -471,7 +471,8 @@ public:
 		
 		vector<basic_item*> output_array;
 
-		for(int i = 0; i <= this->getTotItems; i++)
+		//for(int i = 0; i <= (int)this->getTotItems; i++)
+		for (int i = 0; i <= tot_items; i++)
 		{
 			basic_item* item = this->getElementPtr(i);
 			if (item->IsEqualTo(target_item, search_criteria)) 
@@ -486,7 +487,9 @@ public:
 
 		vector<basic_item*> output_array;
 
-		for (int i = 0; i <= this->getTotItems; i++)
+		// index less than total items?
+		for (int i = 0; i <= tot_items; i++)
+		//for (int i = 0; i <= (int)this->getTotItems; i++)
 		{
 			basic_item* item = this->getElementPtr(i);
 			if (item->IsLargerThan(min_target_item, search_criteria) && !(item->IsLargerThan(max_target_item, search_criteria)))
