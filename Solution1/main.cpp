@@ -205,7 +205,7 @@ void test_EntireArray()
 
 	cout << "Testing Array allocation and data entry: " << endl;
 	//testArrayFunctions_part1(testArray);
-	testArray.allocateArrayAndItems(100);
+	testArray.allocateArrayAndItems(10);
 	cout << "Done." << endl << endl;
 
 	cout << "Testing Array sorting " << endl;
@@ -226,12 +226,24 @@ void test_DateItem()
 {
 	date_item test_date1;
 	date_item test_date2;
+	date_item test_date3;
 
 	test_date1.generateRandomItem();
 	test_date2.generateRandomItem();
+	test_date3.generateRandomItem();
 
 	test_date1.printItemOnScreen();
 	test_date2.printItemOnScreen();
+	test_date3.printItemOnScreen();
+
+	studentrecord_item_sort_criteria sort_crit;
+	sort_crit.setOptionFromKeyboard();
+
+
+
+	test_date1.IsLargerThan(&test_date2, &sort_crit);
+	test_date1.IsLargerThan(&test_date3, &sort_crit);
+	
 
 	//test_date1.IsLargerThan(test_date2);
 }

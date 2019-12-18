@@ -758,8 +758,6 @@ public:
 			cout << "height" << endl;
 			break;
 		}
-
-
 		basic_sort_criteria::printOptionToScreen();
 	}
 };
@@ -1189,7 +1187,7 @@ protected:
 
 	//unsigned int month;
 
-	bool dataSortType;
+	bool dataSortType = true;
 
 	unsigned int date_array[3]; // index 0 is day, 1 is month, 2 is year
 
@@ -2532,7 +2530,6 @@ public:
 		for (int i = 0; i < studentrecord_item_vector.size(); i++)
 		{
 			studentrecord_item_vector[i]->printItemOnScreen();
-			
 		}
 	}
 
@@ -2617,11 +2614,14 @@ public:
 		case(studentrecord_item_sort_criteria::DayAndMonth):
 			result = studentrecord_item_vector[7]->IsLargerThan(typecasted_other_item->getStudentrecord_item(7), sort_criteria);
 			break;
+		case(studentrecord_item_sort_criteria::fullDate):
+			result = studentrecord_item_vector[7]->IsLargerThan(typecasted_other_item->getStudentrecord_item(7), sort_criteria);
+			break;
 		case(studentrecord_item_sort_criteria::bloodType):
 			result = studentrecord_item_vector[8]->IsLargerThan(typecasted_other_item->getStudentrecord_item(8), sort_criteria);
 			break;
 		case(studentrecord_item_sort_criteria::height):
-			result = studentrecord_item_vector[0]->IsLargerThan(typecasted_other_item->getStudentrecord_item(9), sort_criteria);
+			result = studentrecord_item_vector[9]->IsLargerThan(typecasted_other_item->getStudentrecord_item(9), sort_criteria);
 			break;
 		}
 	
@@ -2637,17 +2637,6 @@ public:
 
 		return result;
 	}
-
-	//virtual basic_item* allocateEmptyItem()
-	//{
-	//	basic_item* result = new studentrecord_item;
-	//	if (result == NULL)
-	//	{
-	//		cout << endl << "Out of memory allocating ";
-	//		cout << itemTypeName << endl;
-	//	}
-	//	return result;
-	//}
 
 	virtual bool IsEqualTo(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL)
 	{
@@ -2711,11 +2700,9 @@ public:
 			result = studentrecord_item_vector[8]->IsEqualTo(typecasted_other_item->getStudentrecord_item(8), sort_criteria);
 			break;
 		case(studentrecord_item_sort_criteria::height):
-			result = studentrecord_item_vector[10]->IsEqualTo(typecasted_other_item->getStudentrecord_item(9), sort_criteria);
+			result = studentrecord_item_vector[9]->IsEqualTo(typecasted_other_item->getStudentrecord_item(9), sort_criteria);
 			break;
 		}
-
-
 
 		// chek if ascending/decenting sorting applies 
 		if (sort_criteria != NULL)
@@ -2724,7 +2711,6 @@ public:
 			if (!(sort_criteria->getAscending()))
 				result = !result;
 		}
-
 		return result;
 	}
 
@@ -2741,7 +2727,6 @@ public:
 
 	virtual void deallocateItem(basic_item* itemToDestroy)
 	{
-
 		if (itemToDestroy != NULL)
 		{
 			// first typecast the other item to confirm it is the same as this;
@@ -2771,13 +2756,6 @@ public:
 
 		return result;
 	}
-
-
-
-
-
-
-
 
 };
 //#include "generalArray_v2.h"
