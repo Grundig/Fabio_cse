@@ -423,8 +423,6 @@ public:
 			pi = partition(low, high, sort_criteria_ptr);
 
 
-
-
 			// Separately sort elements before  
 			// partition and after partition  
 			quickSort_inner(low, pi - 1, sort_criteria_ptr);
