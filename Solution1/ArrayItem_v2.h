@@ -297,21 +297,10 @@ public:
 				// items of the wrong type (or null pointers) will be pushed to the end of the list
 			}
 
-			for (int i = 0; i < item_value.size(); i++) 
-			{
-				if (item_value[i] == typecasted_other_item->getItemVal()[i])
-				{
-					result = true;
-					continue;
-					
-				}
-				// changed the operator to change the function
-				else if (item_value[i] != typecasted_other_item->getItemVal()[i])
-				{
-					result = false;
-					break;
-				}
-			}
+			if (includes(other_item))
+				result = true;
+			else
+				result = false;
 
 
 
@@ -2325,21 +2314,10 @@ public:
 				// items of the wrong type (or null pointers) will be pushed to the end of the list
 			}
 
-			for (int i = 0; i < item_value.size(); i++)
-			{
-				if (item_value[i] == typecasted_other_item->getItemVal()[i])
-				{
-					result = true;
-					continue;
-
-				}
-				// changed the operator to change the function
-				else if (item_value[i] != typecasted_other_item->getItemVal()[i])
-				{
-					result = false;
-					break;
-				}
-			}
+			if (includes(other_item))
+				result = true;
+			else
+				result = false;
 
 
 
