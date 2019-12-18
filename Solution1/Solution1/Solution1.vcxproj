@@ -126,6 +126,7 @@
     <ClInclude Include="..\ArrayItem_v2.h" />
     <ClInclude Include="..\generalArray_v2.h" />
     <ClInclude Include="..\itemArray_v2.h" />
+    <ClInclude Include="generalVector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\main.cpp" />

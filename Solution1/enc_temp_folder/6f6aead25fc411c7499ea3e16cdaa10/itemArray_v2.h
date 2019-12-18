@@ -9,7 +9,7 @@ protected:
 	basic_item *itemPrototype;	
 	// this is an array of pointers.
 	// each pints to a generic element
-	basic_item **thearray;		
+	vector<basic_item *>thearray;		
 	// number of array entries allocated
 	int max_arraysize;
 	bool memallocated;
@@ -23,10 +23,11 @@ protected:
 		// check that the memory is allocated and that the element indexes are within array boundary
 		if(memIsAllocated() && checkIndexIsAllowed(elem1_index) && checkIndexIsAllowed(elem2_index) )
 		{
-			basic_item* temp_swap;
-			temp_swap=thearray[elem1_index];						
-			thearray[elem1_index]=thearray[elem2_index];
-			thearray[elem2_index]=temp_swap;
+			std::iter_swap(thearray.begin() + elem1_index, thearray.begin() + elem2_index);
+			//basic_item* temp_swap;
+			//temp_swap=thearray[elem1_index];						
+			//thearray[elem1_index]=thearray[elem2_index];
+			//thearray[elem2_index]=temp_swap;
 			return true;
 		}
 		return false;
@@ -68,8 +69,7 @@ protected:
 		if( (memIsAllocated()) && (getMaxSize()>0) )
 		{
 			// now deallocate the memory for the array itself
-			free(thearray);
-			thearray=NULL;			
+			thearray.clear();		
 			memallocated=false;	
 			max_arraysize = 0;
 		}
@@ -173,14 +173,16 @@ protected:
 	//
 	bool allocateArray(int in_arraysize, bool allocate_each_element)
 	{
+		
 		if ((!memIsAllocated()) && (in_arraysize > 0))
 		{
+			thearray.reserve(in_arraysize);
 			//thearray=new basic_item*[in_arraysize];
 
 			// calloc guarantees the pointer are set to NULL
-			thearray = (basic_item **)calloc(in_arraysize, sizeof(basic_item *));
+			//thearray = (basic_item **)calloc(in_arraysize, sizeof(basic_item *));
 			
-			if (thearray != NULL)
+			if (!thearray.empty())
 			{
 				max_arraysize = in_arraysize;
 				memallocated = true;
@@ -242,7 +244,7 @@ public:
 		max_arraysize=0; 
 		memallocated=false; 
 		tot_items=0; 
-		thearray=NULL; 
+		thearray.clear(); 
 		itemPrototype = NULL; 
 		resetCurrIndexDefault();
 	}
@@ -421,8 +423,6 @@ public:
 			/* pi is partitioning index, arr[p] is now
 			at right place */
 			pi = partition(low, high, sort_criteria_ptr);
-
-
 
 
 			// Separately sort elements before  
