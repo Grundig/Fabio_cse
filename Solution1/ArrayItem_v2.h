@@ -125,7 +125,7 @@ public:
 		if (isEmpty())
 			cout << "Item is empty." << endl;
 		else
-			cout << nameType << " : " << item_value << endl;
+			cout << "Item value is  " << item_value << endl;
 	}
 
 	virtual void enterItemFromKeyboard()
@@ -913,6 +913,14 @@ public:
 			cout << "Item value is " << item_value << endl;
 	}
 
+	virtual void printItemAndTypeOnScreen()
+	{
+		if (isEmpty())
+			cout << "Item is empty." << endl;
+		else
+			cout << "Item type is " << name << ". Item value is " << item_value << endl;
+	}
+
 	void inputRangeFromKeyboard()
 	{
 		string default_val;
@@ -989,6 +997,26 @@ public:
 			item = rand();
 			item = item % (max_rand_val);
 			item = item + Min_val;
+			item_value = item;
+			// item filled
+			empty = false;
+		}
+	}
+
+	void generateRandomItem()
+	{
+		if (isLocked())
+			cout << "Error in generateRandomItem: Item is locked" << endl;
+		else
+		{
+			int item;
+
+
+			int max_rand_val = max_val - min_val;
+
+			item = rand();
+			item = item % (max_rand_val);
+			item = item + min_val;
 			item_value = item;
 			// item filled
 			empty = false;
@@ -1167,7 +1195,7 @@ protected:
 
 	enum day_month_year{day, month, year, sup_val};
 	day_month_year dmy;
-
+	string name_type = "no name";
 	bool date_set;
 
 public:
@@ -1175,6 +1203,13 @@ public:
 		date_set = false;
 		itemTypeName = "date_item";
 	}
+
+	date_item(string name_val) {
+		date_set = false;
+		itemTypeName = "date_item";
+		name_type = name_val;
+	}
+
 	~date_item() { cout << "Date item destructor called" << endl; }
 
 	virtual void enterItemFromKeyboard()
@@ -1314,6 +1349,12 @@ public:
 		{
 			cout << "Date not set" << " ";
 		}
+	}
+
+	virtual void printItemAndTypeOnScreen()
+	{
+		cout << "Item name is " << name_type << ". ";
+		printItemOnScreen();
 	}
 
 	// ascending should bring up the oldest item first
@@ -1612,7 +1653,7 @@ public:
 		itemTypeName = "composite_item";
 		composite_item_vector.push_back(new basic_string_item("first name"));
 		composite_item_vector.push_back(new basic_string_item("second name"));
-		composite_item_vector.push_back(new date_item());
+		composite_item_vector.push_back(new date_item("DOB"));
 	}
 	~composite_item() { cout << "composite_item destructor call" << endl; }
 
@@ -2150,7 +2191,15 @@ public:
 		if (isEmpty())
 			cout << "Item is empty." << endl;
 		else
-			cout << nameType << ": " << item_value << " . " << endl;
+			cout << "Item value is " << item_value << " . " << endl;
+	}
+
+	virtual void printItemAndTypeOnScreen()
+	{
+		if (isEmpty())
+			cout << "Item is empty." << endl;
+		else
+			cout << "Item value is " << item_value << " . " << endl;
 	}
 
 	virtual void enterItemFromKeyboard()
@@ -2467,7 +2516,7 @@ public:
 		studentrecord_item_vector.push_back(new integer_itemWithLimits(51000000, 52099999, "student id", false));
 		studentrecord_item_vector.push_back(new basic_string_itemWithLimits("level", allowed_levels));
 		studentrecord_item_vector.push_back(new integer_itemWithLimits(0, 22, "cgs_mark"));
-		studentrecord_item_vector.push_back(new date_item());
+		studentrecord_item_vector.push_back(new date_item("DOB"));
 		studentrecord_item_vector.push_back(new basic_string_itemWithLimits("blood type", allowed_blood_types)); // can make a blod_type item?
 		studentrecord_item_vector.push_back(new integer_itemWithLimits(0, 300, "height"));
 
@@ -2482,8 +2531,8 @@ public:
 	virtual void printItemOnScreen() {
 		for (int i = 0; i < studentrecord_item_vector.size(); i++)
 		{
-
 			studentrecord_item_vector[i]->printItemOnScreen();
+			
 		}
 	}
 

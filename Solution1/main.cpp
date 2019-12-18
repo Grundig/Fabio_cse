@@ -244,14 +244,14 @@ int main()
 	//test_CompositeItem();
 	//test_DateItem();
 
-	/*integer_itemWithLimits item1, item2;
-	item1.generateRandomItem();
-	item2.generateRandomItem();
+	//integer_itemWithLimits item1, item2;
+	//item1.generateRandomItemWithinLimits(0, 100);
+	//item2.generateRandomItemWithinLimits(0, 100);
 
-	item1.printItemOnScreen();
-	item2.printItemOnScreen();
+	//item1.printItemOnScreen();
+	//item2.printItemOnScreen();
 
-	cout<<item1.IsLargerThan(&item2)<<endl;*/
+	//cout<<item1.IsLargerThan(&item2)<<endl;
 
 
 }
