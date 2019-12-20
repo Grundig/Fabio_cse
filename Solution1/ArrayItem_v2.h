@@ -1181,12 +1181,6 @@ public:
 
 class date_item: public basic_item{
 protected:
-	//unsigned int day;
-	//enum month{int_val, jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec, sup_val};
-	//unsigned int year;
-
-	//unsigned int month;
-
 	bool dataSortType = true;
 
 	unsigned int date_array[3]; // index 0 is day, 1 is month, 2 is year
