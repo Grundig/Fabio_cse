@@ -62,6 +62,7 @@ protected:
 	bool empty;
 	string itemTypeName;	
 	bool locked;
+	string nameType;
 	
 	// Used (later on) by the general_item_array:
 	int includedBy;
@@ -92,7 +93,7 @@ public:
 	virtual void deallocateItem(basic_item* itemToDestroy) = 0;
 	//virtual basic_item* makeCopyofItem()=0;
 	virtual bool compatibilityCheck(basic_item* other_item) = 0;		
-
+	virtual string getNameType() = 0;
 	//friend bool fromSourceToDestinationAarray(item_array& sourceArray, int startPosSour, int totElem, item_array& destArray, int startPosDest, bool removeFromSource);
 	//friend void general_item_array::incrementIncludedBy(basic_item* item);
 	//friend class array_manipulator;
@@ -142,6 +143,8 @@ public:
 			empty = false;
 		}
 	}
+
+	virtual string getNameType() { return nameType; }
 
 	virtual void generateRandomItem()
 	{
@@ -413,18 +416,18 @@ public:
 
 };
 
-class integer_item: public basic_item{
+class integer_item : public basic_item {
 protected:
-	int item_value;	
+	int item_value;
 public:
-	integer_item(){itemTypeName = "integer_item";}
+	integer_item() { itemTypeName = "integer_item"; }
 	~integer_item() { cout << "integer_item destructor called" << endl; } // can remove the printout after testing
 
-	int getItemVal(){return item_value;}
-	
+	int getItemVal() { return item_value; }
+
 	virtual void printItemOnScreen()
 	{
-		if(isEmpty())
+		if (isEmpty())
 			cout << "Item is empty." << endl;
 		else
 			cout << "Item value is " << item_value << endl;
@@ -432,7 +435,7 @@ public:
 
 	virtual void enterItemFromKeyboard()
 	{
-		if(isLocked())
+		if (isLocked())
 			cout << "Error in enterItemFromKeyboard: Item is locked" << endl;
 		else
 		{
@@ -442,7 +445,7 @@ public:
 
 			// item filled
 			empty = false;
-		}		
+		}
 	}
 
 	virtual void generateRandomItem()
@@ -466,7 +469,9 @@ public:
 			empty = false;
 		}
 	}
-	
+
+	virtual string getNameType(){return nameType;}
+
 	void generateRandomItemWithinLimits(int min_val, int max_val)
 	{
 		if (isLocked())
@@ -613,8 +618,7 @@ public:
 		{
 			cout << endl << "Out of memeory allocating ";
 			cout << itemTypeName << endl;
-		}	
-		return result;
+		}		return result;
 	}
 	virtual void deallocateItem(basic_item* itemToDestroy)
 	{
@@ -764,7 +768,7 @@ public:
 
 class compositeItem_sort_criteria : public basic_sort_criteria {
 public:
-	enum sortType { start, firstName, secondName, fullDate, DayAndMonth, day, month, year, includes, stop };
+	enum sortType { start, firstName, secondName, fullDate, DayAndMonth, day, month, year, stop };
 private:
 	sortType thesortoption;
 public:
@@ -798,10 +802,6 @@ public:
 		case 'M':
 		case 'm':
 			setOption(DayAndMonth);
-			break;
-		case 'i':
-		case 'I':
-			setOption(includes);
 			break;
 		}
 		basic_sort_criteria::setOptionFromKeyboard();
@@ -878,7 +878,7 @@ class integer_itemWithLimits : public integer_item {
 protected:
 	int item_value;
 	int min_val, max_val;
-	string name;
+	string nameType;
 
 	void swap(int* xp, int* yp)
 	{
@@ -892,7 +892,7 @@ public:
 		min_val = min;
 		max_val = max;
 		itemTypeName = "integer_itemWithLimits"; 
-		name = name_val;
+		nameType = name_val;
 		if (manual_input)
 		{
 			inputRangeFromKeyboard();
@@ -911,15 +911,19 @@ public:
 			cout << "Item value is " << item_value << endl;
 	}
 
+	virtual void printItemTypeName() { cout << endl << "Item type: " << itemTypeName << endl; }
+
+	virtual string getNameType() { return nameType; }
+
 	virtual void printItemAndTypeOnScreen()
 	{
 		if (isEmpty())
 			cout << "Item is empty." << endl;
 		else
-			cout << "Item type is " << name << ". Item value is " << item_value << endl;
+			cout << "Item type is " << nameType << ". Item value is " << item_value << endl;
 	}
 
-	void inputRangeFromKeyboard()
+	virtual void inputRangeFromKeyboard()
 	{
 		string default_val;
 		cout << "input max range value " << endl;
@@ -956,12 +960,12 @@ public:
 			cout << "Error in enterItemFromKeyboard: Item is locked" << endl;
 		else
 		{
-			cout << "Insert integer "<< name << " element then hit enter. " << "range between " << min_val << " and " << max_val << endl;
+			cout << "Insert integer "<< nameType << " element then hit enter. " << "range between " << min_val << " and " << max_val << endl;
 			cin >> item_value;
 
 			while (item_value > max_val || item_value < min_val)
 			{
-				cout << "sorry that input was out of range" << endl;
+				cout << "Input was out of range. Please enter again." << endl;
 				cin >> item_value;
 			}
 			cout << endl;
@@ -969,11 +973,16 @@ public:
 			// item filled
 			empty = false;
 		}
+	}
 
+	virtual void printLimitsToScreen()
+	{
+		cout << "Upper limit is :" << max_val << endl;
+		cout << "Lower limit is " << min_val << endl << endl;
 	}
 
 
-	void generateRandomItemWithinLimits(int Min_val, int Max_val)
+	virtual void generateRandomItemWithinLimits(int Min_val, int Max_val)
 	{
 		if (isLocked())
 			cout << "Error in generateRandomItem: Item is locked" << endl;
@@ -1221,7 +1230,7 @@ public:
 
 			if (temp_day < 1 || temp_day > 31)
 			{
-				cout << "Invalid date 1. Please enter again" << endl;
+				cout << "Invalid date. Please enter again" << endl;
 				valid = false;
 			}
 			else if (temp_month < 1 || temp_month > 12)
@@ -1233,7 +1242,7 @@ public:
 			{
 				if (temp_day < 1 || temp_day > 28)
 				{
-					cout << "Invalid date (feb). Please enter again " << endl;
+					cout << "Invalid date. Please enter again " << endl;
 					valid = false;
 				}
 			}
@@ -1348,6 +1357,8 @@ public:
 		cout << "Item name is " << name_type << ". ";
 		printItemOnScreen();
 	}
+
+	virtual string getNameType() { return nameType; }
 
 	// ascending should bring up the oldest item first
 	virtual bool IsLargerThan(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL)
@@ -1666,16 +1677,14 @@ public:
 	//These must be implemented by any derived item	
 	virtual void printItemOnScreen()
 	{
-		cout << "first name:" << endl;
-		cout << endl;
+		cout << "first name: ";
 		composite_item_vector[0]->printItemOnScreen();
-		cout << "second name:" << endl;
-		cout << endl;
+		cout << "second name: ";
 		composite_item_vector[1]->printItemOnScreen();
-		cout << "date" << endl;
-		cout << endl;
+		cout << "date: ";
 		composite_item_vector[2]->printItemOnScreen();
 	}
+	virtual string getNameType() { return nameType; }
 	//virtual void loadItemFromFile(FILE* fin)=0;
 	virtual void generateRandomItem()
 	{
@@ -1962,6 +1971,8 @@ public:
 		}
 	}
 
+	virtual string getNameType() { return nameType; }
+
 	virtual void enterItemFromKeyboard()
 	{
 		if (isLocked())
@@ -2194,6 +2205,8 @@ public:
 			cout << "Item value is " << item_value << " . " << endl;
 	}
 
+	virtual string getNameType() { return nameType; }
+
 	virtual void enterItemFromKeyboard()
 	{
 		string tempVal;
@@ -2201,7 +2214,7 @@ public:
 			cout << "Error in enterItemFromKeyboard: Item is locked" << endl;
 		else
 		{
-			cout << "Please enter degree program. These are the available options:" << endl;
+			cout << "Please enter a string. These are the available options:" << endl;
 			for (std::vector<string>::const_iterator i = allowed_strings_vector.begin(); i != allowed_strings_vector.end(); ++i)
 				cout << *i << ' ';
 			cout << endl;
@@ -2510,7 +2523,7 @@ public:
 		studentrecord_item_vector.push_back(new integer_itemWithLimits(0, 22, "cgs_mark"));
 		studentrecord_item_vector.push_back(new date_item("DOB"));
 		studentrecord_item_vector.push_back(new basic_string_itemWithLimits("blood type", allowed_blood_types)); // can make a blod_type item?
-		studentrecord_item_vector.push_back(new integer_itemWithLimits(0, 300, "height"));
+		studentrecord_item_vector.push_back(new integer_itemWithLimits(100, 250, "height"));
 
 	}
 	~studentrecord_item() { cout << "studentrecord_item destructor call" << endl; }
@@ -2523,6 +2536,16 @@ public:
 	virtual void printItemOnScreen() {
 		for (int i = 0; i < studentrecord_item_vector.size(); i++)
 		{
+			studentrecord_item_vector[i]->printItemOnScreen();
+		}
+	}
+
+	virtual string getNameType() { return nameType; }
+
+	virtual void printItemAndNameOnScreen() {
+		for (int i = 0; i < studentrecord_item_vector.size(); i++)
+		{
+			cout << "Item type is : " << studentrecord_item_vector[i]->getNameType();
 			studentrecord_item_vector[i]->printItemOnScreen();
 		}
 	}

@@ -485,6 +485,7 @@ public:
 
 		vector<basic_item*> output_array;
 
+
 		// index less than total items?
 		for (int i = 0; i <= tot_items; i++)
 		//for (int i = 0; i <= (int)this->getTotItems; i++)
