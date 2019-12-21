@@ -1208,7 +1208,7 @@ public:
 	date_item(string name_val) {
 		date_set = false;
 		itemTypeName = "date_item";
-		name_type = name_val;
+		nameType = name_val;
 	}
 
 	~date_item() { cout << "Date item destructor called" << endl; }
@@ -2509,7 +2509,7 @@ protected:
 public:
 	studentrecord_item() {
 
-		allowed_blood_types = { "O–", "O+", "A–", "A+", "B–", "B+", "AB–", "AB+" };
+		allowed_blood_types = { "O-", "O+", "A-", "A+", "B-", "B+", "AB-", "AB+" };
 		allowed_levels = { "MEng", "BEng" };
 		allowed_programs = { "EEE", "Mech", "Chem", "Civil", "Petr" };
 		itemTypeName = "studentrecord_item";
@@ -2520,7 +2520,7 @@ public:
 		studentrecord_item_vector.push_back(new basic_string_itemWithLimits("degree program", allowed_programs));
 		studentrecord_item_vector.push_back(new integer_itemWithLimits(51000000, 52099999, "student id", false));
 		studentrecord_item_vector.push_back(new basic_string_itemWithLimits("level", allowed_levels));
-		studentrecord_item_vector.push_back(new integer_itemWithLimits(0, 22, "cgs_mark"));
+		studentrecord_item_vector.push_back(new integer_itemWithLimits(0, 22, "ave. cgs mark"));
 		studentrecord_item_vector.push_back(new date_item("DOB"));
 		studentrecord_item_vector.push_back(new basic_string_itemWithLimits("blood type", allowed_blood_types)); // can make a blod_type item?
 		studentrecord_item_vector.push_back(new integer_itemWithLimits(100, 250, "height"));
@@ -2536,6 +2536,7 @@ public:
 	virtual void printItemOnScreen() {
 		for (int i = 0; i < studentrecord_item_vector.size(); i++)
 		{
+			cout << "Item type is: " << studentrecord_item_vector[i]->getNameType()  << ". ";
 			studentrecord_item_vector[i]->printItemOnScreen();
 		}
 	}
