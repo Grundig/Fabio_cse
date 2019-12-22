@@ -24,9 +24,6 @@
     <ClInclude Include="..\generalArray_v2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="generalVector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\main.cpp">

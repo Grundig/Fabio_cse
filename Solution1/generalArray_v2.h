@@ -78,6 +78,7 @@ protected:
 			elem_ptr->decrementincludedBy();
 		return elem_ptr;
 	}
+
 	virtual void deallocateArrayContent()
 	{
 		if ((memIsAllocated()) && (getMaxSize() > 0))
@@ -101,38 +102,53 @@ protected:
 		}
 	}
 public:	
-	general_item_array() { min_extension = 5; pct_extension = 10; }
+	general_item_array() { min_extension = 50; pct_extension = 10; }
 	~general_item_array() { deallocateArray(); }
 	// copy constructor
-	void merge(int arr[], int l, int m, int r)
+
+	void merge(item_array* array, int l, int m, int r, basic_sort_criteria* sort_criteria = NULL)
 	{
+	
 		int i, j, k;
 		int n1 = m - l + 1;
 		int n2 = r - m;
 
+
 		/* create temp arrays */
-		int L[n1], R[n2];
+		general_item_array L, R;
 
-		/* Copy data to temp arrays L[] and R[] */
-		for (i = 0; i < n1; i++)
-			L[i] = arr[l + i];
-		for (j = 0; j < n2; j++)
-			R[j] = arr[m + 1 + j];
+		L.allocateArrayAndItems(n1,true);
+		R.allocateArrayAndItems(n2, true);
+		
+		for (int i = 0; i < n1; i++)
+		{
+			L.appendElementPtr(item_array::getElementPtr(i+l),true);
+		}
+		for (int i = 0; i < n2; i++)
+		{
+			R.appendElementPtr(item_array::getElementPtr(m+1+i), true);
+		}
+		//array_manipulator *man = new array_manipulator();
 
+		
 		/* Merge the temp arrays back into arr[l..r]*/
 		i = 0; // Initial index of first subarray 
 		j = 0; // Initial index of second subarray 
 		k = l; // Initial index of merged subarray 
 		while (i < n1 && j < n2)
 		{
-			if (L[i] <= R[j])
+			
+			basic_item* LeftPtr = L.getElementPtr(i);
+			basic_item* RightPtr = R.getElementPtr(j);
+			if (RightPtr->IsLargerThan(LeftPtr,sort_criteria))
 			{
-				arr[k] = L[i];
+				item_array::thearray[k] = L.getElementPtr(i);
+
 				i++;
 			}
 			else
 			{
-				arr[k] = R[j];
+				item_array::thearray[k] = R.getElementPtr(j);
 				j++;
 			}
 			k++;
@@ -142,7 +158,7 @@ public:
 		   are any */
 		while (i < n1)
 		{
-			arr[k] = L[i];
+			item_array::thearray[k] = L.getElementPtr(i);
 			i++;
 			k++;
 		}
@@ -151,15 +167,37 @@ public:
 		   are any */
 		while (j < n2)
 		{
-			arr[k] = R[j];
+			item_array::thearray[k] = R.getElementPtr(j);
 			j++;
 			k++;
 		}
 	}
+
+	void mergeSortRecursion(general_item_array* array, int l, int r, basic_sort_criteria* sort_criteria = NULL)
+	{
+		if (l < r)
+		{
+			// Same as (l+r)/2, but avoids overflow for 
+			// large l and h 
+			int m = l + (r - l) / 2;
+
+			// Sort first and second halves 
+			mergeSortRecursion(array, l, m, sort_criteria);
+			mergeSortRecursion(array, m + 1, r, sort_criteria);
+
+			merge(array, l, m, r,sort_criteria);
+		}
+	}
+
 	void mergesort(basic_sort_criteria* sort_criteria = NULL)
 	{
-		// To be completed by students;
 
+		
+		
+		int arr_size = getMaxSize();
+		mergeSortRecursion((general_item_array*)item_array::thearray, 0, arr_size - 1, sort_criteria);
+
+		// To be completed by students;
 		// sugestions (see mergesort for integers):
 		// Create two "half-size arrays" for the two half/lists.
 		// Move the items in the input array to the two "half-size arrays" using the getNremoveElementPtr(...) and appendElementPtr(...) 
@@ -170,14 +208,49 @@ public:
 		// with the two "half-size arrays" that are now sorted; Use  A->IsLargerThan(B); .
 		//
 		// close recursion for a list of one element
-
-
 		// note: sort_criteria_ptr is an optional paramteter (default is null): see bublerot for examples
 
 	}
 	bool allocateArrayAndItems(int in_arraysize, bool allocate_each_element) { return allocateArray(in_arraysize, allocate_each_element); }
 	// friend functions
 	//friend bool fromSourceToDestinationAarray(item_array& sourceArray, int startPosSour, int totElem, item_array& destArray, int startPosDest, bool removeFromSource);
+	static bool fromSourceToDestinationAarray(general_item_array& sourceArray, int startPosSour, int totElem, general_item_array& destArray, int startPosDest, bool removeFromSource)
+	{
+		bool result = false;
+		int souceIndex, destIndex;
+		// compatiblity check between prototypes
+		basic_item* refSource = sourceArray.getItemPrototype();
+		basic_item* refDestination = sourceArray.getItemPrototype();
+		if ((refSource != NULL) && (refDestination != NULL) && (startPosSour >= 0) && (totElem > 0) && (startPosDest >= 0))
+			if (refSource->compatibilityCheck(refDestination))
+				for (int elem = 0; elem < totElem; elem++)
+				{
+					souceIndex = startPosSour + elem;
+					destIndex = startPosDest + elem;
+					if (sourceArray.checkIndexIsAllowed(souceIndex) && destArray.checkIndexIsAllowed(destIndex, false))
+					{
+						basic_item* movingitem;
+						if (removeFromSource)
+							movingitem = sourceArray.getNremoveElementPtr(souceIndex);
+						else
+							movingitem = sourceArray.getElementPtr(souceIndex);
+						// if the element is "removed" from the source, then it will be deleted by the destination 
+						result = destArray.insertElementPtr(destIndex, movingitem, !removeFromSource);
+						if (!result && !removeFromSource)
+						{
+							if (!removeFromSource)
+								sourceArray.insertElementPtr(souceIndex, movingitem, !removeFromSource);
+							break;
+						}
+					}
+					else
+					{
+						result = false;
+						break;
+					}
+				}
+		return result;
+	}
 	friend class array_manipulator;
 };
 
@@ -187,6 +260,7 @@ private:
 	;
 	//static incrementincludedBy()
 public:
+
 	// transfer (part of) content from source to destination; may leave the originals in place
 	static bool fromSourceToDestinationAarray(general_item_array& sourceArray, int startPosSour, int totElem, general_item_array& destArray, int startPosDest, bool removeFromSource)
 	{

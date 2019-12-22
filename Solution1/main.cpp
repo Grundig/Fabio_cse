@@ -4,6 +4,8 @@
 #include <iostream>
 #include "itemArray_v2.h"
 #include "arrayItem_v2.h"
+#include "generalArray_v2.h"
+#include "generalVector.h"
 
 // for advanced part only
 //#include "generalArray_v2.h"
@@ -171,7 +173,7 @@ void testArrayFunctions_part1(item_array& testArray)
 	cout << endl;
 }
 
-void testArrayFunctions_part2(item_array& testArray, basic_sort_criteria& testsort_crit)
+void testArrayFunctions_part2(general_item_array& testArray, basic_sort_criteria& testsort_crit)
 {
 	cout << " Fill array randomly: " << endl;
 	testArray.fillRandomValueArray();
@@ -183,7 +185,7 @@ void testArrayFunctions_part2(item_array& testArray, basic_sort_criteria& testso
 	cout << "Done." << endl;
 
 	cout << " Sort array and print the result: " << endl;
-	testArray.quickSort(&testsort_crit);
+	testArray.mergesort(&testsort_crit);
 	testArray.printArrayOnScreen();
 	cout << "Done." << endl;
 }
@@ -196,7 +198,7 @@ void test_EntireArray()
 
 	studentrecord_item testitem; studentrecord_item_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
 
-	item_array testArray;
+	general_item_array testArray;
 
 	cout << "The type of item used for all entries in the array is:"; 
 	testitem.printItemTypeName();	
@@ -205,7 +207,7 @@ void test_EntireArray()
 
 	cout << "Testing Array allocation and data entry: " << endl;
 	//testArrayFunctions_part1(testArray);
-	testArray.allocateArrayAndItems(100);
+	testArray.allocateArrayAndItems(10,true);
 	cout << "Done." << endl << endl;
 
 	cout << "Testing Array sorting " << endl;
@@ -241,6 +243,7 @@ int main()
 {
 	
 	test_EntireArray();
+
 	//test_CompositeItem();
 	//test_DateItem();
 
