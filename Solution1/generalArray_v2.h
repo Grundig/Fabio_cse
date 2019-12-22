@@ -116,8 +116,9 @@ public:
 
 		/* create temp arrays */
 		general_item_array L, R;
-
+	//	L.attachItemPrototype(item_array::itemPrototype);
 		L.allocateArrayAndItems(n1,true);
+//		R.attachItemPrototype(item_array::itemPrototype);
 		R.allocateArrayAndItems(n2, true);
 		
 		for (int i = 0; i < n1; i++)
