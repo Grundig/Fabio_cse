@@ -4,6 +4,7 @@
 #include <iostream>
 #include "itemArray_v2.h"
 #include "arrayItem_v2.h"
+#include "generalArray_v2.h"
 
 // for advanced part only
 //#include "generalArray_v2.h"
@@ -264,7 +265,7 @@ void test_EntireArray()
 	//integer_itemWithLimits testitem; basic_sort_criteria testsort_crit;
 	//composite_item testitem; compositeItem_sort_criteria testsort_crit;
 
-	item_array testArray;
+	general_item_array testArray;
 	int arraysize;
 
 	cout << "The type of item used for all entries in the array is:"; 

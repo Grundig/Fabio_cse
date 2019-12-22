@@ -211,7 +211,7 @@ public:
 		// note: sort_criteria_ptr is an optional paramteter (default is null): see bublerot for examples
 
 	}
-	bool allocateArrayAndItems(int in_arraysize, bool allocate_each_element) { return allocateArray(in_arraysize, allocate_each_element); }
+	bool allocateArrayAndItems(int in_arraysize, bool allocate_each_element = true) { return allocateArray(in_arraysize, allocate_each_element); }
 	// friend functions
 	//friend bool fromSourceToDestinationAarray(item_array& sourceArray, int startPosSour, int totElem, item_array& destArray, int startPosDest, bool removeFromSource);
 	static bool fromSourceToDestinationAarray(general_item_array& sourceArray, int startPosSour, int totElem, general_item_array& destArray, int startPosDest, bool removeFromSource)
