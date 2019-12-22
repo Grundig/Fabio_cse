@@ -237,7 +237,7 @@ void testArrayFunctions_part1(item_array& testArray)
 	cout << endl;
 }
 
-void testArrayFunctions_part2(item_array& testArray, basic_sort_criteria& testsort_crit)
+void testArrayFunctions_part2(general_item_array& testArray, basic_sort_criteria& testsort_crit)
 {
 	cout << " Fill array randomly: " << endl;
 	testArray.fillRandomValueArray();
@@ -249,7 +249,7 @@ void testArrayFunctions_part2(item_array& testArray, basic_sort_criteria& testso
 	cout << "Done." << endl;
 
 	cout << " Sort array and print the result: " << endl;
-	testArray.quickSort(&testsort_crit);
+	testArray.mergesort(&testsort_crit);
 	testArray.printArrayOnScreen();
 	cout << "Done." << endl;
 }
