@@ -1217,7 +1217,7 @@ public:
 
 			valid = true;
 
-			if (temp_day < 1 || temp_day > 31)
+			if (temp_day < 1 || temp_day > 31 || temp_year < 1900 || temp_year > 3000)
 			{
 				cout << "Invalid date. Please enter again" << endl;
 				valid = false;
@@ -1243,6 +1243,7 @@ public:
 					valid = false;
 				}
 			}
+
 		} while (valid == false);
 
 		//date_array[0] = temp_day;
@@ -1787,69 +1788,9 @@ public:
 				if (!(sort_criteria->getAscending()))
 					result = !result;
 			}
-			return result;
+	
 		}
-
-
-		//virtual bool IsSmallerThan(basic_item* other_item, basic_sort_criteria* sort_criteria = NULL)
-		//{
-
-		//	bool result = false;
-		//	compositeItem_sort_criteria CompositeSortOption;
-
-		//	// if the other item is "empty" (non allocated) don't do any comparison
-		//	if (other_item == NULL)
-		//		return false;
-
-
-		//	// first typecast the other item to confimr it is the same as this;
-		//	composite_item* typecasted_other_item = typecastItem(other_item, this);
-
-
-		//	//check that it worked
-		//	if (typecasted_other_item == NULL)
-		//	{
-		//		cout << "Other item is not of type intmat2x2_item." << endl;
-		//		return false;
-		//		// items of the wrong type (or null pointers) will be pushed to the end of the list
-		//	}
-
-		//	// check if the sort_option is specific for the int_mat
-		//	if (sort_criteria != NULL)
-		//	{
-		//		// first typecast the other item to confimr it is the same as this;
-		//		compositeItem_sort_criteria* typecasted_sortoption = typecastItem(sort_criteria, &CompositeSortOption);
-		//		if (typecasted_sortoption != NULL)
-		//			CompositeSortOption.setOption(typecasted_sortoption->getOption());
-		//	}
-
-		//	// now verify if the other item is larger than the curren
-		//	switch (CompositeSortOption.getOption()) {
-		//	case(compositeItem_sort_criteria::firstName):
-		//		result = composite_item_vector[0]->IsSmallerThan(typecasted_other_item->getCompsite_item(0), sort_criteria);
-		//		break;
-		//	case(compositeItem_sort_criteria::secondName):
-		//		result = composite_item_vector[1]->IsLargerThan(typecasted_other_item->getCompsite_item(1), sort_criteria);
-		//		break;
-		//	case(compositeItem_sort_criteria::fullDate):
-		//		result = composite_item_vector[2]->IsLargerThan(typecasted_other_item->getCompsite_item(2), sort_criteria);
-		//		break;
-		//	case(compositeItem_sort_criteria::DayAndMonth):
-		//		result = composite_item_vector[2]->IsLargerThan(typecasted_other_item->getCompsite_item(2), sort_criteria);
-		//		break;
-
-		//	}
-
-		//	// chek if ascending/decenting sorting applies 
-		//	if (sort_criteria != NULL)
-		//	{
-		//		// if sorting is in descending order the result is reversed 
-		//		if (!(sort_criteria->getAscending()))
-		//			result = !result;
-		//	}
-
-		//	return result;
-		//}
+		return result;
 	}
 
 	virtual basic_item* allocateEmptyItem()

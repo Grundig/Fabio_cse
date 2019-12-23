@@ -14,6 +14,91 @@ class general_item_array : public item_array {
 protected:	
 	int min_extension;
 	int pct_extension;	
+
+	void merge(item_array* array, int l, int m, int r, basic_sort_criteria* sort_criteria = NULL)
+	{
+
+		int i, j, k;
+		int n1 = m - l + 1;
+		int n2 = r - m;
+
+
+		/* create temp arrays */
+		general_item_array L, R;
+		//	L.attachItemPrototype(item_array::itemPrototype);
+		L.allocateArrayAndItems(n1, true);
+		//		R.attachItemPrototype(item_array::itemPrototype);
+		R.allocateArrayAndItems(n2, true);
+
+		for (int i = 0; i < n1; i++)
+		{
+			L.appendElementPtr(item_array::getElementPtr(i + l), true);
+		}
+		for (int i = 0; i < n2; i++)
+		{
+			R.appendElementPtr(item_array::getElementPtr(m + 1 + i), true);
+		}
+		//array_manipulator *man = new array_manipulator();
+
+
+		/* Merge the temp arrays back into arr[l..r]*/
+		i = 0; // Initial index of first subarray 
+		j = 0; // Initial index of second subarray 
+		k = l; // Initial index of merged subarray 
+		while (i < n1 && j < n2)
+		{
+
+			basic_item* LeftPtr = L.getElementPtr(i);
+			basic_item* RightPtr = R.getElementPtr(j);
+			if (RightPtr->IsLargerThan(LeftPtr, sort_criteria))
+			{
+				item_array::thearray[k] = L.getElementPtr(i);
+
+				i++;
+			}
+			else
+			{
+				item_array::thearray[k] = R.getElementPtr(j);
+				j++;
+			}
+			k++;
+		}
+
+		/* Copy the remaining elements of L[], if there
+		   are any */
+		while (i < n1)
+		{
+			item_array::thearray[k] = L.getElementPtr(i);
+			i++;
+			k++;
+		}
+
+		/* Copy the remaining elements of R[], if there
+		   are any */
+		while (j < n2)
+		{
+			item_array::thearray[k] = R.getElementPtr(j);
+			j++;
+			k++;
+		}
+	}
+
+	void mergeSortRecursion(general_item_array* array, int l, int r, basic_sort_criteria* sort_criteria = NULL)
+	{
+		if (l < r)
+		{
+			// Same as (l+r)/2, but avoids overflow for 
+			// large l and h 
+			int m = l + (r - l) / 2;
+
+			// Sort first and second halves 
+			mergeSortRecursion(array, l, m, sort_criteria);
+			mergeSortRecursion(array, m + 1, r, sort_criteria);
+
+			merge(array, l, m, r, sort_criteria);
+		}
+	}
+
 	int getExtenedMaxSize()
 	{
 		int curr_size = getMaxSize();
@@ -102,93 +187,92 @@ protected:
 		}
 	}
 public:	
-	general_item_array() { min_extension = 50; pct_extension = 10; }
+	general_item_array() { min_extension = 5; pct_extension = 10; }
 	~general_item_array() { deallocateArray(); }
 	// copy constructor
 
-	void merge(item_array* array, int l, int m, int r, basic_sort_criteria* sort_criteria = NULL)
+	general_item_array* complex_search(general_item_array input_array, basic_item* min_target_item, basic_item* max_target_item, basic_sort_criteria* search_criteria)
 	{
-	
-		int i, j, k;
-		int n1 = m - l + 1;
-		int n2 = r - m;
+		int allocated_number = 1;
+		general_item_array* output_array = new general_item_array;
+		output_array->attachItemPrototype(min_target_item);
+		output_array->allocateArray(allocated_number, false);
 
+		cout << "min item: " << endl;
+		min_target_item->enterItemFromKeyboard();
+		cout << "max item: " << endl;
+		max_target_item->enterItemFromKeyboard();
+		basic_item* item = this->thearray[0];
+		// the index of the ouput array. tells me how many item fit search
+		int k = 0;
+		for (int i = 0; i < getMaxSize(); i++)
+		{
+			item = this->thearray[i];
+			int total = general_item_array::getTotItems();
 
-		/* create temp arrays */
-		general_item_array L, R;
-	//	L.attachItemPrototype(item_array::itemPrototype);
-		L.allocateArrayAndItems(n1,true);
-//		R.attachItemPrototype(item_array::itemPrototype);
-		R.allocateArrayAndItems(n2, true);
-		
-		for (int i = 0; i < n1; i++)
-		{
-			L.appendElementPtr(item_array::getElementPtr(i+l),true);
-		}
-		for (int i = 0; i < n2; i++)
-		{
-			R.appendElementPtr(item_array::getElementPtr(m+1+i), true);
-		}
-		//array_manipulator *man = new array_manipulator();
-
-		
-		/* Merge the temp arrays back into arr[l..r]*/
-		i = 0; // Initial index of first subarray 
-		j = 0; // Initial index of second subarray 
-		k = l; // Initial index of merged subarray 
-		while (i < n1 && j < n2)
-		{
-			
-			basic_item* LeftPtr = L.getElementPtr(i);
-			basic_item* RightPtr = R.getElementPtr(j);
-			if (RightPtr->IsLargerThan(LeftPtr,sort_criteria))
+			if (item->IsLargerThan(min_target_item, search_criteria) && !(item->IsLargerThan(max_target_item, search_criteria)))
 			{
-				item_array::thearray[k] = L.getElementPtr(i);
-
-				i++;
+				if (k > allocated_number)
+				{
+					output_array->expandArray();
+				}
+				output_array->appendElementPtr(item, false);
+				k++;
 			}
-			else
+
+		}
+
+		for (int i = 0; i < getMaxSize(); i++)
+		{
+			basic_item* item = output_array->getElementPtr(i);
+			if (item == NULL)
 			{
-				item_array::thearray[k] = R.getElementPtr(j);
-				j++;
+				output_array->deallocateSpecificItem(item);
 			}
-			k++;
+		}
+		//output_array->printArrayOnScreen();
+		return output_array;
+	}
+	general_item_array* simple_search(general_item_array input_array, basic_item* target_item, basic_sort_criteria* search_criteria)
+	{
+		int allocated_number = 1;
+		general_item_array* output_array = new general_item_array;
+		output_array->attachItemPrototype(target_item);
+		output_array->allocateArray(allocated_number, false);
+		target_item->enterItemFromKeyboard();
+		basic_item* item = this->thearray[0];
+		// the index of the ouput array. tells me how many item fit search
+		int k = 0;
+		for (int i = 0; i < getMaxSize(); i++)
+		{
+			item = this->thearray[i];
+			int total = general_item_array::getTotItems();
+
+			if (item->IsEqualTo(target_item, search_criteria) && item != NULL)
+			{
+				if (k > allocated_number)
+				{
+					output_array->expandArray();
+				}
+				output_array->appendElementPtr(item,false);
+				k++;
+			}
+
 		}
 
-		/* Copy the remaining elements of L[], if there
-		   are any */
-		while (i < n1)
+		for (int i = 0; i < getMaxSize(); i++)
 		{
-			item_array::thearray[k] = L.getElementPtr(i);
-			i++;
-			k++;
+			basic_item* item = output_array->getElementPtr(i);
+			if (item == NULL)
+			{
+				output_array->deallocateSpecificItem(item);
+			}
 		}
-
-		/* Copy the remaining elements of R[], if there
-		   are any */
-		while (j < n2)
-		{
-			item_array::thearray[k] = R.getElementPtr(j);
-			j++;
-			k++;
-		}
+		//output_array->printArrayOnScreen();
+		return output_array;
 	}
 
-	void mergeSortRecursion(general_item_array* array, int l, int r, basic_sort_criteria* sort_criteria = NULL)
-	{
-		if (l < r)
-		{
-			// Same as (l+r)/2, but avoids overflow for 
-			// large l and h 
-			int m = l + (r - l) / 2;
 
-			// Sort first and second halves 
-			mergeSortRecursion(array, l, m, sort_criteria);
-			mergeSortRecursion(array, m + 1, r, sort_criteria);
-
-			merge(array, l, m, r,sort_criteria);
-		}
-	}
 
 	void mergesort(basic_sort_criteria* sort_criteria = NULL)
 	{

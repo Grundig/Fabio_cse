@@ -9,7 +9,54 @@
 // for advanced part only
 //#include "generalArray_v2.h"
 
+void testGeneralItemArraySearch() {
+	studentrecord_item testitem; 
+	studentrecord_item testitem1;
+	studentrecord_item_sort_criteria testsort_crit; //testsort_crit.setOption(intmat_sort_criteria::sort_determ);
 
+	general_item_array testArray;
+	int arraysize;
+
+	cout << "The type of item used for all entries in the array is:";
+	testitem.printItemTypeName();
+	testArray.attachItemPrototype(&testitem);
+	cout << endl << endl << endl;
+
+	cout << "Testing Array allocation and data entry: " << endl;
+	//testArrayFunctions_part1(testArray);
+	cout << "Enter size of the array" << endl;
+	cin >> arraysize;
+
+	testArray.allocateArrayAndItems(arraysize);
+	cout << "Done." << endl << endl;
+
+	cout << " Fill array randomly: " << endl;
+	testArray.fillRandomValueArray();
+	testArray.printArrayOnScreen();
+	cout << "Done." << endl;
+
+	cout << " Choose sort criterion: " << endl;
+	testsort_crit.setOptionFromKeyboard();
+	cout << "Done." << endl;
+
+	cout << "performing search" << endl;
+	//general_item_array* outputArray = testArray.simple_search(testArray,&testitem,&testsort_crit);
+	general_item_array* outputArray = testArray.complex_search(testArray, &testitem, &testitem1, &testsort_crit);
+
+	cout << "Done." << endl;
+
+	if (outputArray->getTotItems() <= 0)
+	{
+		cout << " no matches were found for search criteria " << endl;
+
+	}
+	cout << " search array and print the result: " << endl;
+	//outputArray.quickSort(&testsort_crit);
+	outputArray->printArrayOnScreen();
+	cout << "Done." << endl;
+
+
+}
 
 void testItemFunctions_part1(basic_item* item_ptr)
 {
@@ -365,9 +412,9 @@ void test_basic_string_item()
 int main()
 {
 	
-	//
+	testGeneralItemArraySearch();
 	//test_integer_itemWithLimits();
-	test_EntireArray();
+	//test_EntireArray();
 
 	//basic_test_integer_itemWithLimits();
 
