@@ -35,9 +35,31 @@ void testGeneralItemArraySearch() {
 	testArray.printArrayOnScreen();
 	cout << "Done." << endl;
 
-	cout << " Choose sort criterion: " << endl;
+
+
+	//cout << "Generating minimum array item " << endl;
+	//testitem.generateRandomItem();
+
+	cout << "Enter minimum item" << endl;
+	testitem.enterItemFromKeyboard();
+
+	cout << "Minimum item is: " << endl;
+	testitem.printItemOnScreen();
+
+	cout << "Enter maximum item" << endl;
+	testitem1.enterItemFromKeyboard();
+
+	//cout << "Generating maximum array item " << endl;
+	//testitem1.generateRandomItem();
+
+
+	cout << "Maximum item is: " << endl;
+	testitem1.printItemOnScreen();
+
+	cout << " Choose sort criterion to test for " << endl;
 	testsort_crit.setOptionFromKeyboard();
-	cout << "Done." << endl;
+
+
 
 	cout << "performing search" << endl;
 	//general_item_array* outputArray = testArray.simple_search(testArray,&testitem,&testsort_crit);
@@ -49,6 +71,10 @@ void testGeneralItemArraySearch() {
 	{
 		cout << " no matches were found for search criteria " << endl;
 
+	}
+	else
+	{
+		cout << "Number of arrays that have matched item: " << outputArray->getTotItems() << endl;
 	}
 	cout << " search array and print the result: " << endl;
 	//outputArray.quickSort(&testsort_crit);
