@@ -37,17 +37,17 @@ void testGeneralItemArraySearch() {
 
 
 
-	cout << "Generating minimum array item " << endl;
-	testitem.generateRandomItem();
+	//cout << "Generating minimum array item " << endl;
+	//testitem.generateRandomItem();
 
-	//cout << "Enter minimum item" << endl;
-	//testitem.enterItemFromKeyboard();
+	cout << "Enter minimum item" << endl;
+	testitem.enterItemFromKeyboard();
 
-	cout << "Minimum item is: " << endl;
-	testitem.printItemOnScreen();
+	//cout << "Minimum item is: " << endl;
+	//testitem.printItemOnScreen();
 
-	//cout << "Enter maximum item" << endl;
-	//testitem1.enterItemFromKeyboard();
+	cout << "Enter maximum item" << endl;
+	testitem1.enterItemFromKeyboard();
 
 	cout << "Generating maximum array item " << endl;
 	testitem1.generateRandomItem();

@@ -198,10 +198,7 @@ public:
 		output_array->attachItemPrototype(min_target_item);
 		output_array->allocateArray(allocated_number, false);
 
-		//cout << "min item: " << endl;
-		//min_target_item->enterItemFromKeyboard();
-		//cout << "max item: " << endl;
-		//max_target_item->enterItemFromKeyboard();
+
 		basic_item* item = this->thearray[0];
 		// the index of the ouput array. tells me how many item fit search
 		int k = 0;
