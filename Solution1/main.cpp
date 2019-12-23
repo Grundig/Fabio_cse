@@ -444,24 +444,13 @@ void test_basic_string_item()
 
 int main()
 {
-	
 	testGeneralItemArraySearch();
 	//test_integer_itemWithLimits();
 	//test_EntireArray();
-
 	//basic_test_integer_itemWithLimits();
-
 	//test_simple_search();
-
 	//test_CompositeItem();
 	//test_EntireArray_compositeItem();
 	//test_DateItem();
-
-	
-
-
-
-
-
 }
 
